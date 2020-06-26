@@ -14,4 +14,3 @@ start:
 %include "common.inc"
 
 hello db "This is stage 2 of this boot loader.",13,10,0
-

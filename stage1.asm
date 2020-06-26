@@ -46,7 +46,7 @@ op_ferror db 10,13,"Disk error!",13,10,0
 op_fdone db "success!",13,10,0
 op_progress db 0x2e,0
 iBootDrive db 0
-load_segment dw 0x7e00
+load_segment dw 0x1000
 
 ; padding and magic number
 times 510-($-$$) db 0
