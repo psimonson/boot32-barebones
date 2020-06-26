@@ -1,22 +1,30 @@
 [org 0x7c00]
+[bits 16]
 
-jmp main
-nop
+[section .text]
+
+global _start
+_start:
+	jmp 0:main
+	nop
 
 ; put BPB here
 
 main:
+	cli
 	xor ax, ax
 	mov ds, ax
 	mov es, ax
+	mov fs, ax
+	mov gs, ax
 	mov ss, ax
 	mov bp, 0x9000
 	mov sp, bp
 	cld
+	sti
 
 	mov [iBootDrive], dl
-	xor ax, ax
-	int 0x13
+	call reset_disk
 
 	mov si, op_loading
 	call print

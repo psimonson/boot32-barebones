@@ -1,6 +1,17 @@
 ; simple BIOS disk services
 
 ; ======================================
+; reset disk drive
+; ======================================
+reset_disk:
+	push ax
+	xor ax, ax
+	mov dl, [iBootDrive]
+	int 0x13
+	pop ax
+	ret
+
+; ======================================
 ; ax = count of sectors to read
 ; cl = start sector to read
 ; [es:bx] = buffer address pointer
