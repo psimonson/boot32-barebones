@@ -19,7 +19,10 @@ all: $(TARGETS)
 %.asm:
 	$(AS) $(AFLAGS) $@
 
-%.bin: %.asm
+stage1.bin: stage1.asm common.inc disk.inc
+	$(AS) $(AFLAGS) -o $@ $<
+
+stage2.bin: stage2.asm common.inc a20.inc
 	$(AS) $(AFLAGS) -o $@ $<
 
 run: clean disk

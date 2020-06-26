@@ -12,6 +12,14 @@ check_a20:
 	mov bx, 0x7e0e
 	cmp ax, [es:bx]
 	jne .fail
+	mov ax, [0x7dff]
+	push bx
+	mov bx, 0xffff
+	mov es, bx
+	pop bx
+	mov bx, 0x7e0f
+	cmp ax, [es:bx]
+	jne .fail
 .okay:
 	mov si, op_a20yes
 	call print
