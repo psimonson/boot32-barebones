@@ -5,35 +5,35 @@
 [org 0x0]
 [bits 16]
 
-global main
-main:
-	jmp 0:start
-	nop
-
-%include "common.inc"
-%include "a20.inc"
-%include "gdt.inc"
-
 start:
+	mov bp, 0xffff
+	mov sp, bp
+
 	call a20_bios
 	call check_a20
 
 	mov si, op_pmode
 	call print
 
+	call load_gdt
+
+	; switch on protected mode
 	cli
-	lgdt [gdt_desc]
 	mov eax, cr0
 	or eax, 1
 	mov cr0, eax
 
-	jmp CODE_SEG:init_pm
-	hlt
+;	hlt ; uncomment to test before jump instruction
+	jmp dword 0x08:INIT_PM+0x10000
+
+%include "common.inc"
+%include "a20.inc"
+%include "gdt.inc"
 
 [bits 32]
 
-init_pm:
-	mov ax, DATA_SEG
+INIT_PM:
+	mov ax, 0x10
 	mov ds, ax
 	mov es, ax
 	mov fs, ax
@@ -42,7 +42,12 @@ init_pm:
 	mov ebp, 0x90000
 	mov esp, ebp
 
-	jmp $
+	call BEGIN_PM
+	hlt
+
+BEGIN_PM:
+	ret
+
 
 op_pmode db "Entering protected mode...",0
 op_pmode2 db "done!",13,10,0

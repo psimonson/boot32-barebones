@@ -41,6 +41,8 @@ main:
 	mov ds, ax
 	mov es, ax
 	mov ss, ax
+	mov fs, ax
+	mov gs, ax
 	jmp load_segment:0
 
 	cli
