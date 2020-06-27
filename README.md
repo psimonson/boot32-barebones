@@ -7,20 +7,20 @@ written in pure C.
 
 ### Status
 
-	- [X] - First stage boot loader (for loading second stage).
-	- [ ] - Second stage boot loader (for loading kernel).
-	- [ ] - Simple starter kernel written in C.
+ - [x] - First stage boot loader (for loading second stage).
+ - [ ] - Second stage boot loader (for loading kernel).
+ - [ ] - Simple starter kernel written in C.
 
 ### TODO
 
-	- [X] - Fix everything that is wrong with first stage loader.
-	- [ ] - Fix everything that is wrong with second stage loader.
-  - [ ] - Make a simple starter C kernel.
+ - [x] - Fix everything that is wrong with first stage loader.
+ - [ ] - Fix everything that is wrong with second stage loader.
+ - [ ] - Make a simple starter C kernel.
 
 ### Developer
 
-	- Philip R. Simonson (aka 5n4k3)
+ - Philip R. Simonson (aka 5n4k3)
 
 ### License
 
-	- None \[ATM\] (At The Moment)
+ - None [ATM] (At This Moment)
