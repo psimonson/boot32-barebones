@@ -6,9 +6,6 @@
 [bits 16]
 
 start:
-	mov bp, 0xffff
-	mov sp, bp
-
 	call a20_bios
 	call check_a20
 
@@ -24,7 +21,7 @@ start:
 	mov cr0, eax
 
 ;	hlt ; uncomment to test before jump instruction
-	jmp dword 0x08:INIT_PM+0x10000
+	jmp dword 0x08:INIT_PM
 
 %include "common.inc"
 %include "a20.inc"
