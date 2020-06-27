@@ -5,17 +5,11 @@ am doing this small project to learn even more, after all knowledge is power. Th
 project will show you how to write a two stage boot loader written in NASM (Net-wide Assembler), also with a simple kernel
 written in pure C.
 
-### Status
+### TODO
 
  - [x] - First stage boot loader (for loading second stage).
  - [ ] - Second stage boot loader (for loading kernel).
  - [ ] - Simple starter kernel written in C.
-
-### TODO
-
- - [x] - Fix everything that is wrong with first stage loader.
- - [ ] - Fix everything that is wrong with second stage loader.
- - [ ] - Make a simple starter C kernel.
 
 ### Developer
 
