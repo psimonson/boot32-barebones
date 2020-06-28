@@ -2,14 +2,10 @@
 ; by Philip Simonson.
 ; =======================
 
-[org 0x7e00]
+[org 0x0]
 [bits 16]
 
 start:
-	xor ax, ax
-	mov ds, ax
-	mov es, ax
-
 	call a20_bios
 	call check_a20
 

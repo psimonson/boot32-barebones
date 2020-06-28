@@ -1,3 +1,5 @@
+; Stage 1 boot loader by Philip Simonson.
+
 [org 0x7c00]
 [bits 16]
 
@@ -26,12 +28,15 @@ main:
 
 	mov ax, 1
 	mov cl, 2
-	xor bx, bx
-	mov es, bx
 	mov bx, load_segment
+	mov es, bx
+	xor bx, bx
 	call read_disk
 
-	jmp 0:load_segment
+	mov ax, load_segment
+	mov ds, ax
+	mov es, ax
+	jmp load_segment:0
 
 %include "common.inc"
 %include "disk.inc"
