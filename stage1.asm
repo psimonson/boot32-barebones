@@ -14,9 +14,6 @@ main:
 	xor ax, ax
 	mov ds, ax
 	mov es, ax
-	mov fs, ax
-	mov gs, ax
-	mov ax, 0x0050
 	mov ss, ax
 	mov sp, 0x7c00
 	cld
@@ -29,16 +26,12 @@ main:
 
 	mov ax, 1
 	mov cl, 2
-	mov bx, load_segment
-	mov es, bx
 	xor bx, bx
+	mov es, bx
+	mov bx, load_segment
 	call read_disk
 
-	; setup stage 2 and jump to it.
-	mov ax, load_segment
-	mov ds, ax
-	mov es, ax
-	jmp load_segment:0
+	jmp 0:load_segment
 
 %include "common.inc"
 %include "disk.inc"

@@ -37,7 +37,7 @@ clean:
 	rm -f $(TARGETS)
 
 distclean: clean
-	rm -f floppy.img *.bak
+	rm -f floppy.img *.bak *.log
 
 dist: distclean
 	cd .. && tar -cv --exclude=.git ./$(PROJECT_NAME) | xz -9 > $(PROJECT_NAME)-$(PROJECT_VERSION).tar.xz

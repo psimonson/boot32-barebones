@@ -2,20 +2,23 @@
 ; by Philip Simonson.
 ; =======================
 
-[org 0x0]
+[org 0x7e00]
 [bits 16]
 
 start:
+	xor ax, ax
+	mov ds, ax
+	mov es, ax
+
 	call a20_bios
 	call check_a20
 
 	mov si, op_pmode
 	call print
 
-	call load_gdt
-
 	; switch on protected mode
 	cli
+	lgdt [gdt.pointer]
 	mov eax, cr0
 	or eax, 1
 	mov cr0, eax

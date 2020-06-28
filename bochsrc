@@ -34,14 +34,14 @@ cpuid: aes=0, sha=0, xsave=0, xsaveopt=0, avx_f16c=0, avx_fma=0, bmi=0, xop=0, f
 cpuid: tbm=0, x86_64=1, 1g_pages=0, pcid=0, fsgsbase=0, smep=0, smap=0, mwait=1, vmx=1
 cpuid: svm=0
 print_timestamps: enabled=0
-debugger_log: -
+debugger_log: debug.log
 magic_break: enabled=0
 port_e9_hack: enabled=0
 private_colormap: enabled=0
 clock: sync=none, time0=local, rtc_sync=0
 # no cmosimage
 # no loader
-log: -
+log: normal.log
 logprefix: %t%e%d
 debug: action=ignore
 info: action=report
