@@ -7,8 +7,8 @@
  *****************************************************************
  */
 
-#ifndef _SYSTEM_H_
-#define _SYSTEM_H_
+#ifndef _PORTS_H_
+#define _PORTS_H_
 
 /* Get value from given port. */
 unsigned char inb(unsigned short port);

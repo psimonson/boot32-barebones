@@ -1,4 +1,4 @@
-#include "system.h"
+#include "ports.h"
 
 /* Get value from given port.
  */
