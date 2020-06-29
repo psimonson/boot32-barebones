@@ -43,3 +43,13 @@ void terminal_print(int x, int y, const char *s, unsigned char color)
 		s++;
 	}
 }
+/* Enable the cursor.
+ */
+void terminal_cursor_on(void)
+{
+}
+/* Disable the cursor.
+ */
+void terminal_cursor_off(void)
+{
+}

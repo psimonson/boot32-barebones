@@ -6,7 +6,8 @@ CFLAGS=-std=c11 -Wall -O -pedantic -g -m32 \
        -nostdlib -nostdinc -nostartfiles \
        -I./include
 LDFLAGS=-m elf_i386 -Ttext 0x1000
-OBJECTS=entry.o kernel.o drivers/vga.o
+BACKUPS=$(shell find . -iname "*.bak")
+OBJECTS=entry.o kernel.o system.o drivers/vga.o
 TARGET=kernel.bin
 
 .PHONY: all clean distclean
@@ -23,4 +24,6 @@ clean:
 	rm -f $(OBJECTS) $(TARGET) *.elf
 
 distclean: clean
-	rm -f *.bak
+ifneq ($(BACKUPS),)
+	rm -f $(BACKUPS)
+endif

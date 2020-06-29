@@ -16,5 +16,9 @@ void terminal_initialize(void);
 void terminal_putentryat(int x, int y, char ch, unsigned char color);
 /* Print a string on screen. */
 void terminal_print(int x, int y, const char *s, unsigned char color);
+/* Enable the terminal cursor. */
+void terminal_cursor_on(void);
+/* Disable the terminal cursor. */
+void terminal_cursor_off(void);
 
 #endif

@@ -3,7 +3,7 @@
 [bits 32]
 extern kernel_main
 
-global start
-start:
+global _start
+_start:
 	call kernel_main
-	hlt
+	ret
