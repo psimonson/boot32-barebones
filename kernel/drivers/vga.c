@@ -18,8 +18,8 @@
 #define get_offset_row(x) ((x) / (2*MAX_COLS))
 #define get_offset_col(x) (((x) - (get_offset_row((x))*2*MAX_COLS))/2)
 
-static unsigned char *vga_buffer;
-char _terminal_initialized;
+static unsigned char *vga_buffer = (void*)0;
+char _terminal_initialized = 0;
 
 /* Prototypes for private functions. */
 int print_char(int col, int row, char ch, char attr);
@@ -31,11 +31,6 @@ void set_cursor_offset(int offset);
 void clear_screen(const char attr)
 {
 	int screen_size = MAX_COLS * MAX_ROWS;
-
-	if(!_terminal_initialized) {
-		term_init(attr);
-		return;
-	}
 
 	for(int i = 0; i < screen_size; i++) {
 		vga_buffer[i*2] = ' ';
@@ -57,6 +52,8 @@ void term_init(const char attr)
 void kprint_at(int col, int row, const char *s, char attr)
 {
 	int offset;
+
+	if(!_terminal_initialized) return;
 
 	if(col >= 0 && row >= 0)
 		offset = get_offset(col, row);

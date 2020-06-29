@@ -21,11 +21,13 @@ read_disk:
 	mov di, 5
 .loop:
 	push ax
+	push bx
 	mov ah, 0x02
 	mov al, 0x01
 	mov ch, 0x00
 	mov dh, 0x00
 	mov dl, [iBootDrive]
+	pop bx
 	int 0x13
 	jc .fail
 	pop ax

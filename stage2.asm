@@ -7,7 +7,7 @@
 
 start:
 	call reset_disk
-	mov al, 9
+	mov al, 128
 	mov cl, 3
 	xor bx, bx
 	mov es, bx
