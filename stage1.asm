@@ -33,10 +33,10 @@ main:
 	xor bx, bx
 	call read_disk
 
-	mov ax, load_segment
+	mov ax, run_segment
 	mov ds, ax
 	mov es, ax
-	jmp load_segment:0
+	jmp run_segment:run_offset
 
 %include "common.inc"
 %include "disk.inc"
@@ -46,7 +46,9 @@ op_ferror db 10,13,"Disk error!",13,10,0
 op_fdone db "success!",13,10,0
 op_progress db 0x2e,0
 iBootDrive db 0
-load_segment dw 0x07e0
+load_segment equ 0x07e0
+run_segment equ 0x0000
+run_offset equ 0x7e00
 
 ; padding and magic number
 times 510-($-$$) db 0

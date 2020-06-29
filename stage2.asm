@@ -2,7 +2,7 @@
 ; by Philip Simonson.
 ; =======================
 
-[org 0x0]
+[org 0x7e00]
 [bits 16]
 
 start:
@@ -42,10 +42,16 @@ INIT_PM:
 	hlt
 
 BEGIN_PM:
+	mov ah, 0x02
+	mov ebx, op_pmode2
+	call print32
 	ret
 
+%include "common32.inc"
 
 op_pmode db "Entering protected mode...",0
 op_pmode2 db "done!",13,10,0
 op_a20yes db "A20 is enabled.",13,10,0
 op_a20no db "A20 is disabled.",13,10,0
+xpos db 0
+ypos db 0
