@@ -7,12 +7,16 @@
 
 global _start
 _start:
-	jmp 0:main
+	jmp short main
 	nop
 
-; put BPB here
+%include "bs.inc"
 
 main:
+	jmp 0:init
+	nop
+
+init:
 	xor ax, ax
 	mov ds, ax
 	mov es, ax
@@ -27,13 +31,14 @@ main:
 	call print
 
 	mov ax, 1
-	mov cl, 2
+	mov cx, 2
 	mov bx, load_segment
 	mov es, bx
 	xor bx, bx
 	call read_disk
 
-	mov ax, run_segment
+	mov dl, [iBootDrive]
+	xor ax, ax
 	mov ds, ax
 	mov es, ax
 	jmp run_segment:run_offset
@@ -43,9 +48,9 @@ main:
 
 op_loading db "Loading stage 2, please wait",0
 op_ferror db 10,13,"Disk error!",13,10,0
-op_fdone db "success!",13,10,0
+op_done db "success!",13,10,0
+op_failed db "failed!",13,10,0
 op_progress db 0x2e,0
-iBootDrive db 0
 load_segment equ 0x07e0
 run_segment equ 0x0000
 run_offset equ 0x7e00

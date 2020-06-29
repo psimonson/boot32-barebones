@@ -11,46 +11,54 @@ reset_disk:
 	pop ax
 	ret
 
-; ======================================
-; ax = count of sectors to read
-; cl = start sector to read
-; [es:bx] = buffer address pointer
-; ======================================
+; ==================================================
+; Description: Load file from disk using LBA.
+; ax - LBA (Logical Block Address)
+; cx - Number of sectors to read.
+; [es:bx] - Location to store at (in memory).
+; ==================================================
 read_disk:
-	pusha
 	mov di, 5
 .loop:
 	push ax
+	push cx
 	push bx
-	mov ah, 0x02
-	mov al, 0x01
-	mov ch, 0x00
-	mov dh, 0x00
-	mov dl, [iBootDrive]
+	; calculate sector
+	mov bx, word [iTrackSect]
+	xor dx, dx
+	div bx
+	inc dx
+	mov cl, dl
+	; calculate track/head
+	mov bx, word [iHeadCnt]
+	xor dx, dx
+	div bx
+	mov ch, al
+	xchg dl, dh
+	; read sector
+	mov ax, 0x0201
+	mov dl, byte [iBootDrive]
 	pop bx
 	int 0x13
-	jc .fail
-	pop ax
-	cmp ax, 0
-	jne .good
-	mov si, op_fdone
-	call print
-	popa
-	ret
-.good:
-	inc cl
-	add bx, 512
-	dec ax
-	mov si, op_progress
-	call print
-	jmp short .loop
-.fail:
-	clc
+	jnc .success
 	xor ax, ax
 	int 0x13
 	dec di
+	pop cx
+	pop ax
 	cmp di, 0
 	jne .loop
-	mov si, op_ferror
+	mov si, op_failed
+	call print
+	jmp $
+.success:
+	mov si, op_progress
+	call print
+	pop cx
+	pop ax
+	inc ax
+	add bx, word [iSectSize]
+	loop read_disk
+	mov si, op_done
 	call print
 	ret

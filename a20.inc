@@ -35,7 +35,7 @@ check_a20:
 ; ========================================
 a20_bios:
 	push ax
-	mov ax, 0x2401
+	mov ax, 0x2400
 	int 0x15
 	pop ax
 	ret

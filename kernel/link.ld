@@ -8,14 +8,17 @@ SECTIONS
 	.text : AT(0x0000)
 	{
 		*(.text);
+	}
+	.data :
+	{
 		*(.data);
 		*(.rodata);
 		*(.bss);
+		*(COMMON);
 	}
 	/DISCARD/ :
 	{
 		*(.comment);
-		*(.igot.*);
 		*(.eh_frame);
 	}
 }
