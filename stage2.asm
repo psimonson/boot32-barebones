@@ -6,6 +6,14 @@
 [bits 16]
 
 start:
+	call reset_disk
+	mov al, 8
+	mov cl, 3
+	xor bx, bx
+	mov es, bx
+	mov bx, load_segment
+	call read_disk
+
 	call a20_bios
 	call check_a20
 
@@ -19,10 +27,10 @@ start:
 	or eax, 1
 	mov cr0, eax
 
-;	hlt ; uncomment to test before jump instruction
 	jmp dword 0x08:INIT_PM
 
 %include "common.inc"
+%include "disk.inc"
 %include "a20.inc"
 %include "gdt.inc"
 
@@ -45,13 +53,17 @@ BEGIN_PM:
 	mov ah, 0x02
 	mov ebx, op_pmode2
 	call print32
+	call load_segment
 	ret
 
 %include "common32.inc"
 
-op_pmode db "Entering protected mode...",0
-op_pmode2 db "done!",13,10,0
-op_a20yes db "A20 is enabled.",13,10,0
-op_a20no db "A20 is disabled.",13,10,0
-xpos db 0
-ypos db 0
+op_pmode db "Setting cr0 -> Protected mode bit to 1...",0
+op_pmode2 db "done!",10,13,0
+op_a20yes db "A20 is enabled.",10,13,0
+op_a20no db "A20 is disabled.",10,13,0
+op_progress db 0x2e,0
+op_ferror db 10,13,"File not found!",10,13,0
+op_fdone db 10,13,"success!",10,13,0
+iBootDrive db 0
+load_segment equ 0x1000
