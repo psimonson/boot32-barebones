@@ -9,7 +9,7 @@ written in pure C.
 
  - [x] - First stage boot loader (for loading second stage).
  - [x] - Second stage boot loader (for loading kernel).
- - [ ] - Simple starter kernel written in C.
+ - [x] - Simple starter kernel written in C.
 
 ### Developer
 
