@@ -13,7 +13,7 @@ PROJECT_VERSION=1.0
 
 TARGETS=stage1.bin stage2.bin
 
-.PHONY: all run disk clean distclean dist
+.PHONY: all run debug disk clean distclean dist
 all: $(TARGETS)
 	cd ./kernel && make
 
@@ -27,7 +27,11 @@ stage2.bin: stage2.asm common.inc a20.inc
 	$(AS) $(AFLAGS) -o $@ $<
 
 run: clean disk
-	qemu-system-i386 -fda floppy.img
+	qemu-system-i386 -fda floppy.img -boot a
+
+debug: clean disk
+	qemu-system-i386 -fda floppy.img -boot a -s &
+	gdb -ex "target remote localhost:1234" -ex "symbol-file kernel/kernel.elf"
 
 disk: all
 	dd if=/dev/zero of=floppy.img bs=512 count=2880
