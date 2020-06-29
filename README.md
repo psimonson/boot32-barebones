@@ -8,7 +8,7 @@ written in pure C.
 ### TODO
 
  - [x] - First stage boot loader (for loading second stage).
- - [ ] - Second stage boot loader (for loading kernel).
+ - [x] - Second stage boot loader (for loading kernel).
  - [ ] - Simple starter kernel written in C.
 
 ### Developer
