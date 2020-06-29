@@ -12,10 +12,12 @@
 
 /* Initialize the terminal (Text Video Mode). */
 void terminal_initialize(void);
-/* Put a character on the screen. */
+/* Put a character on screen at given (x, y). */
 void terminal_putentryat(int x, int y, char ch, unsigned char color);
+/* Put a character on screen. */
+void terminal_putc(char ch, unsigned char color);
 /* Print a string on screen. */
-void terminal_print(int x, int y, const char *s, unsigned char color);
+void terminal_print(const char *s, unsigned char color);
 /* Enable the terminal cursor. */
 void terminal_cursor_on(void);
 /* Disable the terminal cursor. */

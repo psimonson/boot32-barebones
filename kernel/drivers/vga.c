@@ -14,15 +14,20 @@
 #define VGA_COL 80
 
 static unsigned short *vga_buffer;
+static long unsigned terminal_row;
+static long unsigned terminal_col;
 
 /* Initialize the terminal (graphics).
  */
 void terminal_initialize(void)
 {
 	vga_buffer = (unsigned short*)VGA_MEM;
+	terminal_col = 0;
+	terminal_row = 0;
+
 	for(int y = 0; y < VGA_ROW; y++) {
 		for(int x = 0; x < VGA_COL; x++) {
-			terminal_putentryat(x, y, ' ', 0x0f);
+			terminal_putc(' ', 0x0f);
 		}
 	}
 }
@@ -31,15 +36,41 @@ void terminal_initialize(void)
 void terminal_putentryat(int x, int y, char ch, unsigned char color)
 {
 	if((x >= 0 && x < VGA_COL) && (y >= 0 && y < VGA_ROW)) {
-		vga_buffer[y*VGA_COL+x] = (unsigned short)((color << 8) | ch);
+		const long unsigned index = terminal_row*VGA_COL+terminal_col;
+		vga_buffer[index] = (unsigned short)((color << 8) | ch);
+	}
+}
+/* Put a character on the screen at current location.
+ */
+void terminal_putc(char ch, unsigned char color)
+{
+	switch(ch) {
+		case '\n':
+			terminal_col = 0;
+			terminal_row++;
+		break;
+		default:
+			terminal_putentryat(terminal_col, terminal_row, ch, color);
+			terminal_col++;
+		break;
+	}
+
+	if(terminal_col >= VGA_COL) {
+		terminal_col = 0;
+		terminal_row++;
+	}
+
+	if(terminal_row >= VGA_ROW) {
+		terminal_col = 0;
+		terminal_row = 0;
 	}
 }
 /* Print a string on screen at current location.
  */
-void terminal_print(int x, int y, const char *s, unsigned char color)
+void terminal_print(const char *s, unsigned char color)
 {
 	while(*s != '\0') {
-		terminal_putentryat(x, y, *s, color);
+		terminal_putc(*s, color);
 		s++;
 	}
 }
