@@ -4,17 +4,16 @@ OUTPUT_ARCH(i386:i386);
 
 SECTIONS
 {
-	. = 0x10000;
-	.text : AT(0x0000)
+	. = 0x00100000;
+	.text : ALIGN(4K)
 	{
 		*(.text);
 	}
-	.data :
+	.data : ALIGN(4K)
 	{
 		*(.data);
 		*(.rodata);
 		*(.bss);
-		*(COMMON);
 	}
 	/DISCARD/ :
 	{

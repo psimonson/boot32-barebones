@@ -17,7 +17,7 @@ start:
 	call reset_disk
 
 	mov ax, 2
-	mov cx, 3
+	mov cx, 8
 	xor bx, bx
 	mov es, bx
 	mov bx, load_segment

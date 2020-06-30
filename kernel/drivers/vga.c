@@ -18,8 +18,7 @@
 #define get_offset_row(x) ((x) / (2*MAX_COLS))
 #define get_offset_col(x) (((x) - (get_offset_row((x))*2*MAX_COLS))/2)
 
-static unsigned char *vga_buffer = (void*)0;
-char _terminal_initialized = 0;
+unsigned char *vga_buffer = (void*)0;
 
 /* Prototypes for private functions. */
 int print_char(int col, int row, char ch, char attr);
@@ -36,24 +35,21 @@ void clear_screen(const char attr)
 		vga_buffer[i*2] = ' ';
 		vga_buffer[i*2+1] = attr;
 	}
+
+	set_cursor_offset(get_offset(0, 0));
 }
 /* Initialize the terminal.
  */
 void term_init(const char attr)
 {
-	if(!_terminal_initialized) {
-		_terminal_initialized = 1;
-		vga_buffer = (unsigned char *)VGA_MEM;
-		clear_screen(attr);
-	}
+	vga_buffer = (unsigned char *)VGA_MEM;
+	clear_screen(attr);
 }
 /* Print a string on screen at given (x,y) position.
  */
 void kprint_at(int col, int row, const char *s, char attr)
 {
 	int offset;
-
-	if(!_terminal_initialized) return;
 
 	if(col >= 0 && row >= 0)
 		offset = get_offset(col, row);
@@ -126,5 +122,5 @@ void set_cursor_offset(int offset)
 	outb(REG_VGA_CTRL, 14);
 	outb(REG_VGA_DATA, (unsigned char)(offset >> 8));
 	outb(REG_VGA_CTRL, 15);
-	outb(REG_VGA_DATA, (unsigned char)(offset & 0xff));
+	outb(REG_VGA_DATA, (unsigned char)offset);
 }
