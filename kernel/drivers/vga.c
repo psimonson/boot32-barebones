@@ -123,7 +123,7 @@ int print_char(int col, int row, char c)
 	}
 
 	if(c == '\n') {
-		int row = get_offset_row(offset);
+		row = get_offset_row(offset);
 		offset = get_screen_offset(0, row+1);
 	} else {
 		vga_buffer[offset] = c;
