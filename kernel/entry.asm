@@ -1,6 +1,9 @@
 ; entry point for kernel
 
 [bits 32]
+
+section .text
+
 extern kernel_main
 
 global _start
