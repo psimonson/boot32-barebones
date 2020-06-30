@@ -67,7 +67,7 @@ void term_init(unsigned char bg, unsigned char fg)
  */
 void kprint_at(int col, int row, const char *s)
 {
-	int offset = 0;
+	int offset;
 
 	if(!_term_init) return;
 
@@ -80,7 +80,7 @@ void kprint_at(int col, int row, const char *s)
 	}
 
 	/* Loop through message and print it */
-	for(int i = 0; s[i] != '\0'; i++) {
+	for(int i = 0; s[i] != 0; i++) {
 		offset = print_char(col, row, s[i]);
 		/* Compute row/col for next iteration */
 		row = get_offset_row(offset);
@@ -100,25 +100,21 @@ void kprint(const char *s)
  */
 int print_char(int col, int row, char c)
 {
-	/* Error control: print red 'E' if the coordinates aren't right. */
-	if(col >= MAX_COLS || row >= MAX_ROWS) {
-		vga_buffer[2*MAX_COLS*MAX_ROWS-2] = 'E';
-		vga_buffer[2*MAX_COLS*MAX_ROWS-2-1] = make_attr(BLUE, RED);
-		return get_offset(col, row);
+	int offset;
+	if(col >= 0 && row >= 0) {
+		offset = get_offset(col, row);
+	} else {
+		offset = get_cursor_offset();
 	}
 
-	int offset;
-	if(col >= 0 && row >= 0) offset = get_offset(col, row);
-	else offset = get_cursor_offset();
-
 	if(c == '\n') {
-		row = get_offset_row(offset);
-		offset = get_offset(0, row+1);
+		int row = get_offset_row(offset);
+		offset = get_offset(79, row+1);
 	} else {
 		vga_buffer[offset] = c;
 		vga_buffer[offset+1] = _text_attr;
-		offset += 2;
 	}
+	offset += 2;
 	set_cursor_offset(offset);
 	return offset;
 }
