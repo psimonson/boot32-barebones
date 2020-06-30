@@ -50,7 +50,7 @@ INIT_PM:
 	mov esp, ebp
 
 	call load_segment
-	cli
+	hlt
 
 %include "common32.inc"
 
