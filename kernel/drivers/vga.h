@@ -13,9 +13,9 @@
 #define REG_VGA_CTRL 0x3d4
 #define REG_VGA_DATA 0x3d5
 
-#define YELLOW_ON_BLUE 0x1b
+#define YELLOW_ON_BLUE 0x1e
 #define WHITE_ON_BLACK 0x0f
-#define RED_ON_BLUE    0x14
+#define RED_ON_BLUE    0x13
 
 /* Initialize the terminal (Text Video Mode). */
 void term_init(const char attr);
