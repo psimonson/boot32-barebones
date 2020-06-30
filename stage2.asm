@@ -7,18 +7,21 @@
 
 start:
 	mov [iBootDrive], dl
+
+	call a20_bios
+	call check_a20
+
 	mov si, op_loading
 	call print
+
 	call reset_disk
+
 	mov ax, 2
 	mov cx, 3
 	xor bx, bx
 	mov es, bx
 	mov bx, load_segment
 	call read_disk
-
-	call a20_bios
-	call check_a20
 
 	; switch on protected mode
 	cli
