@@ -13,12 +13,9 @@ void print_at(int col, int row, char *s)
 {
 	int offset, i;
 
-	if(col >= 0 || row >= 0) {
-		offset = get_screen_offset(col, row);
-	} else {
-		offset = get_cursor_offset();
-		col = get_offset_col(offset);
-		row = get_offset_row(offset);
+	if(col >= MAX_COLS || row >= MAX_ROWS) {
+		offset = print_char(0, 0, 'E');
+		set_cursor_offset(offset);
 	}
 
 	i = 0;
