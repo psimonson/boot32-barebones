@@ -28,15 +28,23 @@ unsigned char *vga_buffer;
 
 /* Initialize the terminal (Text Video Mode). */
 void term_init(unsigned char fg, unsigned char bg);
-/* Print a string on screen at given (x, y). */
-void kprint_at(int x, int y, const char *s);
-/* Print a string on screen at current position. */
-void kprint(const char *s);
+/* Put a character on the screen. */
+int print_char(int x, int y, char c);
 /* Clear the screen. */
 void clear_screen(void);
 /* Set a new text attribute. */
 void set_text_attr(unsigned char bg, unsigned char fg);
 /* Make a text attribute. */
 unsigned char make_attr(unsigned char bg, unsigned char fg);
+/* Get screen offset from (col, row). */
+int get_screen_offset(int col, int row);
+/* Get row from offset. */
+int get_offset_row(int offset);
+/* Get column from offset. */
+int get_offset_col(int offset);
+/* Get cursor offset. */
+int get_cursor_offset(void);
+/* Set cursor offset. */
+void set_cursor_offset(int offset);
 
 #endif

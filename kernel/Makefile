@@ -7,7 +7,7 @@ CFLAGS=-std=c11 -Wall -O -pedantic -g -m32 \
 			 -I./drivers
 LDFLAGS=
 BACKUPS=$(shell find . -iname "*.bak")
-OBJECTS=entry.o kernel.o drivers/ports.o drivers/vga.o
+OBJECTS=entry.o kernel.o io.o drivers/ports.o drivers/vga.o
 TARGET=kernel.bin
 
 .PHONY: all clean distclean

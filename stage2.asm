@@ -20,8 +20,8 @@ start:
 
 	call reset_disk
 
-	mov ax, 2
-	mov cx, 16
+	mov ax, 2   ; this is the starting sector LBA addressing
+	mov cx, 9  ; set this to count of sectors to read
 	mov bx, load_segment
 	mov es, bx
 	mov bx, load_offset

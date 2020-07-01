@@ -9,6 +9,11 @@ SECTIONS
 	{
 		code = .;
 		*(.text)
+		. = ALIGN(4K);
+	}
+	.rodata : AT(BASE_ADDR + (rodata - code))
+	{
+		rodata = .;
 		*(.rodata)
 		. = ALIGN(4K);
 	}
