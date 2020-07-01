@@ -9,15 +9,15 @@ written in pure C.
 
  - Install required tools for Debian based distros below.
 
-    1 - build-essential
-    2 - nasm
-    3 - qemu-system (installs everything for qemu).
+    1 - build-essential\
+    2 - nasm\
+    3 - qemu-system (installs everything for qemu).\
 
  - How to compile?
 
-    1 - make run (builds and runs in qemu).
-    2 - make debug (builds and runs in qemu with gdb debugging).
-    3 - make disk - builds floppy.img (you can write that to a floppy).
+    1 - make run (builds and runs in qemu).\
+    2 - make debug (builds and runs in qemu with gdb debugging).\
+    3 - make disk - builds floppy.img (you can write that to a floppy).\
 
 ### TODO
 
