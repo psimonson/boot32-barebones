@@ -10,10 +10,6 @@
 #include "vga.h"
 #include "ports.h"
 
-#define MAX_ROWS 25
-#define MAX_COLS 80
-
-static unsigned char *vga_buffer;
 static unsigned char _text_attr = 0, _term_init = 0;
 
 /* Prototypes for private functions. */
