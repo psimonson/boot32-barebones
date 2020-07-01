@@ -1,30 +1,34 @@
 ENTRY(kernel_main);
 OUTPUT_FORMAT(elf32-i386);
 OUTPUT_ARCH(i386:i386);
+BASE_ADDR = 0x00100000;
 
 SECTIONS
 {
-	. = 0x00080000;
-	.text BLOCK(4K) : ALIGN(4K)
+	.text BASE_ADDR : AT(BASE_ADDR)
 	{
-		*(.text);
+		code = .;
+		*(.text)
+		*(.rodata)
+		. = ALIGN(4K);
 	}
-	.rodata BLOCK(4K) : ALIGN(4K)
+	.data : AT(BASE_ADDR + (data - code))
 	{
-		*(.rodata);
+		data = .;
+		*(.data)
+		. = ALIGN(4K);
 	}
-	.data BLOCK(4K) : ALIGN(4K)
+	.bss : AT(BASE_ADDR + (bss - code))
 	{
-		*(.data);
-	}
-	.bss BLOCK(4K) : ALIGN(4K)
-	{
-		*(.bss);
-		*(COMMON);
+		bss = .;
+		*(.bss)
+		*(COMMON)
+		. = ALIGN(4K);
 	}
 	/DISCARD/ :
 	{
 		*(.comment);
+		*(.igot.*);
 		*(.eh_frame);
 	}
 }

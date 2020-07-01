@@ -17,7 +17,7 @@ entry.o: entry.asm
 	$(AS) $(AFLAGS) -o $@ $^
 
 $(TARGET): $(OBJECTS)
-	$(LD) $(LDFLAGS) -Tlink.ld --oformat=binary -o $@ $^
+	$(LD) $(LDFLAGS) -Tlink.ld -o $@ $^ --oformat binary
 
 kernel.elf: $(OBJECTS)
 	$(LD) $(LDFLAGS) -Tlink.ld -o $@ $^
