@@ -62,7 +62,7 @@ op_filename db "kernel  bin",0
 
 ; constants
 root_segment equ 0x0ee0
-root_offset equ 0x0ee0
+root_offset equ 0x0000
 load_segment equ 0x1000
 load_offset equ 0x0000
 run_offset equ 0x00010000
