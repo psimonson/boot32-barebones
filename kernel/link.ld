@@ -9,7 +9,6 @@ SECTIONS
 	{
 		code = .;
 		*(.text)
-		. = ALIGN(4K);
 	}
 	.rodata : AT(BASE_ADDR + (rodata - code))
 	{
@@ -21,14 +20,12 @@ SECTIONS
 	{
 		data = .;
 		*(.data)
-		. = ALIGN(4K);
 	}
 	.bss : AT(BASE_ADDR + (bss - code))
 	{
 		bss = .;
 		*(.bss)
 		*(COMMON)
-		. = ALIGN(4K);
 	}
 	/DISCARD/ :
 	{
