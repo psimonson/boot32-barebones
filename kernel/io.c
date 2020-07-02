@@ -11,11 +11,21 @@
  */
 void print_at(int col, int row, char *s)
 {
+	int offset;
+
+	if(col >= 0 && row >= 0) {
+		offset = get_screen_offset(col, row);
+	} else {
+		offset = get_cursor_offset();
+		row = get_offset_row(offset);
+		col = get_offset_col(offset);
+	}
+
 	for(int i = 0; s[i] != 0; i++) {
-		int offset = print_char(col, row, s[i]);
+		offset = print_char(col, row, s[i]);
 		/* Compute row/col for next iteration */
-		col = get_offset_row(offset);
-		row = get_offset_col(offset);
+		row = get_offset_row(offset);
+		col = get_offset_col(offset);
 	}
 }
 /* Print a string on screen at current location.
