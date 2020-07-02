@@ -5,6 +5,10 @@ am doing this small project to learn even more, after all knowledge is power. Th
 project will show you how to write a two stage boot loader written in NASM (Net-wide Assembler), also with a simple kernel
 written in pure C.
 
+### Screen Shots
+
+![Screen shot as of July 2, 2020!](screenshots/screenshot01.png)
+
 ### Build and Run Instructions
 
  - Install required tools for Debian based distros below.
