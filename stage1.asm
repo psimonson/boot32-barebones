@@ -68,8 +68,8 @@ op_progress db 0x2e,0
 op_filename db "stage2  bin",0
 
 ; constants
-root_segment equ 0x0000
-root_offset equ 0x0500
+root_segment equ 0x0ee0
+root_offset equ 0x0000
 load_segment equ 0x07e0
 load_offset equ 0x0000
 run_segment equ 0x0000
