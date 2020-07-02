@@ -12,20 +12,13 @@ start:
 	mov ax, 0x0003
 	int 0x10
 
+	call reset_disk
 	call a20_bios
 	call check_a20
 
 	mov si, op_loading
 	call print
-
-	call reset_disk
-
-	mov ax, 2   ; this is the starting sector LBA addressing
-	mov cx, 2  ; set this to count of sectors to read
-	mov bx, load_segment
-	mov es, bx
-	mov bx, load_offset
-	call read_disk
+	call load_file
 
 	; switch on protected mode
 	cli
@@ -58,12 +51,18 @@ INIT_PM:
 
 %include "common32.inc"
 
+; data
 op_loading db "Loading kernel, please wait",0
 op_done db "done!",10,13,0
 op_a20yes db "A20 is enabled.",10,13,0
 op_a20no db "A20 is disabled.",10,13,0
 op_progress db 0x2e,0
-op_failed db 10,13,"File not found!",10,13,0
+op_ferror db 10,13,"File not found!",10,13,0
+op_filename db "kernel  bin",0
+
+; constants
+root_segment equ 0x0ee0
+root_offset equ 0x0000
 load_segment equ 0x1000
 load_offset equ 0x0000
 run_offset equ 0x00010000

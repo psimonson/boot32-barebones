@@ -12,6 +12,38 @@ reset_disk:
 	ret
 
 ; ==================================================
+; Description: Load a file from my file table.
+; No parameters.
+; ==================================================
+load_file:
+	mov bx, root_segment
+	mov es, bx
+	mov bx, root_offset
+.loop:
+	mov al, [bx]
+	cmp al, 0x0
+	je .error
+	mov cx, 11
+	mov di, bx
+	mov si, op_filename
+	rep cmpsb
+	je .found
+	add bx, 16
+	jmp short .loop
+.found:
+	mov ax, word [es:bx+0x0c]
+	mov cx, word [es:bx+0x0e]
+	mov bx, load_segment
+	mov es, bx
+	mov bx, load_offset
+	call read_disk
+	ret
+.error:
+	mov si, op_ferror
+	call print
+	ret
+
+; ==================================================
 ; Description: Load file from disk using LBA.
 ; ax - LBA (Logical Block Address)
 ; cx - Number of sectors to read.
@@ -48,7 +80,7 @@ read_disk:
 	pop ax
 	cmp di, 0
 	jne .loop
-	mov si, op_failed
+	mov si, op_ferror
 	call print
 	jmp $
 .success:

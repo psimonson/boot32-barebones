@@ -27,15 +27,28 @@ init:
 	mov [iBootDrive], dl
 	call reset_disk
 
-	mov si, op_loading
+	; load file table
+	mov si, op_loading1
 	call print
 
-	mov ax, 1
-	mov cx, 2
-	mov bx, load_segment
+	; read entire file table into memory
+	mov ax, 16
+	mov bx, word [iRootSize]
+	mul bx
+	mov bx, word [iSectSize]
+	xor dx, dx
+	div bx
+	mov cx, ax
+	mov ax, word [iResSect]
+	mov bx, root_segment
 	mov es, bx
-	xor bx, bx
+	mov bx, root_offset
 	call read_disk
+
+	; load second stage
+	mov si, op_loading2
+	call print
+	call load_file
 
 	mov dl, [iBootDrive]
 	xor ax, ax
@@ -46,12 +59,19 @@ init:
 %include "common.inc"
 %include "disk.inc"
 
-op_loading db "Loading stage 2, please wait",0
-op_ferror db 10,13,"Disk error!",13,10,0
+; data
+op_loading1 db "Loading file table",0
+op_loading2 db "Loading stage 2, please wait",0
 op_done db "success!",13,10,0
-op_failed db "failed!",13,10,0
+op_ferror db 10,13,"File not found!",13,10,0
 op_progress db 0x2e,0
+op_filename db "stage2  bin",0
+
+; constants
+root_segment equ 0x0ee0
+root_offset equ 0x0000
 load_segment equ 0x07e0
+load_offset equ 0x0000
 run_segment equ 0x0000
 run_offset equ 0x7e00
 
