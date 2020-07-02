@@ -16,8 +16,8 @@ all: $(TARGET) kernel.elf
 entry.o: entry.asm
 	$(AS) $(AFLAGS) -o $@ $^
 
-$(TARGET): $(OBJECTS)
-	$(LD) $(LDFLAGS) -Tlink.ld -o $@ $^ --oformat binary
+$(TARGET): kernel.elf
+	objcopy -O binary kernel.elf $(TARGET)
 
 kernel.elf: $(OBJECTS) link.ld
 	$(LD) $(LDFLAGS) -Tlink.ld -o $@ $(OBJECTS)
