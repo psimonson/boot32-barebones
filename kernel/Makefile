@@ -19,8 +19,8 @@ entry.o: entry.asm
 $(TARGET): $(OBJECTS)
 	$(LD) $(LDFLAGS) -Tlink.ld -o $@ $^ --oformat binary
 
-kernel.elf: $(OBJECTS)
-	$(LD) $(LDFLAGS) -Tlink.ld -o $@ $^
+kernel.elf: $(OBJECTS) link.ld
+	$(LD) $(LDFLAGS) -Tlink.ld -o $@ $(OBJECTS)
 
 clean:
 	rm -f $(OBJECTS) $(TARGET) *.elf
