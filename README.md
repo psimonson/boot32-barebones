@@ -28,10 +28,13 @@ written in pure C.
  - [x] - First stage boot loader (for loading second stage).
  - [x] - Second stage boot loader (for loading kernel).
  - [x] - Simple starter kernel written in C.
+ - [x] - Add my simple file system (list of LBA starts and count of sectors).
+ - [ ] - Fix kernel not loading again.
 
 ### Developer
 
  - Philip R. Simonson (aka 5n4k3)
+ - With help from people on osdev.org, Michael Petch, Octocontrabass, and more.
 
 ### License
 
