@@ -7,12 +7,12 @@
 
 start:
 	mov [iBootDrive], dl
+	call reset_disk
 
 	; set text mode (80x25)
 	mov ax, 0x0003
 	int 0x10
 
-	call reset_disk
 	call a20_bios
 	call check_a20
 
@@ -61,8 +61,8 @@ op_ferror db 10,13,"File not found!",10,13,0
 op_filename db "kernel  bin",0
 
 ; constants
-root_segment equ 0x0ee0
-root_offset equ 0x0000
+root_segment equ 0x0000
+root_offset equ 0x0fc0
 load_segment equ 0x1000
 load_offset equ 0x0000
 run_offset equ 0x00010000
