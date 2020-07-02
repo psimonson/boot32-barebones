@@ -61,8 +61,8 @@ op_ferror db 10,13,"File not found!",10,13,0
 op_filename db "kernel  bin",0
 
 ; constants
-root_segment equ 0x0000
-root_offset equ 0x0fc0
+root_segment equ 0x00000
+root_offset equ 0x0500
 load_segment equ 0x1000
 load_offset equ 0x0000
 run_offset equ 0x00010000
