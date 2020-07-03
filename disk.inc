@@ -18,25 +18,21 @@ reset_disk:
 load_file:
 	mov bx, root_segment
 	mov es, bx
-	mov bx, root_offset
+	xor bx, bx
 .loop:
-	mov al, [bx]
-	cmp al, 0x0
-	je .error
+	mov al, byte [bx]
+	or al, al
+	jz .error
 	mov cx, 11
 	mov di, bx
 	mov si, op_filename
-	rep cmpsb
-	je .found
+	repe cmpsb
+	jz .found
 	add bx, 16
 	jmp short .loop
 .found:
 	mov ax, word [es:bx+0x0c]
 	mov cx, word [es:bx+0x0e]
-	mov bx, load_segment
-	mov es, bx
-	mov bx, load_offset
-	call read_disk
 	ret
 .error:
 	mov si, op_ferror
