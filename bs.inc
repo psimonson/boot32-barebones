@@ -8,7 +8,7 @@ bootsector:
 	iTotalSect:		dw	2880			; Total number of sectors
 	iMedia:			db	0xf0			; Media descriptor
 	iFatSize:		dw	7				; Size of each FAT
-	iTrackSect:		dw	9				; Sectors per track
+	iTrackSect:		dw	18				; Sectors per track
 	iHeadCnt:		dw	2				; Number of heads
 	iHiddenSect:	dd	0				; Number of hidden sectors
 	iSect32:		dd	0				; Number of sectors over 32MB
