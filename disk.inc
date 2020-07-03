@@ -48,24 +48,27 @@ load_file:
 ; ax - LBA (Logical Block Address)
 ; ==================================================
 lbachs:
-	push ax
 	push bx
-	push dx
+	push ax
 	; calculate sector
 	xor dx, dx
-	mov bx, word [iTrackSect]
-	div bx
-	inc dx
+	div word [iTrackSect]
+	inc dl
 	mov [abs_sector], dl
-	; calculate track/head
-	mov bx, word [iHeadCnt]
+	; calculate head
 	xor dx, dx
-	div bx
-	mov [abs_track], al
-	xchg [abs_head], dl
-	pop dx
-	pop bx
+	div word [iHeadCnt]
+	mov [abs_head], dl
+	; finally track
+	mov ax, word [iHeadCnt]
+	mul word [iTrackSect]
+	xor dx, dx
+	xchg bx, ax
 	pop ax
+	div bx
+	mov byte [abs_track], al
+	xor dx, dx
+	pop bx
 	ret
 
 ; ==================================================
@@ -78,21 +81,22 @@ read_disk:
 	mov di, 5
 .loop:
 	push ax
+	push bx
 	push cx
 	call lbachs
 	mov ax, 0x0201
-	mov ch, [abs_track]
-	mov cl, [abs_sector]
-	mov dh, [abs_head]
-	mov dl, [iBootDrive]
+	mov ch, byte [abs_track]
+	mov cl, byte [abs_sector]
+	mov dh, byte [abs_head]
+	mov dl, byte [iBootDrive]
 	int 0x13
 	jnc .success
 	call reset_disk
 	dec di
 	pop cx
+	pop bx
 	pop ax
-	cmp di, 0
-	jne .loop
+	jnz .loop
 	mov si, op_ferror
 	call print
 	jmp $
@@ -100,15 +104,16 @@ read_disk:
 	mov si, op_progress
 	call print
 	pop cx
+	pop bx
 	pop ax
-	inc ax
 	add bx, word [iSectSize]
+	inc ax
 	loop read_disk
 	mov si, op_done
 	call print
 	ret
 
-abs_sector db 0x00
-abs_track db 0x00
-abs_head db 0x00
+abs_sector resb 1
+abs_track resb 1
+abs_head resb 1
 
