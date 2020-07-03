@@ -9,6 +9,7 @@
 
 #include "vga.h"
 #include "ports.h"
+#include "util.h"
 
 static unsigned char _text_attr = 0, _term_init = 0;
 
@@ -88,6 +89,21 @@ int print_char(int col, int row, char c)
 		vga_buffer[offset+1] = _text_attr;
 		offset += 2;
 	}
+
+	/* Scroll the screen up. */
+	if(offset >= MAX_ROWS*MAX_COLS*2) {;
+		for(int i = 0; i < MAX_ROWS; i++) {
+			char *cur_line = (char*)get_screen_offset(0, i)+VGA_ADDRESS;
+			char *prev_line = (char*)get_screen_offset(0, i-1)+VGA_ADDRESS;
+			memcpy(prev_line, cur_line, MAX_COLS*2);
+		}
+		for(int i = 0; i < MAX_COLS; i++) {
+			offset = get_screen_offset(i, MAX_ROWS-1);
+			vga_buffer[offset] = ' ';
+			vga_buffer[offset+1] = _text_attr;
+		}
+	}
+
 	set_cursor_offset(offset);
 	return offset;
 }

@@ -4,10 +4,10 @@ CC=gcc
 CFLAGS=-std=c11 -Wall -O -pedantic -g -m32 \
        -ffreestanding -fno-pie -fno-pic \
        -nostdlib -nostdinc -nostartfiles \
-			 -I./drivers
+			 -I./drivers -I./common
 LDFLAGS=
 BACKUPS=$(shell find . -iname "*.bak")
-OBJECTS=entry.o kernel.o io.o drivers/ports.o drivers/vga.o
+OBJECTS=entry.o kernel.o io.o common/util.o drivers/ports.o drivers/vga.o
 TARGET=kernel.bin
 
 .PHONY: all clean distclean
