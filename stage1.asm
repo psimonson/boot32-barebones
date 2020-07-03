@@ -33,16 +33,14 @@ init:
 
 	; read entire file table into memory
 	mov ax, 16
-	mov bx, word [iRootSize]
-	mul bx
-	mov bx, word [iSectSize]
+	mul word [iRootSize]
 	xor dx, dx
-	div bx
+	div word [iSectSize]
 	mov cx, ax
 	mov ax, word [iResSect]
 	mov bx, root_segment
 	mov es, bx
-	mov bx, root_offset
+	xor bx, bx
 	call read_disk
 
 	; load second stage
@@ -73,7 +71,6 @@ op_filename db "stage2  bin",0
 
 ; constants
 root_segment equ 0x0ee0
-root_offset equ 0x0000
 load_segment equ 0x07e0
 run_segment equ 0x0000
 run_offset equ 0x7e00

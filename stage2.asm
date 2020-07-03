@@ -37,6 +37,7 @@ start:
 %include "disk.inc"
 %include "a20.inc"
 %include "gdt.inc"
+%include "boot.inc"
 
 [bits 32]
 
@@ -68,5 +69,3 @@ op_filename db "kernel  bin",0
 root_segment equ 0x0ee0
 load_segment equ 0x1000
 run_offset equ 0x00010000
-
-%include "bs.inc"
