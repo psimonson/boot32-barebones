@@ -40,34 +40,6 @@ load_file:
 	ret
 
 ; ==================================================
-; Description: Calculate and store the LBA address.
-; ax - LBA (Logical Block Address)
-; ==================================================
-lbachs:
-	push bx
-	push ax
-	; calculate sector
-	xor dx, dx
-	div word [iTrackSect]
-	inc dl
-	mov [abs_sector], dl
-	; calculate head
-	xor dx, dx
-	div word [iHeadCnt]
-	mov [abs_head], dl
-	; finally track
-	mov ax, word [iHeadCnt]
-	mul word [iTrackSect]
-	xor dx, dx
-	xchg bx, ax
-	pop ax
-	div bx
-	mov byte [abs_track], al
-	xor dx, dx
-	pop bx
-	ret
-
-; ==================================================
 ; Description: Load file from disk using LBA.
 ; ax - LBA (Logical Block Address)
 ; cx - Number of sectors to read.
@@ -77,22 +49,33 @@ read_disk:
 	mov di, 5
 .loop:
 	push ax
-	push bx
 	push cx
-	call lbachs
+	push bx
+	; calculate sector
+	mov bx, word [iTrackSect]
+	xor dx, dx
+	div bx
+	inc dx
+	mov cl, dl
+	; calculate track/head
+	mov bx, word [iHeadCnt]
+	xor dx, dx
+	div bx
+	mov ch, al
+	xchg dl, dh
+	; read sector
 	mov ax, 0x0201
-	mov ch, byte [abs_track]
-	mov cl, byte [abs_sector]
-	mov dh, byte [abs_head]
 	mov dl, byte [iBootDrive]
+	pop bx
 	int 0x13
 	jnc .success
-	call reset_disk
+	xor ax, ax
+	int 0x13
 	dec di
 	pop cx
-	pop bx
 	pop ax
-	jnz .loop
+	cmp di, 0
+	jne .loop
 	mov si, op_ferror
 	call print
 	jmp $
@@ -100,10 +83,9 @@ read_disk:
 	mov si, op_progress
 	call print
 	pop cx
-	pop bx
 	pop ax
-	add bx, word [iSectSize]
 	inc ax
+	add bx, word [iSectSize]
 	loop read_disk
 	mov si, op_done
 	call print

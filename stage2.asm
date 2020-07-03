@@ -18,7 +18,9 @@ start:
 
 	mov si, op_loading
 	call print
-	call load_file
+;	call load_file
+	mov ax, 10
+	mov cx, 2
 	mov bx, load_segment
 	mov es, bx
 	xor bx, bx
