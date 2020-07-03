@@ -98,9 +98,9 @@ int print_char(int col, int row, char c)
 			memcpy(prev_line, cur_line, MAX_COLS*2);
 		}
 		for(int i = 0; i < MAX_COLS; i++) {
-			offset = get_screen_offset(i, MAX_ROWS-1);
-			vga_buffer[offset] = ' ';
-			vga_buffer[offset+1] = _text_attr;
+			int index = get_screen_offset(i, MAX_ROWS-1);
+			vga_buffer[index] = ' ';
+			vga_buffer[index+1] = _text_attr;
 		}
 	}
 
