@@ -109,7 +109,7 @@ read_disk:
 	call print
 	ret
 
-abs_sector resb 1
-abs_track resb 1
-abs_head resb 1
+abs_sector db 0
+abs_track db 0
+abs_head db 0
 
