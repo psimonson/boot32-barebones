@@ -19,8 +19,10 @@ start:
 	mov si, op_loading
 	call print
 ;	call load_file
-	mov ax, 10
-	mov cx, 2
+
+	; load kernel from sectors
+	mov ax, 10	; starting sector of kernel
+	mov cx, 2		; total sector containing kernel
 	mov bx, load_segment
 	mov es, bx
 	xor bx, bx
