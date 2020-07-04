@@ -1,5 +1,5 @@
 /*
- * keyboard.c - Source file for simple keyboard input/output.
+ * keyboard.c - Source file for simple keyboard input.
  *
  * Author: Philip R. Simonson
  * Date  : 07/04/2020

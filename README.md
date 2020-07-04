@@ -30,6 +30,7 @@ written in pure C.
  - [x] - Simple starter kernel written in C.
  - [x] - Add my simple file system (list of LBA starts and count of sectors).
  - [x] - Fix kernel not loading again.
+ - [ ] - Add keyboard input handler.
 
 ### Developer
 
