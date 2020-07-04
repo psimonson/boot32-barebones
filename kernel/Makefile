@@ -8,7 +8,8 @@ CFLAGS=-std=c11 -Wall -O -pedantic -g -m32 \
 LDFLAGS=
 BACKUPS=$(shell find . -iname "*.bak")
 OBJECTS=entry.o kernel.o common/io.o common/util.o \
-	drivers/ports.o drivers/vga.o cpu/ints.o cpu/idt.o cpu/isr.o
+	drivers/vga.o drivers/keyboard.o cpu/ints.o \
+	cpu/idt.o cpu/isr.o cpu/ports.o
 TARGET=kernel.bin
 
 .PHONY: all clean distclean
