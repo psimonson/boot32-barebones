@@ -201,60 +201,84 @@ isr19:
 ; 20: Reserved
 isr20:
 	cli
+	push byte 0
+	push byte 20
 	jmp isr_common_stub
 
 ; 21: Reserved
 isr21:
 	cli
+	push byte 0
+	push byte 21
 	jmp isr_common_stub
 
 ; 22: Reserved
 isr22:
 	cli
+	push byte 0
+	push byte 22
 	jmp isr_common_stub
 
 ; 23: Reserved
 isr23:
 	cli
+	push byte 0
+	push byte 23
 	jmp isr_common_stub
 
 ; 24: Reserved
 isr24:
 	cli
+	push byte 0
+	push byte 24
 	jmp isr_common_stub
 
 ; 25: Reserved
 isr25:
 	cli
+	push byte 0
+	push byte 25
 	jmp isr_common_stub
 
 ; 26: Reserved
 isr26:
 	cli
+	push byte 0
+	push byte 26
 	jmp isr_common_stub
 
 ; 27: Reserved
 isr27:
 	cli
+	push byte 0
+	push byte 27
 	jmp isr_common_stub
 
 ; 28: Reserved
 isr28:
 	cli
+	push byte 0
+	push byte 28
 	jmp isr_common_stub
 
 ; 29: Reserved
 isr29:
 	cli
+	push byte 0
+	push byte 29
 	jmp isr_common_stub
 
 ; 30: Reserved
 isr30:
 	cli
+	push byte 0
+	push byte 30
 	jmp isr_common_stub
 
 ; 31: Reserved
 isr31:
 	cli
+	push byte 0
+	push byte 31
 	jmp isr_common_stub
 
