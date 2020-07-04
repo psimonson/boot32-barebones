@@ -7,7 +7,13 @@
 void kernel_main(void)
 {
 	isr_install();
+	irq_install();
 	term_init(BLUE, YELLOW);
+
+	/* Disabled until I can figure out what is wrong with the Interrupts. */
+//	__asm__("int $2");
+//	__asm__("int $3");
+
 	print("Welcome to my bare bones example 32 bit operating system.\n");
 	print("\n  I have designed this because I would like to teach beginners\n");
 	print("the proper way of doing things. As far as a beginning operating\n");
@@ -16,7 +22,7 @@ void kernel_main(void)
 	print("on this project. Also this software comes WITHOUT ANY WARRANTY\n");
 	print("of any kind. I will not be held accountable for any damage this\n");
 	print("software may cause. Please use at your own risk.\n");
-	print("\n\nCheers,\nPhilip R. Simonson (aka 5n4k3)\n");
+	print("\n\nCheers,\nPhilip R. Simonson (aka 5n4k3)\n\n");
 
 	/* Display message to user. */
 	print("Welcome to a bare bones kernel! Please type 'help' to\n"
