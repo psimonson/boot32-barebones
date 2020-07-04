@@ -2,13 +2,13 @@ AS=nasm
 AFLAGS=-f elf32
 CC=gcc
 CFLAGS=-std=c11 -Wall -O -pedantic -g -m32 \
-	-ffreestanding -fno-pie -fno-pic \
+	-ffreestanding -fno-pie -fno-pic -fno-builtin \
 	-nostdlib -nostdinc -nostartfiles \
-	-I./drivers -I./common -I./cpu
+	-I. -I./drivers -I./common -I./cpu
 LDFLAGS=
 BACKUPS=$(shell find . -iname "*.bak")
-OBJECTS=entry.o kernel.o common/io.o common/util.o \
-	drivers/vga.o drivers/keyboard.o cpu/ints.o \
+OBJECTS=entry.o kernel.o common/io.o common/helper.o \
+	common/util.o drivers/vga.o drivers/keyboard.o cpu/ints.o \
 	cpu/idt.o cpu/isr.o cpu/ports.o
 TARGET=kernel.bin
 

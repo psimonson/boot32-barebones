@@ -20,19 +20,13 @@ void memcpy(void *dest, const void *src, unsigned long bytes)
 		d++, s++;
 	}
 }
-/* Convert integer to c-string.
+/* Set memory to specific value.
  */
-void itoa(int n, char *s, int size)
+void memset(void *dest, int c, int size)
 {
-	int i, sign;
-
-	if((sign = n) < 0)
-		n = -n;
-
-	for(i = 0; i < size && n > 0; n /= 10)
-		s[i++] = n % 10 + '0';
-	if(sign < 0)
-		s[i++] = '-';
-	s[i] = '\0';
-	/* TODO: Implement reverse and use it here. */
+	char *d = (char*)dest;
+	int i;
+	if(size <= 0) return;
+	for(i = 0; i < size; i++)
+		d[i] = (char)c;
 }

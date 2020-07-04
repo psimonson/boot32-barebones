@@ -8,7 +8,8 @@
  */
 
 #include "keyboard.h"
-#include "vga.h"
+#include "kernel.h"
+#include "helper.h"
 #include "io.h"
 #include "ports.h"
 #include "isr.h"
@@ -42,14 +43,17 @@ static void keyboard_callback(registers_t *regs)
 	u8_t scancode = inb(0x60);
 
 	if(scancode > SC_MAX) return;
-	if(scancode == 0x0B) {
-		// TODO: Implement this.
-	} else if(scancode == 0x0A) {
-		// TODO: Implement this.
+	if(scancode == 0x0B) { // Backspace
+		backspace(key_buffer);
+		print_bkspc();
+	} else if(scancode == 0x0A) { // Enter/Return
+		print("\n");
+		user_input(key_buffer);
+		key_buffer[0] = '\0';
 	} else {
 		char letter = sc_ascii[(int)scancode];
 		char str[2] = {letter, '\0'};
-//		append(key_buffer, letter);
+		append(key_buffer, letter);
 		print(str);
 	}
 	(void)regs;

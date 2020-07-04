@@ -12,6 +12,6 @@
 
 /* Functions implemented in util.c */
 void memcpy(void *dest, const void *src, unsigned long nbytes);
-void itoa(int n, char *s, int size);
+void memset(void *dest, int c, int size);
 
 #endif

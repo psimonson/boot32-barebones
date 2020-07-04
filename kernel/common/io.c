@@ -34,3 +34,12 @@ void print(char *s)
 {
 	print_at(-1, -1, s);
 }
+/* Print backspace character to screen.
+ */
+void print_bkspc(void)
+{
+	int offset = get_cursor_offset()-2;
+	int row = get_offset_row(offset);
+	int col = get_offset_col(offset);
+	print_char(col, row, 0x08);
+}

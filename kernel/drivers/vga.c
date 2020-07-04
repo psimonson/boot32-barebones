@@ -87,6 +87,10 @@ int print_char(int col, int row, char c)
 	if(c == '\n') {
 		row = get_offset_row(offset);
 		offset = get_screen_offset(0, row+1);
+	} else if(c == 0x08) {
+		vga_buffer[offset] = ' ';
+		vga_buffer[offset+1] = _text_attr;
+		offset += 2;
 	} else {
 		vga_buffer[offset] = c;
 		vga_buffer[offset+1] = _text_attr;
@@ -105,6 +109,7 @@ int print_char(int col, int row, char c)
 			vga_buffer[index] = ' ';
 			vga_buffer[index+1] = _text_attr;
 		}
+		offset = MAX_COLS*2;
 	}
 
 	set_cursor_offset(offset);

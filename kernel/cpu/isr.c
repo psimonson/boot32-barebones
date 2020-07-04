@@ -11,6 +11,7 @@
 #include "idt.h"
 #include "vga.h"
 #include "util.h"
+#include "helper.h"
 #include "io.h"
 #include "ports.h"
 #include "keyboard.h"

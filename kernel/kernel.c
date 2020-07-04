@@ -17,4 +17,20 @@ void kernel_main(void)
 	print("of any kind. I will not be held accountable for any damage this\n");
 	print("software may cause. Please use at your own risk.\n");
 	print("\n\nCheers,\nPhilip R. Simonson (aka 5n4k3)\n");
+
+	/* Display message to user. */
+	print("Welcome to a bare bones kernel! Please type 'help' to\n"
+				"to see what you can do.\n\n> ");
+}
+/* Kernel process user input.
+ */
+void user_input(char *input)
+{
+	if(!strcmp(input, "EXIT")) {
+		print("Halting CPU...\n");
+		__asm__ __volatile("hlt");
+	} else {
+		print("Invalid command entered. Try 'help'\nto see what you can do.\n");
+		print("> ");
+	}
 }
