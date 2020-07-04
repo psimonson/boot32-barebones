@@ -12,6 +12,9 @@
 #include "vga.h"
 #include "util.h"
 #include "io.h"
+#include "ports.h"
+
+isr_t interrupt_handlers[256];
 
 /* Exception messages to print. */
 char *exception_messages[32] = {
@@ -53,6 +56,7 @@ char *exception_messages[32] = {
  */
 void isr_install(void)
 {
+	/* Install ISRs */
 	set_idt_gate(0, (u32_t)isr0);
 	set_idt_gate(1, (u32_t)isr1);
 	set_idt_gate(2, (u32_t)isr2);
@@ -85,18 +89,76 @@ void isr_install(void)
 	set_idt_gate(29, (u32_t)isr29);
 	set_idt_gate(30, (u32_t)isr30);
 	set_idt_gate(31, (u32_t)isr31);
+	/* Remap the PIC */
+	outb(0x20, 0x11);
+	outb(0xA0, 0x11);
+	outb(0x21, 0x20);
+	outb(0xA1, 0x28);
+	outb(0x21, 0x04);
+	outb(0xA1, 0x02);
+	outb(0x21, 0x01);
+	outb(0xA1, 0x01);
+	outb(0x21, 0x00);
+	outb(0xA1, 0x00);
+	/* Install IRQs */
+	set_idt_gate(32, (u32_t)irq0);
+	set_idt_gate(32, (u32_t)irq1);
+	set_idt_gate(32, (u32_t)irq2);
+	set_idt_gate(32, (u32_t)irq3);
+	set_idt_gate(32, (u32_t)irq4);
+	set_idt_gate(32, (u32_t)irq5);
+	set_idt_gate(32, (u32_t)irq6);
+	set_idt_gate(32, (u32_t)irq7);
+	set_idt_gate(32, (u32_t)irq8);
+	set_idt_gate(32, (u32_t)irq9);
+	set_idt_gate(32, (u32_t)irq10);
+	set_idt_gate(32, (u32_t)irq11);
+	set_idt_gate(32, (u32_t)irq12);
+	set_idt_gate(32, (u32_t)irq13);
+	set_idt_gate(32, (u32_t)irq14);
+	set_idt_gate(32, (u32_t)irq15);
 	/* Load IDT with assembly */
 	set_idt();
 }
 /* Generic exception handler.
  */
-void isr_handler(registers_t r)
+void isr_handler(registers_t *r)
 {
 	print("Received interrupt: ");
 	char s[3];
-	itoa(r.int_no, s, 3);
+	itoa(r->int_no, s, 3);
 	print(s);
 	print("Raised Exception: ");
-	print(exception_messages[r.int_no]);
+	print(exception_messages[r->int_no]);
 	print("\n");
+}
+/* Register interrupt handler.
+ */
+void register_interrupt_handler(u8_t n, isr_t handler)
+{
+	interrupt_handlers[n] = handler;
+}
+/* Handle IRQs.
+ */
+void irq_handler(registers_t *r)
+{
+	if(r->int_no >= 40) outb(0xA0, 0x20); // slave
+	else outb(0x20, 0x20); // master
+
+	/* Handle the interrupt in a modular way */
+	if(interrupt_handlers[r->int_no] != 0) {
+		isr_t handler = interrupt_handlers[r->int_no];
+		handler(r);
+	}
+}
+/* Install the IRQs.
+ */
+void irq_install(void)
+{
+	/* Enable interruptions */
+	__asm__ __volatile__("sti");
+	/* IRQ0: timer */
+//	init_timer(50);
+	/* IRQ1: keyboard */
+//	init_keyboard();
 }
