@@ -1,3 +1,12 @@
+/*
+ * keyboard.c - Source file for simple keyboard input/output.
+ *
+ * Author: Philip R. Simonson
+ * Date  : 07/04/2020
+ *
+ ******************************************************************
+ */
+
 #include "keyboard.h"
 #include "vga.h"
 #include "io.h"
