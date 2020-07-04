@@ -1,3 +1,6 @@
+[section .text]
+[bits 32]
+
 ; Defined in isr.c
 [extern isr_handler]
 [extern irq_handler]
