@@ -1,8 +1,12 @@
+#include "isr.h"
 #include "vga.h"
 #include "io.h"
 
+/* Entry point for kernel.
+ */
 void kernel_main(void)
 {
+	isr_install();
 	term_init(BLUE, YELLOW);
 	print("Welcome to my bare bones example 32 bit operating system.\n");
 	print("\n  I have designed this because I would like to teach beginners\n");
@@ -12,5 +16,5 @@ void kernel_main(void)
 	print("on this project. Also this software comes WITHOUT ANY WARRANTY\n");
 	print("of any kind. I will not be held accountable for any damage this\n");
 	print("software may cause. Please use at your own risk.\n");
-	print("\n\nCheers,\nPhilip R. Simonson (aka 5n4k3)\n"); 
+	print("\n\nCheers,\nPhilip R. Simonson (aka 5n4k3)\n");
 }

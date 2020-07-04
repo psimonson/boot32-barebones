@@ -10,7 +10,8 @@
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
-/* Copies memory from source to destination. */
+/* Functions implemented in util.c */
 void memcpy(void *dest, const void *src, unsigned long nbytes);
+void itoa(int n, char *s, int size);
 
 #endif
