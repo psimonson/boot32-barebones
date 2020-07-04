@@ -26,16 +26,14 @@ BRIGHT_MAGENTA, YELLOW, WHITE };
 /* VGA memory buffer. */
 unsigned char *vga_buffer;
 
-/* Initialize the terminal (Text Video Mode). */
-void term_init(unsigned char fg, unsigned char bg);
+/* Terminal initialization. */
+void term_init(unsigned char bg, unsigned char fg);
 /* Put a character on the screen. */
 int print_char(int x, int y, char c);
 /* Clear the screen. */
 void clear_screen(void);
 /* Set a new text attribute. */
 void set_text_attr(unsigned char bg, unsigned char fg);
-/* Make a text attribute. */
-unsigned char make_attr(unsigned char bg, unsigned char fg);
 /* Get screen offset from (col, row). */
 int get_screen_offset(int col, int row);
 /* Get row from offset. */

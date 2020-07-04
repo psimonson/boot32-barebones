@@ -73,6 +73,9 @@ void set_text_attr(unsigned char bg, unsigned char fg)
 int print_char(int col, int row, char c)
 {
 	int offset;
+
+	if(!_term_init) term_init(BLUE, YELLOW);
+
 	if(col >= 0 && row >= 0) {
 		offset = get_screen_offset(col, row);
 	} else {
@@ -125,14 +128,14 @@ void clear_screen(void)
 
 	set_cursor_offset(get_screen_offset(0, 0));
 }
-/* Initialize the terminal.
+/* Terminal initialization.
  */
 void term_init(unsigned char bg, unsigned char fg)
 {
 	if(!_term_init) {
 		_term_init = 1;
+		_text_attr = make_attr(bg, fg);
 		vga_buffer = (void*)VGA_ADDRESS;
-		_text_attr = make_attr(bg, fg);;
 		clear_screen();
 	}
 }
