@@ -9,7 +9,7 @@ LDFLAGS=
 BACKUPS=$(shell find . -iname "*.bak")
 OBJECTS=entry.o kernel.o common/io.o common/helper.o \
 	common/util.o drivers/vga.o drivers/keyboard.o \
-	cpu/idt.o cpu/isr.o cpu/ports.o cpu/timer.o
+	cpu/idt.o cpu/isr.o cpu/int.o cpu/ports.o cpu/timer.o
 TARGET=kernel.bin
 
 .PHONY: all clean distclean
