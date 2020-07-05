@@ -35,8 +35,8 @@ void kernel_main(void)
 	print("of any kind. I will not be held accountable for any damage this\n");
 	print("software may cause. Please use at your own risk.\n");
 	print("\n\nCheers,\nPhilip R. Simonson (aka 5n4k3)\n\n");
-	print("Welcome to a bare bones kernel! Please type 'help' to\n");
-	print("to see what you can do.\n\n> ");
+	print("Welcome to a bare bones kernel! This is a temporary shell.\n");
+	print("Please type 'help' to see what you can do.\n\n> ");
 }
 /* Kernel process user input.
  */
