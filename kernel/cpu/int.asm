@@ -12,7 +12,7 @@
 ; Common ISR code
 isr_common_stub:
 	pusha
-	mov eax, ds
+	mov ax, ds
 	push eax
 	mov ax, 0x10
 	mov ds, ax
@@ -33,7 +33,7 @@ isr_common_stub:
 ; Common IRQ code
 irq_common_stub:
 	pusha
-	mov eax, ds
+	mov ax, ds
 	push eax
 	mov ax, 0x10
 	mov ds, ax

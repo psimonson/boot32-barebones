@@ -95,9 +95,9 @@ extern void irq15();
 /* Struct which aggregates many registers. */
 typedef struct registers {
 	u32_t ds;
-	u32_t edi, esi, ebp, useless, ebx, edx, ecx, eax;
+	u32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;
 	u32_t int_no, err_code;
-	u32_t eip, cs, eflags, esp, ss;
+	u32_t eip, cs, eflags, useresp, ss;
 } __attribute__((packed)) registers_t;
 
 /* Functions implemented in isr.c */
