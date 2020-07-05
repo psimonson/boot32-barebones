@@ -30,9 +30,10 @@ int strcmp(const char *s, const char *t)
 }
 /* Reverse a string in place.
  */
-void reverse(char *s)
+void reverse(char *s, int len)
 {
-	for(int i = 0, j = strlen(s)-1; i != j; i++, j--) {
+	int i, j;
+	for(i = 0, j = len-1; s[i] != s[j]; i++, j--) {
 		char tmp = s[i];
 		s[i] = s[j];
 		s[j] = tmp;
@@ -40,17 +41,15 @@ void reverse(char *s)
 }
 /* Convert integer to c-string.
  */
-void itoa(int n, char *s)
+void itoa(int n, char *s, int size)
 {
 	int i, sign;
 	if((sign = n) < 0) n = -n;
-	i = 0;
-	do{
+	for(i = 0; i < size-1 && n > 0; n /= 10, i++)
 		s[i++] = n % 10 + '0';
-	} while((n /= 10) > 0);
-	if(sign < 0) s[i++] = '-';
+	if(i < size && sign < 0) s[i++] = '-';
 	s[i] = '\0';
-	reverse(s);
+	reverse(s, i);
 }
 
 /* ----------------------- Helper Functions ---------------------- */

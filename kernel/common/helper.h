@@ -13,8 +13,8 @@
 /* String functions */
 int strlen(const char *s);
 int strcmp(const char *s, const char *t);
-void reverse(char *s);
-void itoa(int n, char *s);
+void reverse(char *s, int len);
+void itoa(int n, char *s, int size);
 
 /* Functions for kernel. */
 void append(char *s, char c);

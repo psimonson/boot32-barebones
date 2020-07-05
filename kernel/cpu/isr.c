@@ -132,7 +132,7 @@ void isr_handler(registers_t *r)
 	memset(s, 0, sizeof(s));
 	clear_screen();
 	print("Received interrupt: ");
-	itoa(r->int_no, s);
+	itoa(r->int_no, s, sizeof(s));
 	print(s);
 	print("\n");
 	print("Raised Exception: ");
