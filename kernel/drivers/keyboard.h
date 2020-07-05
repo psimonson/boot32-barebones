@@ -10,6 +10,6 @@
 #ifndef _KEYBOARD_H_
 #define _KEYBOARD_H_
 
-void init_keyboard(void);
+void install_keyboard(void);
 
 #endif

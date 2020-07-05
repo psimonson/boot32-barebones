@@ -60,7 +60,7 @@ static void keyboard_callback(registers_t *regs)
 }
 /* Initialize the keyboard.
  */
-void init_keyboard(void)
+void install_keyboard(void)
 {
 	register_interrupt_handler(IRQ1, keyboard_callback);
 }

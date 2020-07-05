@@ -22,8 +22,6 @@ void kernel_main(void)
 
 	// Disabled for now, because there is a problem with the ISR handlers.
 //	irq_install();
-//	__asm__("int $2");
-//	__asm__("int $3");
 
 	// Display welcome message to user and prompt.
 	print("Welcome to my bare bones example 32 bit operating system.\n");

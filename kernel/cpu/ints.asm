@@ -8,47 +8,33 @@
 ; Common ISR code
 isr_common_stub:
 	pusha
-	mov ax, ds
-	push eax
-	mov ax, 0x10
-	mov ds, ax
-	mov es, ax
-	mov fs, ax
-	mov gs, ax
-	push esp
+	push ds
+	push es
+	push fs
+	push gs
 	cld
 	call isr_handler
-	pop eax
-	pop eax
-	mov ds, ax
-	mov es, ax
-	mov fs, ax
-	mov gs, ax
+	pop gs
+	pop fs
+	pop es
+	pop ds
 	popa
-	add esp, 8	; Cleans up the pushed error code and ISR number
 	iret 				; pops 5 things at once: CS, EIP, EFLAGS, SS and ESP
 
 ; Common IRQ code
 irq_common_stub:
 	pusha
-	mov ax, ds
-	push eax
-	mov ax, 0x10
-	mov ds, ax
-	mov es, ax
-	mov fs, ax
-	mov gs, ax
-	push esp
+	push ds
+	push es
+	push fs
+	push gs
 	cld
 	call irq_handler
-	pop ebx
-	pop ebx
-	mov ds, bx
-	mov es, bx
-	mov fs, bx
-	mov gs, bx
+	pop gs
+	pop fs
+	pop es
+	pop ds
 	popa
-	add esp, 8
 	iret
 
 ; Below are the interrupts

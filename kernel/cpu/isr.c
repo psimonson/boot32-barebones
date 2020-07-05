@@ -15,6 +15,7 @@
 #include "io.h"
 #include "ports.h"
 #include "keyboard.h"
+#include "timer.h"
 
 isr_t interrupt_handlers[256];
 
@@ -162,7 +163,7 @@ void irq_install(void)
 	/* Enable interruptions */
 	__asm__ __volatile__("sti");
 	/* IRQ0: timer */
-//	init_timer(50);
+	install_timer(50);
 	/* IRQ1: keyboard */
-	init_keyboard();
+	install_keyboard();
 }

@@ -22,7 +22,7 @@ static void timer_callback(registers_t *regs)
 }
 /* Initialize the system timer.
  */
-void init_timer(u32_t freq)
+void install_timer(u32_t freq)
 {
 	// Install the timer callback.
 	register_interrupt_handler(IRQ0, timer_callback);
