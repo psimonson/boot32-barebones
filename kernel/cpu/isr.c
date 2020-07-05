@@ -89,7 +89,7 @@ void isr_install(void)
 }
 
 /* Exception messages to print. */
-char *exception_messages[32] = {
+static char *exception_messages[32] = {
 	"Division By Zero",
 	"Debug",
 	"Non Maskable Interrupt",
@@ -128,7 +128,9 @@ char *exception_messages[32] = {
  */
 void isr_handler(registers_t *r)
 {
-	char s[5];
+	char s[32];
+	memset(s, 0, sizeof(s));
+	clear_screen();
 	print("Received interrupt: ");
 	itoa(r->int_no, s);
 	print(s);
@@ -136,6 +138,8 @@ void isr_handler(registers_t *r)
 	print("Raised Exception: ");
 	print(exception_messages[r->int_no]);
 	print("\n");
+	__asm__ __volatile__("cli");
+	__asm__ __volatile__("hlt");
 }
 /* Register interrupt handler.
  */
