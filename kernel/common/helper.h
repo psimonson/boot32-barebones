@@ -13,11 +13,11 @@
 /* String functions */
 int strlen(const char *s);
 int strcmp(const char *s, const char *t);
-void reverse(char s[]);
-void itoa(int n, char s[], int size);
+void reverse(char *s);
+void itoa(int n, char *s);
 
 /* Functions for kernel. */
-void append(char s[], char c);
-void backspace(char s[]);
+void append(char *s, char c);
+void backspace(char *s);
 
 #endif

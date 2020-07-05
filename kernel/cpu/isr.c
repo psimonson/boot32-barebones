@@ -127,8 +127,8 @@ void isr_install(void)
 void isr_handler(registers_t *r)
 {
 	print("Received interrupt: ");
-	char s[3];
-	itoa(r->int_no, s, 3);
+	char s[4];
+	itoa(r->int_no, s);
 	print(s);
 	print("Raised Exception: ");
 	print(exception_messages[r->int_no]);
