@@ -16,6 +16,8 @@ PROJECT_DIR=$(shell pwd)
 PROJECT_NAME=$(shell basename $(PROJECT_DIR))
 PROJECT_VERSION=1.0
 
+CDROM_IMG=$(SRCDIR)/boot32-barebones.iso
+
 .PHONY: all run debug disk clean distclean dist
 all:
 	cd $(SRCDIR)/boot && make
@@ -35,6 +37,9 @@ disk: all
 	$(IMAGEFS) w $(SRCDIR)/floppy.img $(SRCDIR)/boot/stage1.bin
 	$(PRSFS) $(SRCDIR)/floppy.img $(SRCDIR)/boot/stage2.bin $(SRCDIR)/kernel/kernel.bin
 
+cdrom: disk
+	cd .. && mkisofs -pad -b floppy.img -R -o ./$(PROJECT_NAME)/boot32-barebones.iso ./$(PROJECT_NAME)
+
 clean:
 	rm -f $(TARGETS)
 	cd $(SRCDIR)/boot && make clean
@@ -43,7 +48,7 @@ clean:
 	cd $(SRCDIR)/prsfs && make clean
 
 distclean: clean
-	rm -f floppy.img *.bak *.log
+	rm -f floppy.img $(CDROM_IMG) *.bak *.log
 	cd $(SRCDIR)/boot && make distclean
 	cd $(SRCDIR)/kernel && make distclean
 	cd $(SRCDIR)/imagefs && make distclean
