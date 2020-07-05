@@ -68,22 +68,22 @@ void isr_install(void)
 	outb(0x21, 0x00);
 	outb(0xA1, 0x00);
 	/* Install IRQs */
-	SET_IRQ(32, 0);
-	SET_IRQ(33, 1);
-	SET_IRQ(34, 2);
-	SET_IRQ(35, 3);
-	SET_IRQ(36, 4);
-	SET_IRQ(37, 5);
-	SET_IRQ(38, 6);
-	SET_IRQ(39, 7);
-	SET_IRQ(40, 8);
-	SET_IRQ(41, 9);
-	SET_IRQ(42, 10);
-	SET_IRQ(43, 11);
-	SET_IRQ(44, 12);
-	SET_IRQ(45, 13);
-	SET_IRQ(46, 14);
-	SET_IRQ(47, 15);
+	SET_IRQ(0);
+	SET_IRQ(1);
+	SET_IRQ(2);
+	SET_IRQ(3);
+	SET_IRQ(4);
+	SET_IRQ(5);
+	SET_IRQ(6);
+	SET_IRQ(7);
+	SET_IRQ(8);
+	SET_IRQ(9);
+	SET_IRQ(10);
+	SET_IRQ(11);
+	SET_IRQ(12);
+	SET_IRQ(13);
+	SET_IRQ(14);
+	SET_IRQ(15);
 	/* Load IDT with assembly */
 	set_idt();
 }

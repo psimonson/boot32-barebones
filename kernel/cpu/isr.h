@@ -18,7 +18,7 @@
 
 /* Macros to set the ISRs and IRQs. */
 #define SET_ISR(X) set_idt_gate((X), (u32_t)TO_ISR(X))
-#define SET_IRQ(X,N) set_idt_gate((X), (u32_t)TO_IRQ(N))
+#define SET_IRQ(X) set_idt_gate((X)+32, (u32_t)TO_IRQ(X))
 
 /* Macro to set a custom gate. */
 #define SET_GATE(X,N) set_idt_gate(X, (u32_t)N);
