@@ -21,7 +21,7 @@ void kernel_main(void)
 	isr_install();
 
 	// Disabled for now, because there is a problem with the ISR handlers.
-	irq_install();
+//	irq_install();
 
 	// Display welcome message to user and prompt.
 	print("Welcome to my bare bones example 32 bit operating system.\n");
