@@ -18,6 +18,75 @@
 
 isr_t interrupt_handlers[256];
 
+/* Map interrupts to the service routines.
+ */
+void isr_install(void)
+{
+	/* Install ISRs */
+	SET_ISR(0);
+	SET_ISR(1);
+	SET_ISR(2);
+	SET_ISR(3);
+	SET_ISR(4);
+	SET_ISR(5);
+	SET_ISR(6);
+	SET_ISR(7);
+	SET_ISR(8);
+	SET_ISR(9);
+	SET_ISR(10);
+	SET_ISR(11);
+	SET_ISR(12);
+	SET_ISR(13);
+	SET_ISR(14);
+	SET_ISR(15);
+	SET_ISR(16);
+	SET_ISR(17);
+	SET_ISR(18);
+	SET_ISR(19);
+	SET_ISR(20);
+	SET_ISR(21);
+	SET_ISR(22);
+	SET_ISR(23);
+	SET_ISR(24);
+	SET_ISR(25);
+	SET_ISR(26);
+	SET_ISR(27);
+	SET_ISR(28);
+	SET_ISR(29);
+	SET_ISR(30);
+	SET_ISR(31);
+	/* Remap the PIC */
+	outb(0x20, 0x11);
+	outb(0xA0, 0x11);
+	outb(0x21, 0x20);
+	outb(0xA1, 0x28);
+	outb(0x21, 0x04);
+	outb(0xA1, 0x02);
+	outb(0x21, 0x01);
+	outb(0xA1, 0x01);
+	outb(0x21, 0x00);
+	outb(0xA1, 0x00);
+	/* Install IRQs */
+	SET_IRQ(32, 0);
+	SET_IRQ(33, 1);
+	SET_IRQ(34, 2);
+	SET_IRQ(35, 3);
+	SET_IRQ(36, 4);
+	SET_IRQ(37, 5);
+	SET_IRQ(38, 6);
+	SET_IRQ(39, 7);
+	SET_IRQ(40, 8);
+	SET_IRQ(41, 9);
+	SET_IRQ(42, 10);
+	SET_IRQ(43, 11);
+	SET_IRQ(44, 12);
+	SET_IRQ(45, 13);
+	SET_IRQ(46, 14);
+	SET_IRQ(47, 15);
+	/* Load IDT with assembly */
+	set_idt();
+}
+
 /* Exception messages to print. */
 char *exception_messages[32] = {
 	"Division By Zero",
@@ -54,74 +123,6 @@ char *exception_messages[32] = {
 	"Reserved"
 };
 
-/* Map interrupts to the service routines.
- */
-void isr_install(void)
-{
-	/* Install ISRs */
-	set_idt_gate(0, (u32_t)isr0);
-	set_idt_gate(1, (u32_t)isr1);
-	set_idt_gate(2, (u32_t)isr2);
-	set_idt_gate(3, (u32_t)isr3);
-	set_idt_gate(4, (u32_t)isr4);
-	set_idt_gate(5, (u32_t)isr5);
-	set_idt_gate(6, (u32_t)isr6);
-	set_idt_gate(7, (u32_t)isr7);
-	set_idt_gate(8, (u32_t)isr8);
-	set_idt_gate(9, (u32_t)isr9);
-	set_idt_gate(10, (u32_t)isr10);
-	set_idt_gate(11, (u32_t)isr11);
-	set_idt_gate(12, (u32_t)isr12);
-	set_idt_gate(13, (u32_t)isr13);
-	set_idt_gate(14, (u32_t)isr14);
-	set_idt_gate(15, (u32_t)isr15);
-	set_idt_gate(16, (u32_t)isr16);
-	set_idt_gate(17, (u32_t)isr17);
-	set_idt_gate(18, (u32_t)isr18);
-	set_idt_gate(19, (u32_t)isr19);
-	set_idt_gate(20, (u32_t)isr20);
-	set_idt_gate(21, (u32_t)isr21);
-	set_idt_gate(22, (u32_t)isr22);
-	set_idt_gate(23, (u32_t)isr23);
-	set_idt_gate(24, (u32_t)isr24);
-	set_idt_gate(25, (u32_t)isr25);
-	set_idt_gate(26, (u32_t)isr26);
-	set_idt_gate(27, (u32_t)isr27);
-	set_idt_gate(28, (u32_t)isr28);
-	set_idt_gate(29, (u32_t)isr29);
-	set_idt_gate(30, (u32_t)isr30);
-	set_idt_gate(31, (u32_t)isr31);
-	/* Remap the PIC */
-	outb(0x20, 0x11);
-	outb(0xA0, 0x11);
-	outb(0x21, 0x20);
-	outb(0xA1, 0x28);
-	outb(0x21, 0x04);
-	outb(0xA1, 0x02);
-	outb(0x21, 0x01);
-	outb(0xA1, 0x01);
-	outb(0x21, 0x00);
-	outb(0xA1, 0x00);
-	/* Install IRQs */
-	set_idt_gate(32, (u32_t)irq0);
-	set_idt_gate(32, (u32_t)irq1);
-	set_idt_gate(32, (u32_t)irq2);
-	set_idt_gate(32, (u32_t)irq3);
-	set_idt_gate(32, (u32_t)irq4);
-	set_idt_gate(32, (u32_t)irq5);
-	set_idt_gate(32, (u32_t)irq6);
-	set_idt_gate(32, (u32_t)irq7);
-	set_idt_gate(32, (u32_t)irq8);
-	set_idt_gate(32, (u32_t)irq9);
-	set_idt_gate(32, (u32_t)irq10);
-	set_idt_gate(32, (u32_t)irq11);
-	set_idt_gate(32, (u32_t)irq12);
-	set_idt_gate(32, (u32_t)irq13);
-	set_idt_gate(32, (u32_t)irq14);
-	set_idt_gate(32, (u32_t)irq15);
-	/* Load IDT with assembly */
-	set_idt();
-}
 /* Generic exception handler.
  */
 void isr_handler(registers_t *r)

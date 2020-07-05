@@ -10,6 +10,7 @@
 #include "isr.h"
 #include "vga.h"
 #include "io.h"
+#include "helper.h"
 
 /* Entry point for kernel.
  */
@@ -19,12 +20,10 @@ void kernel_main(void)
 	term_init(BLUE, YELLOW);
 	isr_install();
 
-/*
-	// Disable for now, because there is a problem with the ISR handlers.
-	irq_install();
-	__asm__("int $2");
-	__asm__("int $3");
-*/
+	// Disabled for now, because there is a problem with the ISR handlers.
+//	irq_install();
+//	__asm__("int $2");
+//	__asm__("int $3");
 
 	// Display welcome message to user and prompt.
 	print("Welcome to my bare bones example 32 bit operating system.\n");
