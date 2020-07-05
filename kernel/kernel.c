@@ -40,7 +40,8 @@ void user_input(char *input)
 {
 	if(!strcmp(input, "EXIT")) {
 		print("Halting CPU...\n");
-		__asm__ __volatile("hlt");
+		__asm__ __volatile__("cli");
+		__asm__ __volatile__("hlt");
 	} else {
 		print("Invalid command entered. Try 'help'\nto see what you can do.\n");
 		print("> ");

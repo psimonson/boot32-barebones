@@ -19,6 +19,42 @@
 
 isr_t interrupt_handlers[256];
 
+/* Exception messages to print. */
+static char *exception_messages[32] = {
+	"Division By Zero",
+	"Debug",
+	"Non Maskable Interrupt",
+	"Breakpoint",
+	"Into Detected Overflow",
+	"Out of Bounds",
+	"Invalid Opcode",
+	"No Coprocessor",
+	"Double Fault",
+	"Coprocessor Segment Overrun",
+	"Bad TSS",
+	"Segment Not Present",
+	"Stack Fault",
+	"General Protection Fault",
+	"Page Fault",
+	"Unknown Interrupt",
+	"Coprocessor Fault",
+	"Alignment Check",
+	"Machine Check",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved"
+};
+
 /* Map interrupts to the service routines.
  */
 void isr_install(void)
@@ -87,49 +123,11 @@ void isr_install(void)
 	/* Load IDT with assembly */
 	set_idt();
 }
-
-/* Exception messages to print. */
-static char *exception_messages[32] = {
-	"Division By Zero",
-	"Debug",
-	"Non Maskable Interrupt",
-	"Breakpoint",
-	"Into Detected Overflow",
-	"Out of Bounds",
-	"Invalid Opcode",
-	"No Coprocessor",
-	"Double Fault",
-	"Coprocessor Segment Overrun",
-	"Bad TSS",
-	"Segment Not Present",
-	"Stack Fault",
-	"General Protection Fault",
-	"Page Fault",
-	"Unknown Interrupt",
-	"Coprocessor Fault",
-	"Alignment Check",
-	"Machine Check",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved"
-};
-
 /* Generic exception handler.
  */
 void isr_handler(registers_t *r)
 {
 	char s[32];
-	memset(s, 0, sizeof(s));
 	clear_screen();
 	print("Received interrupt: ");
 	itoa(r->int_no, s, sizeof(s));
