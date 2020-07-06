@@ -100,16 +100,16 @@ int print_char(int col, int row, char c)
 	/* Scroll the screen up. */
 	if(offset >= MAX_ROWS*MAX_COLS*2) {;
 		for(int i = 0; i < MAX_ROWS; i++) {
-			char *cur_line = (char*)get_screen_offset(0, i)+VGA_ADDRESS;
-			char *prev_line = (char*)get_screen_offset(0, i-1)+VGA_ADDRESS;
-			memcpy(prev_line, cur_line, MAX_COLS*2);
+			memcpy((char*)get_screen_offset(0, i-1)+VGA_ADDRESS,
+				(char*)get_screen_offset(0, i)+VGA_ADDRESS, MAX_COLS*2);
 		}
 		for(int i = 0; i < MAX_COLS; i++) {
-			int index = get_screen_offset(i, MAX_ROWS-1);
-			vga_buffer[index] = ' ';
-			vga_buffer[index+1] = _text_attr;
+			offset = get_screen_offset(i, MAX_ROWS-1);
+			vga_buffer[offset] = ' ';
+			vga_buffer[offset+1] = _text_attr;
+			offset += 2;
 		}
-		offset = MAX_COLS*2;
+		offset -= MAX_COLS*2;
 	}
 
 	set_cursor_offset(offset);
@@ -121,7 +121,7 @@ void clear_screen(void)
 {
 	int col = 0, row = 0;
 
-	if(!_term_init) return;
+	if(!_term_init) term_init(BLUE, YELLOW);
 
 	for(int x = 0; x < MAX_COLS; x++) {
 		for(int y = 0; y < MAX_ROWS; y++) {
