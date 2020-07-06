@@ -30,19 +30,18 @@ isr_common_stub:
 	mov gs, ax
 	popa
 	add esp, 8
-	sti
 	iret
 
 ; Common IRQ code
 irq_common_stub:
 	pusha
-	mov bx, ds
-	push ebx
-	mov bx, 0x10
-	mov ds, bx
-	mov es, bx
-	mov fs, bx
-	mov gs, bx
+	mov ax, ds
+	push eax
+	mov ax, 0x10
+	mov ds, ax
+	mov es, ax
+	mov fs, ax
+	mov gs, ax
 	push esp
 	cld
 	call irq_handler
@@ -54,7 +53,6 @@ irq_common_stub:
 	mov gs, bx
 	popa
 	add esp, 8
-	sti
 	iret
 
 ; ISRs
