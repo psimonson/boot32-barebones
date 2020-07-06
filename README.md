@@ -31,9 +31,9 @@ written in pure C.
  - [x] - Add my simple file system (list of LBA starts and count of sectors).
  - [x] - Fix kernel not loading again.
  - [x] - Fix ISRs and IRQs so they work (they cause a kernel panic).
- - [x] - Fix breakpoint exception (shouldn't be happening).
+ - [ ] - Fix breakpoint exception (shouldn't be happening).
  - [x] - Add PIT timer handler.
- - [ ] - Add keyboard input handler.
+ - [x] - Add keyboard input handler.
 
 ### Developer
 
