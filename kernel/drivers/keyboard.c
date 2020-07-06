@@ -15,36 +15,32 @@
 #include "isr.h"
 #include "util.h"
 
-static char key_buffer[256];
+static char key_buffer[256]; // Save the keys pressed
 
-const char ascii_table[128] = {
-	'\0', '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
-	'-', '=', '\0', '\0', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i',
-	'o', 'p', '[', ']', '\\', '\0', 'a', 's', 'd', 'f', 'g', 'h', 'j',
-	'k', 'l', ';', '\'', '\0', '\0', 'z', 'x', 'c', 'v', 'b', 'n',
-	'm', ',', '.', '/', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
-	'\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
-	'7', '4', '1', '/', '8', '5', '2', '0', '*', '9', '6', '3',
-	'.', '-', '+', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
-	'\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0'
+char kbdus_table[128] = {
+	0, 27, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
+	'-', '=', '\b', '\t', 'q', 'w', 'e', 'r', 't', 'y', 'u',
+	'i', 'o', 'p', '[', ']', '\n', 0, 'a', 's', 'd', 'f',
+	'g', 'h', 'j', 'k', 'l', ';', '\'', '`', 0, '\\', 'z',
+	'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 0, '*', 0,
+	' ', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '-',
+	0, 0, 0, '+', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
 /* Handle keyboard input from user.
  */
 static void keyboard_callback(registers_t *regs)
 {
-	int scancode = inb(0x60);
+	char scancode = inb(0x60);
 
-	if(scancode > 128) return;
-	if(scancode == 0x0B) { // Backspace
+	if(scancode == '\b') {
 		backspace(key_buffer);
 		print_bkspc();
-	} else if(scancode == 0x0A) { // Enter/Return
-		print("\n");
+	} else if(scancode == '\n') { // Enter/Return
 		user_input(key_buffer);
 		key_buffer[0] = '\0';
 	} else {
-		char letter = ascii_table[scancode];
+		char letter = kbdus_table[(int)scancode];
 		char str[2] = {letter, '\0'};
 		append(key_buffer, letter);
 		print(str);
