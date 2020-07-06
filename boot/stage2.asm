@@ -29,7 +29,6 @@ start:
 	; switch on protected mode
 	cli
 	lgdt [gdt.pointer]
-	lidt [idt.pointer]
 	mov eax, cr0
 	or eax, 1
 	mov cr0, eax
@@ -67,13 +66,6 @@ op_a20no db "A20 is disabled.",10,13,0
 op_progress db 0x2e,0
 op_ferror db 10,13,"File not found!",10,13,0
 op_filename db "kernel  bin",0
-
-; dummy IDT
-idt:
-	times 256 dd 0
-.pointer:
-	dw 256*8-1
-	dd idt
 
 ; constants
 root_segment equ 0x0ee0
