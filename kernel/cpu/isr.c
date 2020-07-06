@@ -127,7 +127,8 @@ void isr_install(void)
  */
 void isr_handler(registers_t *r)
 {
-	char s[32];
+	char s[5];
+	memset(s, 0, sizeof(s));
 	clear_screen();
 	print("Received interrupt: ");
 	itoa(r->int_no, s, sizeof(s));
