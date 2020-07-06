@@ -25,10 +25,10 @@ all:
 	cd $(SRCDIR)/imagefs && $(MAKE)
 	cd $(SRCDIR)/prsfs && $(MAKE)
 
-run: clean disk
+run: disk
 	qemu-system-i386 -fda $(SRCDIR)/floppy.img -boot a
 
-debug: clean disk
+debug: disk
 	qemu-system-i386 -fda $(SRCDIR)/floppy.img -boot a -s &
 	gdb -ex "target remote localhost:1234" -ex "symbol-file $(SRCDIR)/kernel/kernel.elf"
 
