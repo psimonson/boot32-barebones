@@ -137,8 +137,7 @@ void isr_handler(registers_t *r)
 	print("Raised Exception: ");
 	print(exception_messages[r->int_no]);
 	print("\n");
-	__asm__ __volatile__("cli");
-	__asm__ __volatile__("hlt");
+	outb(0x20, 0x20); // master
 }
 /* Register interrupt handler.
  */
@@ -151,7 +150,6 @@ void register_interrupt_handler(u8_t n, isr_t handler)
 void irq_handler(registers_t *r)
 {
 	if(r->int_no >= 40) outb(0xA0, 0x20); // slave
-	outb(0x20, 0x20); // master
 
 	/* Handle the interrupt in a modular way */
 	if(interrupt_handlers[r->int_no] != 0) {
