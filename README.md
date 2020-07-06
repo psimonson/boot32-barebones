@@ -32,7 +32,8 @@ written in pure C.
  - [x] - Fix kernel not loading again.
  - [x] - Fix ISRs and IRQs so they work (they cause a kernel panic).
  - [x] - Fix breakpoint exception (shouldn't be happening).
- - [ ] - Fix keyboard map.
+ - [x] - Fix keyboard map.
+ - [ ] - Fix keyboard handler, it types multiples and '9' is enter for some reason.
  - [x] - Add PIT timer handler.
  - [x] - Add keyboard input handler.
 
@@ -43,4 +44,4 @@ written in pure C.
 
 ### License
 
- - None [ATM] (At This Moment)
+ - MIT License (see LICENSE.md for details)
