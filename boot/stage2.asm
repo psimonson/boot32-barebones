@@ -54,7 +54,7 @@ INIT_PM:
 	mov esp, ebp
 
 	call run_offset
-	hlt
+	jmp $
 
 %include "common32.inc"
 
