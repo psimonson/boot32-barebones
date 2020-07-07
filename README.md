@@ -8,6 +8,8 @@ written in pure C.
 ### Screen Shots
 
 ![Screen shot as of July 2, 2020!](screenshots/screenshot01.png)
+![Screen shot as of July 7, 2020!](screenshots/screenshot02.png)
+![Screen shot as of July 7, 2020!](screenshots/screenshot03.png)
 
 ### Build and Run Instructions
 
