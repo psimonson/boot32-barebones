@@ -28,25 +28,32 @@ typedef struct command {
 #define ADD_CMD(c,h) 	{ #c, h, &cmd_ ##c }
 #define END_CMD };
 #define CNT_CMD const int cmd_total = \
-	sizeof(commands)/sizeof(command_t)
+	sizeof(commands)/sizeof(command_t);
 
 /* Macro to define command function */
 #define DEF_FNC(c) void cmd_ ##c(void)
 
 /* Prototypes for commands */
+DEF_FNC(clear);
 DEF_FNC(help);
 DEF_FNC(exit);
 
 /* ----------------------------- Commands -------------------------- */
 
 BEG_CMD
+ADD_CMD(clear, "Clear the VGA screen buffer."),
 ADD_CMD(help, "Display this help text."),
 ADD_CMD(exit, "Halt execution of CPU.")
 END_CMD
-CNT_CMD;
+CNT_CMD
 
 /* ----------------------------- Functions ------------------------- */
 
+/* Clear command, erase VGA screen buffer.
+ */
+DEF_FNC(clear) {
+	clear_screen();
+}
 /* Help command, display help.
  */
 DEF_FNC(help) {
