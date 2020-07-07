@@ -24,6 +24,15 @@ written in pure C.
     1 - make run (builds and runs in qemu).\
     2 - make debug (builds and runs in qemu with gdb debugging).\
     3 - make disk - builds floppy.img (you can write that to a floppy).
+		4 - make cdrom - builds cdrom.iso (you can write this to cdrom).
+
+ - How to write to disk?
+
+		1 - Floppy, make disk && sudo dd if=floppy.img of=/dev/fd0 bs=512 count=2880 conv=sync status=progress
+		2 - CDROM, an ISO image ready to burn.
+			2a - cdrecord -scanbus (to see what device id).
+			2b - cdrecord dev=<devid> speed=12 -pad -v -eject boot32-barebones.iso
+			2c - NOTE: <devid> = #,#,# from cdrecord -scanbus (2a).
 
 ### TODO
 
