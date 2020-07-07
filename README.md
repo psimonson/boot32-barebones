@@ -33,7 +33,7 @@ written in pure C.
  - [x] - Fix ISRs and IRQs so they work (they cause a kernel panic).
  - [x] - Fix breakpoint exception (shouldn't be happening).
  - [x] - Fix keyboard map.
- - [ ] - Fix keyboard handler, it types multiples and '9' is enter for some reason.
+ - [x] - Fix keyboard handler, it types multiples and '9' is enter for some reason.
  - [x] - Add PIT timer handler.
  - [x] - Add keyboard input handler.
 
