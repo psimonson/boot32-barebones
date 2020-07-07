@@ -29,7 +29,6 @@ start:
 	; switch on protected mode
 	cli
 	lgdt [gdt.pointer]
-	lidt [idt.pointer]
 	mov eax, cr0
 	or eax, 1
 	mov cr0, eax
@@ -40,7 +39,6 @@ start:
 %include "disk.inc"
 %include "a20.inc"
 %include "gdt.inc"
-%include "idt.inc"
 %include "boot.inc"
 
 [bits 32]
