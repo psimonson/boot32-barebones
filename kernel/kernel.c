@@ -38,7 +38,14 @@ void kernel_main(void)
  */
 void user_input(char *input)
 {
-	if(!strcmp(input, "EXIT")) {
+/*
+	// For testing input: Uncomment this to see what input is.
+	print("\n");
+	print(input);
+	print("\n");
+*/
+
+	if(!strcmp(input, "exit")) {
 		print("Halting CPU...\n");
 		__asm__ __volatile__("cli");
 		__asm__ __volatile__("hlt");

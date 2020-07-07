@@ -15,7 +15,7 @@
 #include "isr.h"
 #include "util.h"
 
-static char key_buffer[256]; // Save the keys pressed
+char key_buffer[256]; // Save the keys pressed
 
 char kbdus_table[128] = {
 	0, 27, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
@@ -31,10 +31,11 @@ char kbdus_table[128] = {
  */
 static void keyboard_callback(registers_t *regs)
 {
-	static unsigned char multibyte = 0;
-	char scancode = inb(0x60);
+	static unsigned char multibyte = 0, scancode = 0;
+	unsigned short word = inb(0x60);
 
-	multibyte = scancode;
+	multibyte = (word >> 8) & 0xff;
+	scancode = word & 0xff;
 	if(multibyte >= 0xe0) {
 		if(scancode >= 0x80) {
 			/* TODO: Handle two byte release. */
@@ -61,16 +62,17 @@ static void keyboard_callback(registers_t *regs)
 		}
 	} else {
 		if(scancode >= 0x80) {
-			/* TODO: Handle one byte release. */
+			/* TODO: Handle key release. */
 		} else {
 			if(scancode == '\b') { // Backspace
 				backspace(key_buffer);
 				print_bkspc();
-			} else if(scancode == '\n') { // Enter/Return
+			} else if(scancode == 0x1c) { // Enter/Return
+				print("\n");
 				user_input(key_buffer);
-				key_buffer[0] = '\0';
+				key_buffer[0] = 0;
 			} else {
-				char letter = kbdus_table[multibyte];
+				char letter = kbdus_table[scancode];
 				char str[2] = {letter, '\0'};
 				append(key_buffer, letter);
 				print(str);

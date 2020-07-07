@@ -19,14 +19,25 @@ int strlen(const char *s)
 	while(s[i++] != '\0');
 	return i;
 }
+/* Strip off new line from string.
+ */
+int strstrip(char *s)
+{
+	int pos = strlen(s);
+	while(--pos >= 0)
+		if(s[pos] == '\n')
+			s[pos] = 0;
+	return pos;
+}
 /* Compares two strings together.
  */
 int strcmp(const char *s, const char *t)
 {
 	int i;
 	for(i = 0; s[i] == t[i]; i++)
-		if(s[i] != '\0') return 0;
-	return s[i] - t[i];
+		if(s[i] == 0)
+			return 0;
+	return s[i]-t[i];
 }
 /* Reverse a string in place.
  */
@@ -59,8 +70,8 @@ void itoa(int n, char *s, int size)
 void append(char *s, char c)
 {
 	int len = strlen(s);
-	s[len] = c;
-	s[len+1] = '\0';
+	s[len++] = c;
+	s[len] = '\0';
 }
 /* Backspace from the kernel buffer.
  */

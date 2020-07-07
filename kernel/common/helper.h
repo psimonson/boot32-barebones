@@ -12,6 +12,7 @@
 
 /* String functions */
 int strlen(const char *s);
+int strstrip(char *s);
 int strcmp(const char *s, const char *t);
 void reverse(char *s, int len);
 void itoa(int n, char *s, int size);
