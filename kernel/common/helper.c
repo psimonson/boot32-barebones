@@ -34,10 +34,10 @@ int strstrip(char *s)
 int strcmp(const char *s, const char *t)
 {
 	int i;
-	for(i = 0; s[i] != 0; i++)
-		if(s[i] != t[i])
-			return s[i]-t[i];
-	return 0;
+	for(i = 0; s[i] == t[i]; i++)
+		if(s[i] == 0)
+			return 0;
+	return s[i]-t[i];
 }
 /* Reverse a string in place.
  */
