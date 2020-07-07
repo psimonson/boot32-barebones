@@ -51,24 +51,13 @@ void print_bkspc(void)
 void print_hex(unsigned int n)
 {
 	const char hex_digit[] = "0123456789ABCDEF";
-	char buf[12];
-	int i, j = 0, num;
-	if(n > 0) {
-		num = n;
-	} else {
-		buf[j++] = '0';
-		buf[j++] = 'x';
-	}
-	for(i = j; i < 8+j; i++) {
+	char buf[12] = {'0', 'x', '0'};
+	int i;
+	for(i = 2; i < 10; i++) {
 		buf[i] = hex_digit[n%16];
 		n /= 16;
 	}
-	if(num > 0 && i < 10) {
-		buf[i++] = 'x';
-		buf[i++] = '0';
-	}
 	buf[i] = 0;
-	if(num > 0)
-		reverse(buf, strlen(buf));
+	reverse(buf+2);
 	print(buf);
 }

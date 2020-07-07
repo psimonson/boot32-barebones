@@ -59,8 +59,9 @@ DEF_FNC(clear) {
 /* Regs command, display register values.
  */
 DEF_FNC(regs) {
-	unsigned int eax, ebx, ecx, edx;
+	unsigned int eax, ebx, ecx, edx, esi, edi;
 	__asm__ __volatile__("" : "=a"(eax), "=b"(ebx), "=c"(ecx), "=d"(edx));
+	__asm__ __volatile__("" : "=S"(esi), "=D"(edi));
 	print("List of registers below...\n");
 	print("==========================\n");
 	print("EAX: ");
@@ -71,6 +72,10 @@ DEF_FNC(regs) {
 	print_hex(ecx);
 	print("\nEDX: ");
 	print_hex(edx);
+	print("\nESI: ");
+	print_hex(esi);
+	print("\nEDI: ");
+	print_hex(edi);
 	print("\n");
 }
 /* Help command, display help.

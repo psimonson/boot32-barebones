@@ -41,10 +41,11 @@ int strcmp(const char *s, const char *t)
 }
 /* Reverse a string in place.
  */
-void reverse(char *s, int len)
+void reverse(char *s)
 {
+	const int len = strlen(s)-1;
 	int i, j;
-	for(i = 0, j = len-1; s[i] != s[j]; i++, j--) {
+	for(i = 0, j = len; s[i] != s[j]; i++, j--) {
 		char tmp = s[i];
 		s[i] = s[j];
 		s[j] = tmp;
@@ -60,7 +61,7 @@ void itoa(int n, char *s, int size)
 		s[i++] = n % 10 + '0';
 	if(i < size && sign < 0) s[i++] = '-';
 	s[i] = '\0';
-	reverse(s, i);
+	reverse(s);
 }
 
 /* ----------------------- Helper Functions ---------------------- */

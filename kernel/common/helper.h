@@ -14,7 +14,7 @@
 int strlen(const char *s);
 int strstrip(char *s);
 int strcmp(const char *s, const char *t);
-void reverse(char *s, int len);
+void reverse(char *s);
 void itoa(int n, char *s, int size);
 
 /* Functions for kernel. */
