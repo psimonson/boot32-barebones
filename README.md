@@ -23,7 +23,7 @@ written in pure C.
 
     1 - make run (builds and runs in qemu).\
     2 - make debug (builds and runs in qemu with gdb debugging).\
-    3 - make disk - builds floppy.img (you can write that to a floppy).
+    3 - make disk - builds floppy.img (you can write that to a floppy).\
 		4 - make cdrom - builds cdrom.iso (you can write this to cdrom).
 
  - How to write to disk?
