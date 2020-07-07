@@ -1,4 +1,4 @@
-## Small Two Stage Bootloader and C Kernel (WIP)
+## Small Two Stage Bootloader and C Kernel
 
 I know a lot about 16 real mode and boot sectors but not everything about it. I
 am doing this small project to learn even more, after all knowledge is power. This
@@ -36,6 +36,7 @@ written in pure C.
  - [x] - Fix keyboard handler, it types multiples and '9' is enter for some reason.
  - [x] - Add PIT timer handler.
  - [x] - Add keyboard input handler.
+ - [x] - Basic shell.
 
 ### Developer
 

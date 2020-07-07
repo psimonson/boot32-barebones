@@ -90,7 +90,6 @@ int print_char(int col, int row, char c)
 		row = get_offset_row(offset);
 		offset = get_screen_offset(0, row+1);
 	} else if(c == '\b') {
-		int col = get_offset_col(offset);
 		if(col > strlen(key_buffer)+1) {
 			offset -= 2;
 			vga_buffer[offset] = ' ';

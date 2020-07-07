@@ -27,11 +27,13 @@ void kernel_main(void)
 	print("\n  I have designed this because I would like to teach beginners\n");
 	print("the proper way of doing things. As far as a beginning operating\n");
 	print("system goes. Please feel free to clone and use it. If you are\n");
-	print("are worried about a LICENSE don't be. I will NOT put a LICENSE\n");
-	print("on this project. Also this software comes WITHOUT ANY WARRANTY\n");
-	print("of any kind. I will not be held accountable for any damage this\n");
-	print("software may cause. Please use at your own risk.\n");
-	print("\n\nCheers,\nPhilip R. Simonson (aka 5n4k3)\n\n");
+	print("are wondering about what license. It has an MIT license so\n");
+	print("basically don't say you wrote it and you'll be fine. Other than\n");
+	print("that, you can use it for whatever you want. Also this software\n");
+	print("comes WITHOUT ANY WARRANTY of any kind. I will not be held\n");
+	print("accountable for any damage this software may cause. Please use\n");
+	print("it at your own risk.\n\n");
+	print("Cheers,\nPhilip R. Simonson (aka 5n4k3)\n\n");
 	print("Welcome to a bare bones kernel! This is a temporary shell.\n");
 	print("Please type 'help' to see what you can do.\n\n> ");
 }
