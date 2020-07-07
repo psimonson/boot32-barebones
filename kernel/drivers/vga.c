@@ -10,6 +10,7 @@
 #include "vga.h"
 #include "ports.h"
 #include "util.h"
+#include "helper.h"
 
 static unsigned char _text_attr = 0, _term_init = 0;
 

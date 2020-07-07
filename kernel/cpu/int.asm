@@ -6,6 +6,29 @@
 [section .text]
 [bits 32]
 
+%macro isr_return 1
+	[global isr%1]
+	isr%1:
+		push byte %1
+		jmp isr_common_stub
+%endmacro
+
+%macro isr_noret 1
+	[global isr%1]
+	isr%1:
+		push byte 0
+		push byte %1
+		jmp isr_common_stub
+%endmacro
+
+%macro irq_stub 2
+	[global irq%1]
+	irq%1:
+		push byte %1
+		push byte %2
+		jmp irq_common_stub
+%endmacro
+
 [extern isr_handler]
 [extern irq_handler]
 
@@ -55,296 +78,60 @@ irq_common_stub:
 	add esp, 8
 	iret
 
-; ISRs
-global isr0
-global isr1
-global isr2
-global isr3
-global isr4
-global isr5
-global isr6
-global isr7
-global isr8
-global isr9
-global isr10
-global isr11
-global isr12
-global isr13
-global isr14
-global isr15
-global isr16
-global isr17
-global isr18
-global isr19
-global isr20
-global isr21
-global isr22
-global isr23
-global isr24
-global isr25
-global isr26
-global isr27
-global isr28
-global isr29
-global isr30
-global isr31
-
-; IRQs
-global irq0
-global irq1
-global irq2
-global irq3
-global irq4
-global irq5
-global irq6
-global irq7
-global irq8
-global irq9
-global irq10
-global irq11
-global irq12
-global irq13
-global irq14
-global irq15
-
 ; =========================
 ; ISRs Below
 ; =========================
 
-isr0:
-	push byte 0
-	push byte 0
-	jmp isr_common_stub
-
-isr1:
-	push byte 0
-	push byte 1
-	jmp isr_common_stub
-
-isr2:
-	push byte 0
-	push byte 2
-	jmp isr_common_stub
-
-isr3:
-	push byte 0
-	push byte 3
-	jmp isr_common_stub
-
-isr4:
-	push byte 0
-	push byte 4
-	jmp isr_common_stub
-
-isr5:
-	push byte 0
-	push byte 5
-	jmp isr_common_stub
-
-isr6:
-	push byte 0
-	push byte 6
-	jmp isr_common_stub
-
-isr7:
-	push byte 0
-	push byte 7
-	jmp isr_common_stub
-
-isr8:
-	push byte 8
-	jmp isr_common_stub
-
-isr9:
-	push byte 0
-	push byte 9
-	jmp isr_common_stub
-
-isr10:
-	push byte 10
-	jmp isr_common_stub
-
-isr11:
-	push byte 11
-	jmp isr_common_stub
-
-isr12:
-	push byte 12
-	jmp isr_common_stub
-
-isr13:
-	push byte 13
-	jmp isr_common_stub
-
-isr14:
-	push byte 14
-	jmp isr_common_stub
-
-isr15:
-	push byte 0
-	push byte 15
-	jmp isr_common_stub
-
-isr16:
-	push byte 0
-	push byte 16
-	jmp isr_common_stub
-
-isr17:
-	push byte 0
-	push byte 17
-	jmp isr_common_stub
-
-isr18:
-	push byte 0
-	push byte 18
-	jmp isr_common_stub
-
-isr19:
-	push byte 0
-	push byte 19
-	jmp isr_common_stub
-
-isr20:
-	push byte 0
-	push byte 20
-	jmp isr_common_stub
-
-isr21:
-	push byte 0
-	push byte 21
-	jmp isr_common_stub
-
-isr22:
-	push byte 0
-	push byte 22
-	jmp isr_common_stub
-
-isr23:
-	push byte 0
-	push byte 23
-	jmp isr_common_stub
-
-isr24:
-	push byte 0
-	push byte 24
-	jmp isr_common_stub
-
-isr25:
-	push byte 0
-	push byte 25
-	jmp isr_common_stub
-
-isr26:
-	push byte 0
-	push byte 26
-	jmp isr_common_stub
-
-isr27:
-	push byte 0
-	push byte 27
-	jmp isr_common_stub
-
-isr28:
-	push byte 0
-	push byte 28
-	jmp isr_common_stub
-
-isr29:
-	push byte 0
-	push byte 29
-	jmp isr_common_stub
-
-isr30:
-	push byte 0
-	push byte 30
-	jmp isr_common_stub
-
-isr31:
-	push byte 0
-	push byte 31
-	jmp isr_common_stub
+isr_noret 0
+isr_noret 1
+isr_noret 2
+isr_noret 3
+isr_noret 4
+isr_noret 5
+isr_noret 6
+isr_noret 7
+isr_return 8
+isr_noret 9
+isr_return 10
+isr_return 11
+isr_return 12
+isr_return 13
+isr_return 14
+isr_noret 15
+isr_noret 16
+isr_noret 17
+isr_noret 18
+isr_noret 19
+isr_noret 20
+isr_noret 21
+isr_noret 22
+isr_noret 23
+isr_noret 24
+isr_noret 25
+isr_noret 26
+isr_noret 27
+isr_noret 28
+isr_noret 29
+isr_noret 30
+isr_noret 31
 
 ; =========================
 ; IRQs Below
 ; =========================
 
-irq0:
-	push byte 0
-	push byte 32
-	jmp irq_common_stub
-
-irq1:
-	push byte 1
-	push byte 33
-	jmp irq_common_stub
-
-irq2:
-	push byte 2
-	push byte 34
-	jmp irq_common_stub
-
-irq3:
-	push byte 3
-	push byte 35
-	jmp irq_common_stub
-
-irq4:
-	push byte 4
-	push byte 36
-	jmp irq_common_stub
-
-irq5:
-	push byte 5
-	push byte 37
-	jmp irq_common_stub
-
-irq6:
-	push byte 6
-	push byte 38
-	jmp irq_common_stub
-
-irq7:
-	push byte 7
-	push byte 39
-	jmp irq_common_stub
-
-irq8:
-	push byte 8
-	push byte 40
-	jmp irq_common_stub
-
-irq9:
-	push byte 9
-	push byte 41
-	jmp irq_common_stub
-
-irq10:
-	push byte 10
-	push byte 42
-	jmp irq_common_stub
-
-irq11:
-	push byte 11
-	push byte 43
-	jmp irq_common_stub
-
-irq12:
-	push byte 12
-	push byte 44
-	jmp irq_common_stub
-
-irq13:
-	push byte 13
-	push byte 45
-	jmp irq_common_stub
-
-irq14:
-	push byte 14
-	push byte 46
-	jmp irq_common_stub
-
-irq15:
-	push byte 15
-	push byte 47
-	jmp irq_common_stub
+irq_stub 0, 32
+irq_stub 1, 33
+irq_stub 2, 34
+irq_stub 3, 35
+irq_stub 4, 36
+irq_stub 5, 37
+irq_stub 6, 38
+irq_stub 7, 39
+irq_stub 8, 40
+irq_stub 9, 41
+irq_stub 10, 42
+irq_stub 11, 43
+irq_stub 12, 44
+irq_stub 13, 45
+irq_stub 14, 46
+irq_stub 15, 47
