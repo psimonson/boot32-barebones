@@ -35,6 +35,7 @@ typedef struct command {
 
 /* Prototypes for commands */
 DEF_FNC(clear);
+DEF_FNC(regs);
 DEF_FNC(help);
 DEF_FNC(exit);
 
@@ -42,6 +43,7 @@ DEF_FNC(exit);
 
 BEG_CMD
 ADD_CMD(clear, "Clear the VGA screen buffer."),
+ADD_CMD(regs, "Display register values."),
 ADD_CMD(help, "Display this help text."),
 ADD_CMD(exit, "Halt execution of CPU.")
 END_CMD
@@ -53,6 +55,23 @@ CNT_CMD
  */
 DEF_FNC(clear) {
 	clear_screen();
+}
+/* Regs command, display register values.
+ */
+DEF_FNC(regs) {
+	unsigned int eax, ebx, ecx, edx;
+	__asm__ __volatile__("" : "=a"(eax), "=b"(ebx), "=c"(ecx), "=d"(edx));
+	print("List of registers below...\n");
+	print("==========================\n");
+	print("EAX: ");
+	print_hex(eax);
+	print("\nEBX: ");
+	print_hex(ebx);
+	print("\nECX: ");
+	print_hex(ecx);
+	print("\nEDX: ");
+	print_hex(edx);
+	print("\n");
 }
 /* Help command, display help.
  */

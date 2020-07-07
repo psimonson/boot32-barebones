@@ -1,4 +1,6 @@
 /*
+ * io.c - Source file for standard output functions.
+ *
  * Author: Philip R. Simonson
  * Date  : 07/01/2020
  *
@@ -6,6 +8,7 @@
  */
 
 #include "vga.h"
+#include "helper.h"
 
 /* Print a string on screen at given (x,y) position.
  */
@@ -42,4 +45,30 @@ void print_bkspc(void)
 	int row = get_offset_row(offset);
 	int col = get_offset_col(offset);
 	print_char(col, row, 0x08);
+}
+/* Print hex number to screen.
+ */
+void print_hex(unsigned int n)
+{
+	const char hex_digit[] = "0123456789ABCDEF";
+	char buf[12];
+	int i, j = 0, num;
+	if(n > 0) {
+		num = n;
+	} else {
+		buf[j++] = '0';
+		buf[j++] = 'x';
+	}
+	for(i = j; i < 8+j; i++) {
+		buf[i] = hex_digit[n%16];
+		n /= 16;
+	}
+	if(num > 0 && i < 10) {
+		buf[i++] = 'x';
+		buf[i++] = '0';
+	}
+	buf[i] = 0;
+	if(num > 0)
+		reverse(buf, strlen(buf));
+	print(buf);
 }
