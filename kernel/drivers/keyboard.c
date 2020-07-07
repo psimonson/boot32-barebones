@@ -31,11 +31,9 @@ char kbdus_table[128] = {
  */
 static void keyboard_callback(registers_t *regs)
 {
-	static unsigned char multibyte = 0, scancode = 0;
-	unsigned short word = inb(0x60);
+	static unsigned char multibyte = 0;
+	unsigned char scancode = inb(0x60);
 
-	multibyte = (word >> 8) & 0xff;
-	scancode = word & 0xff;
 	if(multibyte >= 0xe0) {
 		if(scancode >= 0x80) {
 			/* TODO: Handle two byte release. */
@@ -61,7 +59,9 @@ static void keyboard_callback(registers_t *regs)
 			break;
 		}
 	} else {
-		if(scancode >= 0x80) {
+		if(scancode == 0xe0 || scancode == 0xe1) {
+			multibyte = scancode;
+		} else if(scancode >= 0x80) {
 			/* TODO: Handle key release. */
 		} else {
 			if(scancode == '\b') { // Backspace
