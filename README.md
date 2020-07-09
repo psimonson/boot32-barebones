@@ -15,15 +15,13 @@ written in pure C.
 
  - Install required tools for Debian based distros below.
 
-    1 - build-essential\
-    2 - nasm\
-    3 - qemu-system (installs everything for qemu).
+		sudo apt install -y build-essential nasm qemu-system wodim
 
  - How to compile?
 
-    1 - make run (builds and runs in qemu).\
-    2 - make debug (builds and runs in qemu with gdb debugging).\
-    3 - make disk - builds floppy.img (you can write that to a floppy).\
+		1 - make run (builds and runs in qemu).
+		2 - make debug (builds and runs in qemu with gdb debugging).
+		3 - make disk - builds floppy.img (you can write that to a floppy).
 		4 - make cdrom - builds cdrom.iso (you can write this to cdrom).
 
  - How to write to disk?
@@ -48,6 +46,12 @@ written in pure C.
  - [x] - Add PIT timer handler.
  - [x] - Add keyboard input handler.
  - [x] - Basic shell.
+ - [ ] - Fix buggy backspace issue.
+
+### Known Issues
+
+ - Backspace is a little buggy at the moment.\
+    But doesn't hinder operating system at all.
 
 ### Developer
 
