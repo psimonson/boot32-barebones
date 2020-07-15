@@ -150,14 +150,14 @@ void register_interrupt_handler(u8_t n, isr_t handler)
  */
 void irq_handler(registers_t *r)
 {
-	if(r->int_no >= 40) outb(0xA0, 0x20); // slave
-	outb(0x20, 0x20); // master
-
 	/* Handle the interrupt in a modular way */
 	if(interrupt_handlers[r->int_no] != 0) {
 		isr_t handler = interrupt_handlers[r->int_no];
 		handler(r);
 	}
+
+	if(r->int_no >= 40) outb(0xA0, 0x20); // slave
+	outb(0x20, 0x20); // master
 }
 /* Install the IRQs.
  */
