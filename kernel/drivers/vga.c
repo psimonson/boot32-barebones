@@ -73,7 +73,6 @@ void set_text_attr(unsigned char bg, unsigned char fg)
  */
 int print_char(int col, int row, char c)
 {
-	static int col_off = 0;
 	int offset;
 
 	if(!_term_init) term_init(BLUE, YELLOW);
@@ -86,20 +85,12 @@ int print_char(int col, int row, char c)
 		col = get_offset_col(offset);
 	}
 
-	if(col >= 0 && col_off == 0)
-		col_off = col;
-
 	if(c == '\n') {
 		row = get_offset_row(offset);
 		offset = get_screen_offset(0, row+1);
 	} else if(c == '\b') {
-		if(col > col_off) {
-			offset -= 2;
-			vga_buffer[offset] = ' ';
-			vga_buffer[offset+1] = _text_attr;
-		} else {
-			col_off = 0;
-		}
+		vga_buffer[offset] = ' ';
+		vga_buffer[offset+1] = _text_attr;
 	} else {
 		vga_buffer[offset] = c;
 		vga_buffer[offset+1] = _text_attr;

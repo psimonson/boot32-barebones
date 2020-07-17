@@ -46,11 +46,11 @@ written in pure C.
  - [x] - Add PIT timer handler.
  - [x] - Add keyboard input handler.
  - [x] - Basic shell.
- - [ ] - Fix buggy backspace issue.
+ - [x] - Fix buggy backspace issue.
 
 ### Known Issues
 
- - Backspace is a little buggy at the moment.\
+ - (Fixed) Backspace is a little buggy at the moment.\
     But doesn't hinder operating system at all.
 
 ### Developer

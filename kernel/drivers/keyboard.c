@@ -64,7 +64,7 @@ static void keyboard_callback(registers_t *regs)
 		} else if(scancode >= 0x80) {
 			/* TODO: Handle key release. */
 		} else {
-			if(scancode == '\b') { // Backspace
+			if(scancode == 0x0e) { // Backspace
 				backspace(key_buffer);
 				print_bkspc();
 			} else if(scancode == 0x1c) { // Enter/Return
