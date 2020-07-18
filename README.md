@@ -34,6 +34,8 @@ written in pure C.
 
 ### TODO
 
+ - Check marks are already completed.
+
  - [x] - First stage boot loader (for loading second stage).
  - [x] - Second stage boot loader (for loading kernel).
  - [x] - Simple starter kernel written in C.
@@ -47,6 +49,7 @@ written in pure C.
  - [x] - Add keyboard input handler.
  - [x] - Basic shell.
  - [x] - Fix buggy backspace issue.
+ - [ ] - Make a line cap so backspace cannot exceed bound. (Almost complete)
 
 ### Known Issues
 
