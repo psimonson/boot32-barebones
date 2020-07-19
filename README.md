@@ -49,12 +49,19 @@ written in pure C.
  - [x] - Add keyboard input handler.
  - [x] - Basic shell.
  - [x] - Fix buggy backspace issue.
- - [ ] - Make a line cap so backspace cannot exceed bound. (Almost complete)
+ - [ ] - Make backspace not exceed bounds. (Almost complete)
 
 ### Known Issues
 
  - (Fixed) Backspace is a little buggy at the moment.\
     But doesn't hinder operating system at all.
+
+ - While backspacing everything works with backspace but, it\
+    doesn't backspace all characters have to figure that one out. It's\
+    a problem in the VGA driver within print_char() function. It deletes\
+    characters up until the first character typed and then just stops.\
+    When it gets to the first character it doesn't delete anymore including\
+    the first character. Hmmmm...
 
 ### Developer
 

@@ -73,12 +73,13 @@ void set_text_attr(unsigned char bg, unsigned char fg)
  */
 int print_char(int col, int row, char c)
 {
-	extern char key_buffer[];
-	static int last_col = 0;
+	extern char key_buffer[]; // Defined inside keyboard.c
 	int offset;
 
+	// Initialize vga for terminal if not already initialized
 	if(!_term_init) term_init(BLUE, YELLOW);
 
+	// Get current offset or rows and columns, plus offset
 	if(col >= 0 && row >= 0) {
 		offset = get_screen_offset(col, row);
 	} else {
@@ -87,15 +88,16 @@ int print_char(int col, int row, char c)
 		col = get_offset_col(offset);
 	}
 
+	// Handle line breaks, backspace and normal characters
 	if(c == '\n') {
 		row = get_offset_row(offset);
 		offset = get_screen_offset(0, row+1);
 	} else if(c == '\b') {
-		if((col+last_col) != (strlen(key_buffer)+last_col)) {
+		if(col != (col-strlen(key_buffer))) { // Bounds check for shell
 			vga_buffer[offset] = ' ';
 			vga_buffer[offset+1] = _text_attr;
 		} else {
-			return;
+			return offset;
 		}
 	} else {
 		vga_buffer[offset] = c;
@@ -103,7 +105,7 @@ int print_char(int col, int row, char c)
 		offset += 2;
 	}
 
-	/* Scroll the screen up. */
+	// Scroll the screen up
 	if(offset >= MAX_ROWS*MAX_COLS*2) {;
 		for(int i = 0; i < MAX_ROWS; i++) {
 			memcpy((char*)get_screen_offset(0, i-1)+VGA_ADDRESS,
@@ -118,7 +120,7 @@ int print_char(int col, int row, char c)
 		offset -= MAX_COLS*2;
 	}
 
-	last_col = get_offset_col(offset);
+	// Set cursor to current offset and return offset
 	set_cursor_offset(offset);
 	return offset;
 }
