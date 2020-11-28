@@ -44,3 +44,9 @@ void user_input(char *input)
 	process_command(input);
 	print("> ");
 }
+/* Start of operating system.
+ */
+ void _start(void)
+ {
+ 	kernel_main();
+ }
