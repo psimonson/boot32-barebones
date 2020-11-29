@@ -3,7 +3,7 @@ AFLAGS=-f elf32
 CC=gcc
 CFLAGS=-std=c11 -Wall -O -pedantic -g -m32 \
 	-ffreestanding -fno-pie -fno-pic -fno-builtin \
-	-nostdlib -nostdinc -nostartfiles \
+	-nostdlib -nostartfiles \
 	-I. -I./drivers -I./common -I./cpu
 LDFLAGS=
 BACKUPS=$(shell find . -iname "*.bak")

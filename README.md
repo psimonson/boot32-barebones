@@ -15,9 +15,11 @@ written in pure C.
 
  - Install required tools for Debian based distros below.
 
-		sudo apt install -y build-essential nasm qemu-system wodim
+		sudo apt install -y build-essential gcc-multilib nasm qemu-system wodim
 
  - How to compile?
+ 
+		(NOTE: You need gcc-multilib to compile this now!)
 
 		1 - make run (builds and runs in qemu).
 		2 - make debug (builds and runs in qemu with gdb debugging).

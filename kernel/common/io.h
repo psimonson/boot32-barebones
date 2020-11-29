@@ -10,8 +10,14 @@
 #ifndef _IO_H_
 #define _IO_H_
 
+#ifdef EOF
+#undef EOF
+#endif
+
+#define EOF -1
+
 /* Print character to console */
-void kputc(char c);
+int kputc(char c);
 /* Print string to console */
 int kputs(const char *s);
 /* Print formatted string to console */
