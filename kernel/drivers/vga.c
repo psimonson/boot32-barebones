@@ -93,7 +93,7 @@ int print_char(int col, int row, char c)
 		row = get_offset_row(offset);
 		offset = get_screen_offset(0, row+1);
 	} else if(c == '\b') {
-		if(col != (col-strlen(key_buffer))) { // Bounds check for shell
+		if(col > 0 && col != col+strlen(key_buffer)) { // Bounds check for shell
 			offset -= 2;
 			vga_buffer[offset] = ' ';
 			vga_buffer[offset+1] = _text_attr;
