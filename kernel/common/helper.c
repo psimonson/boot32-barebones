@@ -9,6 +9,10 @@
 
 #include "helper.h"
 
+/* ------------------------ Used internally ---------------------- */
+
+char _itoa[32];
+
 /* ----------------------- Helper Functions ---------------------- */
 
 /* Get length of given string.
@@ -53,15 +57,36 @@ void reverse(char *s)
 }
 /* Convert integer to c-string.
  */
-void itoa(int n, char *s, int size)
+void itoa(unsigned n, unsigned base, char *s, int size)
 {
-	int i, sign;
-	if((sign = n) < 0) n = -n;
-	for(i = 0; i < size-1 && n > 0; n /= 10, i++)
-		s[i++] = n % 10 + '0';
-	if(i < size && sign < 0) s[i++] = '-';
-	s[i] = '\0';
-	reverse(s);
+	int opos, pos;
+	
+	/* Check bounds */
+	if(n == 0 || base > 16) {
+		s[0] = '0';
+		s[1] = 0;
+		return;
+	}
+	
+	/* Fill itoa buffer */
+	for(pos = 0; n != 0; n /= 10, pos++)
+		_itoa[pos] = n % base + '0';
+	/* Read itoa buffer backwards */
+	for(opos = 0; opos < size && pos != 0; pos--,opos++)
+		s[opos] = _itoa[pos];
+}
+/* Convert integer to c-string safely.
+ */
+void itoa_s(int n, unsigned base, char *buf, int size)
+{
+	if(base > 16) return;
+	if(n < 0) {
+		buf[0] = '-';
+		buf[1] = 0;
+	} else {
+		buf[0] = 0;
+	}
+	itoa(n, base, buf, size);
 }
 
 /* ----------------------- Helper Functions ---------------------- */

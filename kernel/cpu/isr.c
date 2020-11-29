@@ -127,16 +127,9 @@ void isr_install(void)
  */
 void isr_handler(registers_t *r)
 {
-	char s[5];
-	memset(s, 0, sizeof(s));
 	clear_screen();
-	print("Received interrupt: ");
-	itoa(r->int_no, s, sizeof(s));
-	print(s);
-	print("\n");
-	print("Raised Exception: ");
-	print(exception_messages[r->int_no]);
-	print("\n");
+	kprintf("Received interrupt: %d\n"
+		"Raised Exception: %x\n", r->int_no, exception_messages[r->int_no]);
 	__asm__ __volatile__("cli");
 	__asm__ __volatile__("hlt");
 }

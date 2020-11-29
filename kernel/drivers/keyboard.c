@@ -66,16 +66,16 @@ static void keyboard_callback(registers_t *regs)
 		} else {
 			if(scancode == 0x0e) { // Backspace
 				backspace(key_buffer);
-				print_bkspc();
+				kputc('\b');
 			} else if(scancode == 0x1c) { // Enter/Return
-				print("\n");
+				kputc('\n');
 				user_input(key_buffer);
 				key_buffer[0] = 0;
 			} else {
 				char letter = kbdus_table[scancode];
 				char str[2] = {letter, '\0'};
 				append(key_buffer, letter);
-				print(str);
+				kputs(str);
 			}
 		}
 	}

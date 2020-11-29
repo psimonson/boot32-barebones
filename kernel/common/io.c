@@ -9,13 +9,14 @@
 
 #include "vga.h"
 #include "helper.h"
+#include "stdarg.h"
 
-/* Print a string on screen at given (x,y) position.
+/* Print character to console.
  */
-void print_at(int col, int row, char *s)
+void _kputc(int col, int row, char c)
 {
 	int offset;
-
+	
 	if(col >= 0 && row >= 0) {
 		offset = get_screen_offset(col, row);
 	} else {
@@ -23,41 +24,92 @@ void print_at(int col, int row, char *s)
 		row = get_offset_row(offset);
 		col = get_offset_col(offset);
 	}
-
-	for(int i = 0; s[i] != 0; i++) {
-		offset = print_char(col, row, s[i]);
-		/* Compute row/col for next iteration */
-		row = get_offset_row(offset);
-		col = get_offset_col(offset);
-	}
+	
+	offset = print_char(col, row, c);
+	row = get_offset_row(offset);
+	col = get_offset_col(offset);
 }
-/* Print a string on screen at current location.
+/* Print character for kernel.
  */
-void print(char *s)
+void kputc(char c)
 {
-	print_at(-1, -1, s);
+	_kputc(-1, -1, c);
 }
-/* Print backspace character to screen.
+/* Print character for kernel.
  */
-void print_bkspc(void)
+int _kputs(const char *s)
 {
-	int offset = get_cursor_offset()-2;
-	int row = get_offset_row(offset);
-	int col = get_offset_col(offset);
-	print_char(col, row, 0x08);
-}
-/* Print hex number to screen.
- */
-void print_hex(unsigned int n)
-{
-	const char hex_digit[] = "0123456789ABCDEF";
-	char buf[12] = {'0', 'x', '0'};
 	int i;
-	for(i = 2; i < 10; i++) {
-		buf[i] = hex_digit[n%16];
-		n /= 16;
+	for(i = 0; i < strlen(s); i++)
+		kputc(s[i]);
+	return i;
+}
+/* Print string to console.
+ */
+int kputs(const char *s)
+{
+	return _kputs(s);
+}
+/* Print formatted for kernel.
+ */
+int kprintf(const char *format, ...)
+{
+	va_list ap;
+	int i;
+	
+	va_start(ap, format);
+	for(i = 0; i < strlen(format); i++) {
+		switch(format[i]) {
+			case '%':
+				switch(format[i+1]) {
+					case 'c': {
+						char c = va_arg(ap, char);
+						kputc(c);
+						i++;
+						break;
+					}
+					case 's': {
+						const char *s = (const char *)va_arg(ap, const char *);
+						i += kprintf("%s", s);
+						break;
+					}
+					case 'd':
+					case 'i': {
+						int c = va_arg(ap, int);
+						char str[32] = {0};
+						itoa_s(c, 10, str, 32);
+						i += kputs(str);
+						break;
+					} break;
+					case 'x':
+					case 'X': {
+						int c = va_arg(ap, int);
+						char str[32] = {0};
+						itoa_s(c, 16, str, 32);
+						i += kputs(str);
+						break;
+					}
+					default:
+						return -1;
+				}
+			case '\\':
+				++i;
+				switch(format[i]) {
+					case 'n':
+						kputs("\n");
+					break;
+					case 'b':
+						kputs("\b");
+					break;
+					default:
+						return -1;
+				}
+			break;
+			default:
+				kputc(format[i]);
+			break;
+		}
 	}
-	buf[i] = 0;
-	reverse(buf+2);
-	print(buf);
+	va_end(ap);
+	return i;
 }
