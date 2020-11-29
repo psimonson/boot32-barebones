@@ -12,6 +12,11 @@
 /* ------------------------ Used internally ---------------------- */
 
 char _itoa[32];
+const char _hexdigits[] = {
+	'0', '1', '2', '3', '4', '5', '6',
+	'7', '8', '9', 'A', 'B', 'C', 'D',
+	'E', 'F'
+};
 
 /* ----------------------- Helper Functions ---------------------- */
 
@@ -59,7 +64,7 @@ void reverse(char *s)
  */
 void itoa(unsigned n, unsigned base, char *s, int size)
 {
-	int opos, pos;
+	int opos, pos, top;
 	
 	/* Check bounds */
 	if(n == 0 || base > 16) {
@@ -70,10 +75,11 @@ void itoa(unsigned n, unsigned base, char *s, int size)
 	
 	/* Fill itoa buffer */
 	for(pos = 0; n != 0; n /= 10, pos++)
-		_itoa[pos] = n % base + '0';
+		_itoa[pos] = ((char*)_hexdigits)[n % base];
 	/* Read itoa buffer backwards */
-	for(opos = 0; opos < size && pos != 0; pos--,opos++)
+	for(opos = 0, top = pos--; opos < size && opos < top; pos--,opos++)
 		s[opos] = _itoa[pos];
+	s[opos] = 0;
 }
 /* Convert integer to c-string safely.
  */
@@ -83,8 +89,6 @@ void itoa_s(int n, unsigned base, char *buf, int size)
 	if(n < 0) {
 		buf[0] = '-';
 		buf[1] = 0;
-	} else {
-		buf[0] = 0;
 	}
 	itoa(n, base, buf, size);
 }

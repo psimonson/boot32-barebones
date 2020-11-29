@@ -66,7 +66,7 @@ static void keyboard_callback(registers_t *regs)
 		} else {
 			if(scancode == 0x0e) { // Backspace
 				backspace(key_buffer);
-				kputc('\b');
+				kprintf("\b");
 			} else if(scancode == 0x1c) { // Enter/Return
 				kputc('\n');
 				user_input(key_buffer);
