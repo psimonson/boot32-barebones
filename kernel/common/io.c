@@ -58,7 +58,7 @@ int kprintf(const char *format, ...)
 	int i;
 	
 	va_start(ap, format);
-	for(i = 0; i < strlen(format); i++) {
+	for(i = 0; i < strlen(format); ) {
 		switch(format[i]) {
 			case '%':
 				switch(format[i+1]) {
@@ -69,8 +69,11 @@ int kprintf(const char *format, ...)
 						break;
 					}
 					case 's': {
-						const char *s = (const char *)va_arg(ap, const char *);
-						i += kprintf("%s", s);
+						int c = (int)va_arg(ap, const char*);
+						char str[32] = {0};
+						itoa_s(c, 10, str, 32);
+						i += kputs(str);
+						i++;
 						break;
 					}
 					case 'd':
@@ -79,27 +82,32 @@ int kprintf(const char *format, ...)
 						char str[32] = {0};
 						itoa_s(c, 10, str, 32);
 						i += kputs(str);
+						i++;
 						break;
-					} break;
+					}
 					case 'x':
 					case 'X': {
 						int c = va_arg(ap, int);
 						char str[32] = {0};
 						itoa_s(c, 16, str, 32);
 						i += kputs(str);
+						i++;
 						break;
 					}
 					default:
 						return -1;
 				}
 			case '\\':
-				++i;
-				switch(format[i]) {
+				switch(format[i+1]) {
 					case 'n':
 						kputs("\n");
+						i++;
+						break;
 					break;
 					case 'b':
 						kputs("\b");
+						i++;
+						break;
 					break;
 					default:
 						return -1;
@@ -107,7 +115,7 @@ int kprintf(const char *format, ...)
 			break;
 			default:
 				kputc(format[i]);
-			break;
+				i++;
 		}
 	}
 	va_end(ap);
