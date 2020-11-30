@@ -34,6 +34,15 @@ written in pure C.
 			2b - cdrecord dev=<devid> speed=12 -pad -v -eject boot32-barebones.iso
 			2c - NOTE: <devid> = #,#,# from cdrecord -scanbus (2a).
 
+### PATCHES
+
+ - login.patch - Adds a simple login to the operating system.
+ 
+#### Apply the patches like this!
+
+		cd into boot32-barebones root directory then,
+		git apply patches/<patch-name>.patch
+
 ### TODO
 
  - Check marks are already completed.
