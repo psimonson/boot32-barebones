@@ -291,7 +291,7 @@ static char kbd_self_test(void)
 }
 /* Initialize the keyboard.
  */
-void install_keyboard(void)
+void install_kbd(void)
 {
 	register_interrupt_handler(IRQ1, keyboard_callback);
 	

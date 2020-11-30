@@ -161,5 +161,5 @@ void irq_install(void)
 	/* IRQ0: timer */
 	install_timer(50);
 	/* IRQ1: keyboard */
-	install_keyboard();
+	install_kbd();
 }
