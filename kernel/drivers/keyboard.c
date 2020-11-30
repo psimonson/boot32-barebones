@@ -33,6 +33,7 @@ enum KBD_ERROR {
 	BUILD_KBD_ERR(KBD_ERR_KEY, 0xFF)
 };
 
+bool _kbd_istyping;
 int _scancode;
 
 static bool _kbd_bat_res;
@@ -199,17 +200,20 @@ static void keyboard_callback(registers_t *regs)
 					case KEY_BACKSPACE:
 						backspace(key_buffer);
 						kputc('\b');
+						_kbd_istyping = true;
 					break;
 					case KEY_RETURN:
 						kputc('\n');
 						user_input(key_buffer);
 						key_buffer[0] = 0;
+						_kbd_istyping = true;
 					break;
 					default: {
 						char letter = _kbd_std_table[code];
 						char str[2] = {letter, '\0'};
 						append(key_buffer, letter);
 						kputs(str);
+						_kbd_istyping = true;
 						break;
 					}
 				}
@@ -298,6 +302,7 @@ void install_kbd(void)
 	_kbd_bat_res = kbd_self_test();
 	_kbd_diag_res = _kbd_resend_res = false;
 	
+	_kbd_istyping = false;
 	_numlock = true;
 	_scrolllock = _capslock = false;
 	_shift = _ctrl = _alt = false;

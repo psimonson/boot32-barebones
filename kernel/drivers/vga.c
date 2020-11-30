@@ -6,6 +6,8 @@
  *
  ********************************************************************
  */
+ 
+#include <stdbool.h>
 
 #include "vga.h"
 #include "ports.h"
@@ -73,7 +75,8 @@ void set_text_attr(unsigned char bg, unsigned char fg)
  */
 int print_char(int col, int row, char c)
 {
-	extern char key_buffer[]; // Defined inside keyboard.c
+	extern bool _kbd_istyping; // Defined inside keyboard.c
+	static int last_col = 0;
 	int offset;
 
 	// Initialize vga for terminal if not already initialized
@@ -93,7 +96,7 @@ int print_char(int col, int row, char c)
 		row = get_offset_row(offset);
 		offset = get_screen_offset(0, row+1);
 	} else if(c == '\b') {
-		if(col > 0 && col != col+strlen(key_buffer)) { // Bounds check for shell
+		if(col > 0 && col != last_col) { // Bounds check for shell
 			offset -= 2;
 			vga_buffer[offset] = ' ';
 			vga_buffer[offset+1] = _text_attr;
@@ -104,6 +107,8 @@ int print_char(int col, int row, char c)
 		vga_buffer[offset] = c;
 		vga_buffer[offset+1] = _text_attr;
 		offset += 2;
+		if(!_kbd_istyping)
+			last_col = get_offset_col(offset);
 	}
 
 	// Scroll the screen up
