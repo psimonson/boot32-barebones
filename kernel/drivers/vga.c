@@ -75,6 +75,7 @@ void set_text_attr(unsigned char bg, unsigned char fg)
  */
 int print_char(int col, int row, char c)
 {
+	extern char key_buffer[]; // Defined inside keyboard.c
 	extern bool _kbd_istyping; // Defined inside keyboard.c
 	static int last_col = 0;
 	int offset;
@@ -96,7 +97,8 @@ int print_char(int col, int row, char c)
 		row = get_offset_row(offset);
 		offset = get_screen_offset(0, row+1);
 	} else if(c == '\b') {
-		if(col > 0 && col != last_col) { // Bounds check for shell
+		int len = strlen(key_buffer);
+		if((row == 0 && col > 0) || (col >= 0 && last_col != (col-len))) { // Bounds check for shell
 			offset -= 2;
 			vga_buffer[offset] = ' ';
 			vga_buffer[offset+1] = _text_attr;
@@ -107,8 +109,10 @@ int print_char(int col, int row, char c)
 		vga_buffer[offset] = c;
 		vga_buffer[offset+1] = _text_attr;
 		offset += 2;
-		if(!_kbd_istyping)
-			last_col = get_offset_col(offset);
+		if(!_kbd_istyping) {
+			last_col = get_offset_col(offset)+1;
+			_kbd_istyping = true;
+		}
 	}
 
 	// Scroll the screen up

@@ -134,7 +134,6 @@ static void kbd_set_leds(char num, char caps, char scroll)
  */
 static void keyboard_callback(registers_t *regs)
 {
-#if USE_NEW_KEYBOARD_CALLBACK
 	static char _extended = false;
 	int code = 0;
 	
@@ -204,16 +203,16 @@ static void keyboard_callback(registers_t *regs)
 					break;
 					case KEY_RETURN:
 						kputc('\n');
+						_kbd_istyping = false;
 						user_input(key_buffer);
 						key_buffer[0] = 0;
-						_kbd_istyping = true;
 					break;
 					default: {
 						char letter = _kbd_std_table[code];
 						char str[2] = {letter, '\0'};
+						_kbd_istyping = true;
 						append(key_buffer, letter);
 						kputs(str);
-						_kbd_istyping = true;
 						break;
 					}
 				}
@@ -235,56 +234,6 @@ static void keyboard_callback(registers_t *regs)
 			break;
 		}
 	}
-#else
-	static unsigned char multibyte = 0;
-	unsigned char scancode = inb(0x60);
-
-	if(multibyte >= 0xe0) {
-		if(scancode >= 0x80) {
-			/* TODO: Handle two byte release. */
-		} else {
-			/* TODO: Handle two byte press. */
-		}
-		multibyte = 0;
-	} else if(multibyte == 0xe1) {
-		switch(scancode) {
-			case 0x1d:
-			case 0x45:
-			case 0x9d:
-			case 0xe1:
-				/* TODO: Verify correct order */
-			break;
-			case 0xc5:
-				/* TODO: Handle pause key */
-				multibyte = 0;
-			break;
-			default:
-				/* Shouldn't happen, perhaps warn user. */
-				multibyte = 0;
-			break;
-		}
-	} else {
-		if(scancode == 0xe0 || scancode == 0xe1) {
-			multibyte = scancode;
-		} else if(scancode >= 0x80) {
-			/* TODO: Handle key release. */
-		} else {
-			if(scancode == 0x0e) { // Backspace
-				backspace(key_buffer);
-				kprintf("\b");
-			} else if(scancode == 0x1c) { // Enter/Return
-				kputc('\n');
-				user_input(key_buffer);
-				key_buffer[0] = 0;
-			} else {
-				char letter = _kbd_std_table[scancode];
-				char str[2] = {letter, '\0'};
-				append(key_buffer, letter);
-				kputs(str);
-			}
-		}
-	}
-#endif
 	(void)regs;
 }
 /* Do a self test on the keyboard.
