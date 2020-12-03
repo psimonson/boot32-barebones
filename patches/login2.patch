@@ -1,0 +1,179 @@
+diff --git a/kernel/cpu/isr.c b/kernel/cpu/isr.c
+index 353fe22..ac52d3c 100644
+--- a/kernel/cpu/isr.c
++++ b/kernel/cpu/isr.c
+@@ -55,6 +55,14 @@ static char *exception_messages[32] = {
+ 	"Reserved"
+ };
+ 
++/* Generate interrupt exception by number.
++ */
++void gen_interrupt(int intno)
++{
++	__asm__ __volatile__("cli");
++	__asm__ __volatile__("movb %0, %%al; movb %%al, (genint*=)+1; genint:; int $0"
++		: : "a"(intno));
++}
+ /* Map interrupts to the service routines.
+  */
+ void isr_install(void)
+diff --git a/kernel/cpu/isr.h b/kernel/cpu/isr.h
+index 308d4c8..9a13b33 100644
+--- a/kernel/cpu/isr.h
++++ b/kernel/cpu/isr.h
+@@ -100,6 +100,9 @@ typedef struct registers {
+ 	u32_t eip, cs, eflags, useresp, ss;
+ } __attribute__((packed)) registers_t;
+ 
++/* Special functions in isr.c */
++void gen_interrupt(int intno);
++
+ /* Functions implemented in isr.c */
+ void isr_install(void);
+ void isr_handler(registers_t *r);
+diff --git a/kernel/kernel.c b/kernel/kernel.c
+index b8b17cd..e1e68a5 100644
+--- a/kernel/kernel.c
++++ b/kernel/kernel.c
+@@ -7,46 +7,50 @@
+  ***********************************************************************
+  */
+ 
++#include <stdbool.h>
++
+ #include "isr.h"
+ #include "vga.h"
+ #include "helper.h"
+ #include "io.h"
+ #include "shell.h"
+ 
++bool _login_active;
++
+ /* Entry point for kernel.
+  */
+ void kernel_main(void)
+ {
+-	// Initialize the terminal and install ISRs and IRQs.
+-	term_init(BLUE, YELLOW);
+ 	isr_install();
+ 	irq_install();
++	_login_active = true;
+ 
+ 	// Display welcome message to user and prompt.
+-	kprintf("Welcome to my bare bones example 32 bit operating system.\n");
+-	kprintf("\n  I have designed this because I would like to teach beginners\n");
+-	kprintf("the proper way of doing things. As far as a beginning operating\n");
+-	kprintf("system goes. Please feel free to clone and use it. If you are\n");
+-	kprintf("are wondering about what license. It has an MIT license so\n");
+-	kprintf("basically don't say you wrote it and you'll be fine. Other than\n");
+-	kprintf("that, you can use it for whatever you want. Also this software\n");
+-	kprintf("comes WITHOUT ANY WARRANTY of any kind. I will not be held\n");
+-	kprintf("accountable for any damage this software may cause. Please use\n");
+-	kprintf("it at your own risk.\n\n");
+-	kprintf("Cheers,\nPhilip R. Simonson (aka 5n4k3)\n\n");
+-	kprintf("Welcome to a bare bones kernel! This is a temporary shell.\n");
+-	kprintf("Please type 'help' to see what you can do.\n\n> ");
++	kprintf(LOGIN_MOTD);
+ }
+ /* Kernel process user input.
+  */
+ void user_input(char *input)
+ {
+-	process_command(input);
+-	kprintf("> ");
++	if(_login_active) {
++		if(!strcmp("wargames", input)) {
++			_login_active = false;
++			kprintf("Login successful!\nWelcome to a simple command line ");
++			kprintf("interface (CLI).\nPlease type 'help' to see a list of ");
++			kprintf("commands.\n\n> ");
++		} else {
++			kprintf("Login failed!\nLOGIN ? ");
++		}
++	} else {
++		process_command(input);
++		if(!_login_active) kprintf("> ");
++	}
+ }
+ /* Start of operating system.
+  */
+- void _start(void)
+- {
+- 	kernel_main();
+- }
++void _start(void)
++{
++	// Initialize the terminal and install ISRs and IRQs.
++	term_init(BLUE, YELLOW);
++	kernel_main();
++}
+diff --git a/kernel/shell.c b/kernel/shell.c
+index 66741d2..77357c6 100644
+--- a/kernel/shell.c
++++ b/kernel/shell.c
+@@ -7,6 +7,8 @@
+  *********************************************************************
+  */
+ 
++#include <stdbool.h>
++
+ #include "vga.h"
+ #include "helper.h"
+ #include "io.h"
+@@ -37,6 +39,7 @@ typedef struct command {
+ DEF_FNC(clear);
+ DEF_FNC(regs);
+ DEF_FNC(help);
++DEF_FNC(logout);
+ DEF_FNC(exit);
+ 
+ /* ----------------------------- Commands -------------------------- */
+@@ -45,6 +48,7 @@ BEG_CMD
+ ADD_CMD(clear, "Clear the VGA screen buffer."),
+ ADD_CMD(regs, "Display register values."),
+ ADD_CMD(help, "Display this help text."),
++ADD_CMD(logout, "Return to login screen."),
+ ADD_CMD(exit, "Halt execution of CPU.")
+ END_CMD
+ CNT_CMD
+@@ -74,6 +78,14 @@ DEF_FNC(help) {
+ 	for(int i = 0; i < cmd_total; i++)
+ 		kprintf("%s - %s\n", commands[i].cmd, commands[i].help);
+ }
++/* Logout command, return to login screen.
++ */
++DEF_FNC(logout) {
++	extern bool _login_active;
++	_login_active = true;
++	clear_screen();
++	kprintf(LOGIN_MOTD);
++}
+ /* Exit command, halt CPU.
+  */
+ DEF_FNC(exit) {
+diff --git a/kernel/shell.h b/kernel/shell.h
+index 1afdea8..a6eb656 100644
+--- a/kernel/shell.h
++++ b/kernel/shell.h
+@@ -10,6 +10,21 @@
+ #ifndef _SHELL_H_
+ #define _SHELL_H_
+ 
++#define LOGIN_MOTD \
++"Welcome to my bare bones example 32 bit operating system.\n" \
++"\n  I have designed this because I would like to teach beginners\n" \
++"the proper way of doing things. As far as a beginning operating\n" \
++"system goes. Please feel free to clone and use it. If you are\n" \
++"are wondering about what license. It has an MIT license so\n" \
++"basically don't say you wrote it and you'll be fine. Other than\n" \
++"that, you can use it for whatever you want. Also this software\n" \
++"comes WITHOUT ANY WARRANTY of any kind. I will not be held\n" \
++"accountable for any damage this software may cause. Please use\n" \
++"it at your own risk.\n\n" \
++"Cheers,\nPhilip R. Simonson (aka 5n4k3)\n\n" \
++"Welcome to a bare bones kernel! Please login to use the shell.\n" \
++"\nLOGIN ? "
++
+ /* Process commands from basic shell. */
+ void process_command(char *input);
+ 
