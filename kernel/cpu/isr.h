@@ -100,6 +100,9 @@ typedef struct registers {
 	u32_t eip, cs, eflags, useresp, ss;
 } __attribute__((packed)) registers_t;
 
+/* Special functions in isr.c */
+extern void gen_interrupt(int intno);
+
 /* Functions implemented in isr.c */
 void isr_install(void);
 void isr_handler(registers_t *r);

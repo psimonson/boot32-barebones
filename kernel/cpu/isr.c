@@ -129,7 +129,7 @@ void isr_handler(registers_t *r)
 {
 	clear_screen();
 	kprintf("Received interrupt: %d\n"
-		"Raised Exception: %x\n", r->int_no, exception_messages[r->int_no]);
+		"Raised Exception: %s\n", r->int_no, exception_messages[r->int_no]);
 	__asm__ __volatile__("cli");
 	__asm__ __volatile__("hlt");
 }
