@@ -20,6 +20,12 @@ static void timer_callback(registers_t *regs)
 	_kernel_ticks++;
 	(void)regs;
 }
+/* Get timer ticks from kernel.
+ */
+u32_t get_timer_ticks(void)
+{
+	return _kernel_ticks;
+}
 /* Initialize the system timer.
  */
 void install_timer(u32_t freq)

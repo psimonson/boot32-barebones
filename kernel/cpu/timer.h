@@ -12,7 +12,9 @@
 
 #include "types.h"
 
+/* Get timer ticks from kernel. */
+extern u32_t get_timer_ticks(void);
 /* Call this function to install a timer. */
-void install_timer(u32_t freq);
+extern void install_timer(u32_t freq);
 
 #endif

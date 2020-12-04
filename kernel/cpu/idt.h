@@ -35,7 +35,7 @@ idt_gate_t idt[IDT_ENTRIES];
 idt_reg_t idt_reg;
 
 /* Functions implemented in idt.c. */
-void set_idt_gate(int n, u32_t handler);
-void set_idt(void);
+extern void set_idt_gate(int n, u32_t handler);
+extern void set_idt(void);
 
 #endif

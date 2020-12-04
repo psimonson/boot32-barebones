@@ -7,8 +7,6 @@
  ******************************************************************
  */
 
-#include <stdbool.h>
-
 #include "keyboard.h"
 #include "kernel.h"
 #include "helper.h"
@@ -19,6 +17,8 @@
 
 #define APPEND_KEYS(K, ...) K, ##__VA_ARGS__
 #define BUILD_KBD_ERR(S, X) S = X
+
+#define isascii(c) ((unsigned)(c) <= 0x7F)
 
 /* Scan error codes */
 enum KBD_ERROR {
@@ -40,14 +40,12 @@ static bool _kbd_bat_res;
 static bool _kbd_diag_res;
 static bool _kbd_resend_res;
 
-static unsigned char _numlock;
-static unsigned char _scrolllock;
-static unsigned char _capslock;
-static unsigned char _ctrl;
-static unsigned char _shift;
-static unsigned char _alt;
-
-char key_buffer[256]; // Save the keys pressed
+static bool _numlock;
+static bool _scrolllock;
+static bool _capslock;
+static bool _ctrl;
+static bool _shift;
+static bool _alt;
 
 static int _kbd_std_table[] = {
 	APPEND_KEYS(KEY_UNKNOWN, KEY_ESCAPE, KEY_1, KEY_2, KEY_3, KEY_4),
@@ -119,7 +117,7 @@ static void kbd_enc_send_cmd(unsigned char cmd)
 }
 /* Set LEDs on keyboard for Special keys.
  */
-static void kbd_set_leds(char num, char caps, char scroll)
+static void kbd_set_leds(bool num, bool caps, bool scroll)
 {
 	unsigned char data = 0;
 	
@@ -197,23 +195,23 @@ static void keyboard_callback(registers_t *regs)
 						kbd_set_leds(_numlock, _capslock, _scrolllock);
 					break;
 					case KEY_BACKSPACE:
-						backspace(key_buffer);
+/*						backspace(key_buffer);
 						kputc('\b');
 						_kbd_istyping = true;
-					break;
+*/					break;
 					case KEY_RETURN:
-						kputc('\n');
+/*						kputc('\n');
 						_kbd_istyping = false;
 						user_input(key_buffer);
 						key_buffer[0] = 0;
-					break;
+*/					break;
 					default: {
-						char letter = _kbd_std_table[code];
+/*						char letter = _kbd_std_table[code];
 						char str[2] = {letter, '\0'};
 						_kbd_istyping = true;
 						append(key_buffer, letter);
 						kputs(str);
-						break;
+*/						break;
 					}
 				}
 			}
@@ -241,6 +239,120 @@ static void keyboard_callback(registers_t *regs)
 static char kbd_self_test(void)
 {
 	return true;
+}
+/* Return last scan code of pressed key.
+ */
+u8_t kbd_get_last_scan(void)
+{
+	return _scancode;
+}
+/* Return last key that was pressed.
+ */
+KEYCODE kbd_get_last_key(void)
+{
+	return (_scancode != INVALID_SCANCODE) ? ((KEYCODE)_kbd_std_table[_scancode]) : KEY_UNKNOWN;
+}
+/* Discard last key that was received.
+ */
+void kbd_discard_last_key(void)
+{
+	_scancode = INVALID_SCANCODE;
+}
+/* Convert keycode to ascii value.
+ */
+char kbd_key_to_ascii(KEYCODE code)
+{
+	u8_t key = code;
+	
+	if(isascii(key)) {
+		if(_shift || _capslock) {
+			if(key >= 'a' && key <= 'z')
+				key -= 32;
+		}
+		
+		if(_shift && !_capslock) {
+			if(key >= '0' && key <= '9') {
+				switch(key) {
+					case '0':
+						key = KEY_RIGHTPARENTHESIS;
+					break;
+					case '1':
+						key = KEY_EXCLAMATION;
+					break;
+					case '2':
+						key = KEY_AT;
+					break;
+					case '3':
+						key = KEY_HASH;
+					break;
+					case '4':
+						key = KEY_DOLLAR;
+					break;
+					case '5':
+						key = KEY_PERCENT;
+					break;
+					case '6':
+						key = KEY_CARRET;
+					break;
+					case '7':
+						key = KEY_AMPERSAND;
+					break;
+					case '8':
+						key = KEY_ASTERISK;
+					break;
+					case '9':
+						key = KEY_LEFTPARENTHESIS;
+					break;
+					default:
+						// Do nothing here
+					break;
+				}
+			} else {
+				switch(key) {
+					case KEY_COMMA:
+						key = KEY_GREATER;
+					break;
+					case KEY_DOT:
+						key = KEY_LESS;
+					break;
+					case KEY_SLASH:
+						key = KEY_QUESTION;
+					break;
+					case KEY_SEMICOLON:
+						key = KEY_COLON;
+					break;
+					case KEY_QUOTE:
+						key = KEY_QUOTEDOUBLE;
+					break;
+					case KEY_LEFTBRACKET:
+						key = KEY_LEFTCURL;
+					break;
+					case KEY_RIGHTBRACKET:
+						key = KEY_RIGHTCURL;
+					break;
+					case KEY_GRAVE:
+						key = KEY_TILDE;
+					break;
+					case KEY_MINUS:
+						key = KEY_UNDERSCORE;
+					break;
+					case KEY_EQUAL:
+						key = KEY_PLUS;
+					break;
+					case KEY_BACKSLASH:
+						key = KEY_BAR;
+					break;
+					default:
+						// Do nothing here
+					break;
+				}
+			}
+		}
+		
+		return key;
+	}
+	
+	return 0;
 }
 /* Initialize the keyboard.
  */

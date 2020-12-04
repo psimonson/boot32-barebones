@@ -10,9 +10,10 @@
 #ifndef _KEYBOARD_H_
 #define _KEYBOARD_H_
 
-#define USE_NEW_KEYBOARD_CALLBACK 1
+#include <stdbool.h>
+#include "types.h"
 
-enum KEYCODE {
+typedef enum KEYCODE {
 	/* Alphanumeric keys */
 	KEY_SPACE	= ' ',
 	KEY_0		= '0',
@@ -158,11 +159,23 @@ enum KEYCODE {
 
 	KEY_UNKNOWN,
 	KEY_NUMKEYCODES
-};
+} KEYCODE;
 
+/* Get scroll lock on or off. */
 extern char kbd_get_scrolllock(void);
+/* Get num lock on or off. */
 extern char kbd_get_numlock(void);
+/* Get caps lock on or off. */
 extern char kbd_get_capslock(void);
+/* Return last scan code of pressed key. */
+extern u8_t kbd_get_last_scan(void);
+/* Return last key that was pressed. */
+extern KEYCODE kbd_get_last_key(void);
+/* Discard last key that was received. */
+extern void kbd_discard_last_key(void);
+/* Convert key code into ascii value. */
+extern char kbd_key_to_ascii(KEYCODE key);
+/* Install keyboard handler. */
 extern void install_kbd(void);
 
 #endif

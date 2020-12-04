@@ -104,11 +104,11 @@ typedef struct registers {
 extern void gen_interrupt(int intno);
 
 /* Functions implemented in isr.c */
-void isr_install(void);
-void isr_handler(registers_t *r);
-void irq_install(void);
+extern void isr_install(void);
+extern void isr_handler(registers_t *r);
+extern void irq_install(void);
 
 typedef void (*isr_t)(registers_t *);
-void register_interrupt_handler(u8_t n, isr_t handler);
+extern void register_interrupt_handler(u8_t n, isr_t handler);
 
 #endif
