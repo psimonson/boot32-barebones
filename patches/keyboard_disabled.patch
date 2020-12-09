@@ -1,0 +1,22 @@
+diff --git a/kernel/kernel.c b/kernel/kernel.c
+index 5d2fd96..34feaee 100644
+--- a/kernel/kernel.c
++++ b/kernel/kernel.c
+@@ -35,7 +35,7 @@ void kernel_main(void)
+ 	// Display welcome message to user and prompt.
+ 	kprintf(WELCOME_MESSAGE "? ");
+ 	for(;;) {
+-		if(login_active) {
++/*		if(login_active) {
+ 			if(get_command(key_buffer, sizeof(key_buffer)) > 0)
+ 				if(!strcmp("root071", key_buffer)) {
+ 					login_active = false;
+@@ -50,7 +50,7 @@ void kernel_main(void)
+ 			if(get_command(key_buffer, sizeof(key_buffer)) > 0)
+ 				process_command(key_buffer);
+ 		}
+-	}
++*/	}
+ }
+ /* Get key from keyboard.
+  */
