@@ -16,11 +16,13 @@
 #include "io.h"
 #include "shell.h"
 #include "keyboard.h"
+#include "timer.h"
 
 char key_buffer[256]; // Used to store keyboard input.
 bool kbd_istyping;
 bool login_active;
 
+extern int getch(void);
 extern int get_command(char *buf, int size);
 
 /* Sleep for a specific number of ticks.
@@ -42,8 +44,9 @@ void kernel_main(void)
 	// Display welcome message to user and prompt.
 	kprintf(WELCOME_MESSAGE "? ");
 	for(;;) {
+		while(getch() != KEY_ESCAPE) sleep(10);
 		if(login_active) {
-			if(get_command(key_buffer, sizeof(key_buffer)) > 0)
+			if(get_command(key_buffer, sizeof(key_buffer)) > 0) {
 				if(!strcmp("root071", key_buffer)) {
 					login_active = false;
 					kprintf("Login successful!\nPlease type 'help' "
@@ -52,6 +55,7 @@ void kernel_main(void)
 					login_active = true;
 					kprintf("Login failed!\nLOGIN? ");
 				}
+			}
 		} else {
 			kprintf("> ");
 			if(get_command(key_buffer, sizeof(key_buffer)) > 0)
@@ -61,7 +65,7 @@ void kernel_main(void)
 }
 /* Get key from keyboard.
  */
-KEYCODE getch(void)
+int getch(void)
 {
 	KEYCODE key = KEY_UNKNOWN;
 	

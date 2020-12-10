@@ -16,6 +16,7 @@
 #include "ports.h"
 #include "keyboard.h"
 #include "timer.h"
+#include "system.h"
 
 isr_t interrupt_handlers[256];
 
@@ -59,6 +60,7 @@ static char *exception_messages[32] = {
  */
 void isr_install(void)
 {
+	disable();
 	/* Install ISRs */
 	SET_ISR(0);
 	SET_ISR(1);
@@ -122,6 +124,7 @@ void isr_install(void)
 	SET_IRQ(15);
 	/* Load IDT with assembly */
 	set_idt();
+	enable();
 }
 /* Generic exception handler.
  */
@@ -130,8 +133,7 @@ void isr_handler(registers_t *r)
 	clear_screen();
 	kprintf("Received interrupt: %d\n"
 		"Raised Exception: %s\n", r->int_no, exception_messages[r->int_no]);
-	__asm__ __volatile__("cli");
-	__asm__ __volatile__("hlt");
+	halt();
 }
 /* Register interrupt handler.
  */
@@ -156,8 +158,6 @@ void irq_handler(registers_t *r)
  */
 void irq_install(void)
 {
-	/* Enable interruptions */
-	__asm__ __volatile__("sti");
 	/* IRQ0: timer */
 	install_timer(50);
 	/* IRQ1: keyboard */
