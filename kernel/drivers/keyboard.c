@@ -33,7 +33,8 @@ enum KBD_ERROR {
 	BUILD_KBD_ERR(KBD_ERR_KEY, 0xFF)
 };
 
-bool _kbd_istyping;
+extern char key_buffer[];
+extern bool kbd_istyping;
 int _scancode;
 
 static bool _kbd_bat_res;
@@ -96,7 +97,7 @@ static char kbd_ctrl_read_status(void)
 void kbd_ctrl_send_cmd(unsigned char cmd)
 {
 	while(1)
-		if(kbd_ctrl_read_status() & 2)
+		if((kbd_ctrl_read_status() & 2) == 0)
 			break;
 	outb(0x64, cmd);
 }
@@ -111,7 +112,7 @@ static char kbd_enc_read_buf(void)
 static void kbd_enc_send_cmd(unsigned char cmd)
 {
 	while(1)
-		if(kbd_enc_read_buf() & 2)
+		if((kbd_ctrl_read_status() & 2) == 0)
 			break;
 	outb(0x60, cmd);
 }
@@ -197,39 +198,37 @@ static void keyboard_callback(registers_t *regs)
 					case KEY_BACKSPACE:
 /*						backspace(key_buffer);
 						kputc('\b');
-						_kbd_istyping = true;
+						kbd_istyping = true;
 */					break;
 					case KEY_RETURN:
 /*						kputc('\n');
-						_kbd_istyping = false;
-						user_input(key_buffer);
+						kbd_istyping = false;
 						key_buffer[0] = 0;
 */					break;
 					default: {
-/*						char letter = _kbd_std_table[code];
-						char str[2] = {letter, '\0'};
-						_kbd_istyping = true;
-						append(key_buffer, letter);
+/*						char str[2] = {key, '\0'};
+						kbd_istyping = true;
+						append(key_buffer, key);
 						kputs(str);
 */						break;
 					}
 				}
 			}
-		}
 		
-		/* Watch for errors. */
-		switch(code) {
-			case KBD_ERR_BAT_FAILED:
-				_kbd_bat_res = false;
-			break;
-			case KBD_ERR_DIAG_FAILED:
-				_kbd_diag_res = false;
-			break;
-			case KBD_ERR_RESEND_CMD:
-				_kbd_resend_res = true;
-			break;
-			default:
-			break;
+			/* Watch for errors. */
+			switch(code) {
+				case KBD_ERR_BAT_FAILED:
+					_kbd_bat_res = false;
+				break;
+				case KBD_ERR_DIAG_FAILED:
+					_kbd_diag_res = false;
+				break;
+				case KBD_ERR_RESEND_CMD:
+					_kbd_resend_res = true;
+				break;
+				default:
+				break;
+			}
 		}
 	}
 	(void)regs;
@@ -363,7 +362,7 @@ void install_kbd(void)
 	_kbd_bat_res = kbd_self_test();
 	_kbd_diag_res = _kbd_resend_res = false;
 	
-	_kbd_istyping = false;
+	kbd_istyping = false;
 	_numlock = true;
 	_scrolllock = _capslock = false;
 	_shift = _ctrl = _alt = false;

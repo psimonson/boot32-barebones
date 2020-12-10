@@ -23,6 +23,13 @@ bool login_active;
 
 extern int get_command(char *buf, int size);
 
+/* Sleep for a specific number of ticks.
+ */
+void sleep(unsigned int ticks)
+{
+	unsigned int eticks = get_timer_ticks()+ticks;
+	while(get_timer_ticks() < eticks);
+}
 /* Entry point for kernel.
  */
 void kernel_main(void)
@@ -102,6 +109,7 @@ int get_command(char *buf, int size)
 				kbd_istyping = true;
 			}
 		}
+		sleep(10);
 	}
 	buf[i] = 0;
 	return i;
