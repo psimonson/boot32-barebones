@@ -21,7 +21,6 @@
 #define isascii(c) ((unsigned)(c) <= 0x7F)
 #define MAXBUF 100
 
-char key_buffer[MAXBUF];
 bool kbd_istyping;
 bool login_active;
 
@@ -43,13 +42,13 @@ static int getch(void)
 	kbd_discard_last_key();
 	return key;
 }
-static void get_command(void)
+static void get_command(char *buf, int size)
 {
 		KEYCODE key;
 		bool buf_char;
 		int i = 0;
 
-		while(i < MAXBUF) {
+		while(i < size) {
 			buf_char = true;
 			key = getch();
 
@@ -61,7 +60,7 @@ static void get_command(void)
 
 			if(key == KEY_BACKSPACE) {
 				if(i > 0) {
-					key_buffer[i-1] = 0;
+					buf[i-1] = 0;
 					kbd_istyping = true;
 					i--;
 				} else {
@@ -71,19 +70,19 @@ static void get_command(void)
 
 			if(buf_char) {
 				char c = kbd_key_to_ascii(key);
-				key_buffer[i++] = c;
+				buf[i++] = c;
 				kbd_istyping = true;
 				kputc(c);
 			}
 			sleep(10);
 		}
-		key_buffer[i] = 0;
+		buf[i] = 0;
 }
 /* Entry point for kernel.
  */
 static void kernel_main(void)
 {
-	char key_buffer[100];
+	char key_buffer[MAXBUF];
 
 	// Initialize the terminal and install ISRs and IRQs.
 	term_init(BLUE, YELLOW);
@@ -144,7 +143,7 @@ static void kernel_main(void)
 		}
 #else		// This doesn't! Why?
 		if(login_active) {
-			get_command();
+			get_command(key_buffer, MAXBUF);
 			if(!strcmp("root071", key_buffer)) {
 				login_active = false;
 				kprintf("Login successful!\nPlease type 'help' "
@@ -154,7 +153,7 @@ static void kernel_main(void)
 				kprintf("Login failed!\nLOGIN ? ");
 			}
 		} else {
-			get_command();
+			get_command(key_buffer, MAXBUF);
 			process_command(key_buffer);
 			kprintf("> ");
 		}
