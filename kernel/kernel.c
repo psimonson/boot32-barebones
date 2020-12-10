@@ -18,53 +18,23 @@
 #include "keyboard.h"
 #include "timer.h"
 
-char key_buffer[256]; // Used to store keyboard input.
+#define isascii(c) ((unsigned)(c) <= 0x7F)
+#define MAXBUF 100
+
+char key_buffer[MAXBUF];
 bool kbd_istyping;
 bool login_active;
 
-extern int getch(void);
-extern int get_command(char *buf, int size);
-
 /* Sleep for a specific number of ticks.
  */
-void sleep(unsigned int ticks)
+static void sleep(unsigned int ticks)
 {
 	unsigned int eticks = get_timer_ticks()+ticks;
 	while(get_timer_ticks() < eticks);
 }
-/* Entry point for kernel.
- */
-void kernel_main(void)
-{
-	// Initialize the terminal and install ISRs and IRQs.
-	term_init(BLUE, YELLOW);
-	isr_install();
-	irq_install();
-	
-	// Display welcome message to user and prompt.
-	kprintf(WELCOME_MESSAGE "? ");
-	for(;;) {
-		if(login_active) {
-			if(get_command(key_buffer, sizeof(key_buffer)) > 0) {
-				if(!strcmp("root071", key_buffer)) {
-					login_active = false;
-					kprintf("Login successful!\nPlease type 'help' "
-						"for a list of commands.\n\n> ");
-				} else {
-					login_active = true;
-					kprintf("Login failed!\nLOGIN? ");
-				}
-			}
-		} else {
-			kprintf("> ");
-			if(get_command(key_buffer, sizeof(key_buffer)) > 0)
-				process_command(key_buffer);
-		}
-	}
-}
 /* Get key from keyboard.
  */
-int getch(void)
+static int getch(void)
 {
 	KEYCODE key = KEY_UNKNOWN;
 	
@@ -73,49 +43,123 @@ int getch(void)
 	kbd_discard_last_key();
 	return key;
 }
-/* Get next command for shell.
- */
-int get_command(char *buf, int size)
+static void get_command(void)
 {
-	KEYCODE key = KEY_UNKNOWN;
-	bool buf_char = false;
-	int i = 0;
+		KEYCODE key;
+		bool buf_char;
+		int i = 0;
 
-	while(i < size) {
-		buf_char = true;
-		key = getch();
-		
-		if(key == KEY_RETURN) {
-			kputc('\n');
-			kbd_istyping = false;
-			break;
-		}
-		
-		if(key == KEY_BACKSPACE) {
-			buf_char = false;
-			
-			if(i > 0) {
-				backspace(key_buffer);
-				kputc('\b');
-				kbd_istyping = true;
-				--i;
-			} else {
+		while(i < MAXBUF) {
+			buf_char = true;
+			key = getch();
+
+			if(key == KEY_RETURN) {
+				kputc('\n');
 				kbd_istyping = false;
+				break;
 			}
-		}
-		
-		if(buf_char) {
-			char c = kbd_key_to_ascii(key);
-			if(c != 0) {
-				kputc(c);
-				buf[i++] = c;
+
+			if(key == KEY_BACKSPACE) {
+				if(i > 0) {
+					key_buffer[i-1] = 0;
+					kbd_istyping = true;
+					i--;
+				} else {
+					kbd_istyping = false;
+				}
+			}
+
+			if(buf_char) {
+				char c = kbd_key_to_ascii(key);
+				key_buffer[i++] = c;
 				kbd_istyping = true;
+				kputc(c);
 			}
+			sleep(10);
 		}
-		sleep(10);
+		key_buffer[i] = 0;
+}
+/* Entry point for kernel.
+ */
+static void kernel_main(void)
+{
+	char key_buffer[100];
+
+	// Initialize the terminal and install ISRs and IRQs.
+	term_init(BLUE, YELLOW);
+	isr_install();
+	irq_install();
+	
+	// Display welcome message to user and prompt.
+	kprintf(WELCOME_MESSAGE "? ");
+	for(;;) {
+#if 1		// This works!
+		KEYCODE key;
+		bool buf_char;
+		int i = 0;
+
+		while(i < MAXBUF) {
+			buf_char = true;
+			key = getch();
+
+			if(key == KEY_RETURN) {
+				kputc('\n');
+				kbd_istyping = false;
+				break;
+			}
+
+			if(key == KEY_BACKSPACE) {
+				if(i > 0) {
+					key_buffer[i-1] = 0;
+					kbd_istyping = true;
+					i--;
+				} else {
+					kbd_istyping = false;
+				}
+			}
+
+			if(buf_char) {
+				char c = kbd_key_to_ascii(key);
+				key_buffer[i++] = c;
+				kbd_istyping = true;
+				kputc(c);
+			}
+			sleep(10);
+		}
+		key_buffer[i] = 0;
+
+		// Handle login
+		if(login_active) {
+			if(!strcmp("root071", key_buffer)) {
+				login_active = false;
+				kprintf("Login successful!\nPlease type 'help' for "
+					"a list of commands.\n\n> ");
+			} else {
+				login_active = true;
+				kprintf("Login failed.\nLOGIN ? ");
+			}
+		} else {
+			process_command(key_buffer);
+			kprintf("> ");
+		}
+#else		// This doesn't! Why?
+		if(login_active) {
+			get_command();
+			if(!strcmp("root071", key_buffer)) {
+				login_active = false;
+				kprintf("Login successful!\nPlease type 'help' "
+					"for a list of commands.\n\n> ");
+			} else {
+				login_active = true;
+				kprintf("Login failed!\nLOGIN ? ");
+			}
+		} else {
+			get_command();
+			process_command(key_buffer);
+			kprintf("> ");
+		}
+#endif
 	}
-	buf[i] = 0;
-	return i;
 }
 /* Start of operating system.
  */

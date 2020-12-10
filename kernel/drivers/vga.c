@@ -75,7 +75,7 @@ void set_text_attr(unsigned char bg, unsigned char fg)
  */
 int print_char(int col, int row, char c)
 {
-	extern char key_buffer[]; // Defined inside keyboard.c
+//	extern char key_buffer[]; // Defined inside keyboard.c
 	extern bool kbd_istyping; // Defined inside keyboard.c
 	static int last_col = 0;
 	int offset;
@@ -97,8 +97,7 @@ int print_char(int col, int row, char c)
 		row = get_offset_row(offset);
 		offset = get_screen_offset(0, row+1);
 	} else if(c == '\b') {
-		int len = strlen(key_buffer);
-		if((row == 0 && col > 0) || (col >= 0 && last_col != (col-len))) { // Bounds check for shell
+		if((row == 0 && col > 0) || (col >= 0 && last_col != 0)) { // Bounds check for shell
 			offset -= 2;
 			vga_buffer[offset] = ' ';
 			vga_buffer[offset+1] = _text_attr;
