@@ -44,7 +44,6 @@ void kernel_main(void)
 	// Display welcome message to user and prompt.
 	kprintf(WELCOME_MESSAGE "? ");
 	for(;;) {
-		while(getch() != KEY_ESCAPE) sleep(10);
 		if(login_active) {
 			if(get_command(key_buffer, sizeof(key_buffer)) > 0) {
 				if(!strcmp("root071", key_buffer)) {
