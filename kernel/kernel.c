@@ -149,7 +149,7 @@ static void kernel_main(void)
 			}
 		} else {
 			process_command(key_buffer);
-			kprintf("> ");
+			if(!login_active) kprintf("> ");
 		}
 #else		// This doesn't! Why?
 		if(login_active) {
@@ -166,7 +166,7 @@ static void kernel_main(void)
 		} else {
 			get_command(key_buffer, MAXBUF);
 			process_command(key_buffer);
-			kprintf("> ");
+			if(!login_active) kprintf("> ");
 		}
 #endif
 	}
