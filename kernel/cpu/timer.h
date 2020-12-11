@@ -14,6 +14,8 @@
 
 /* Get timer ticks from kernel. */
 extern u32_t get_timer_ticks(void);
+/* Get timer seconds from kernel. */
+extern int get_timer_seconds(void);
 /* Call this function to install a timer. */
 extern void install_timer(u32_t freq);
 

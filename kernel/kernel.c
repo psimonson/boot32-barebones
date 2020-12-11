@@ -26,10 +26,17 @@ bool login_active;
 
 /* Sleep for a specific number of ticks.
  */
-static void sleep(unsigned int ticks)
+static void delay(unsigned int ticks)
 {
 	unsigned int eticks = get_timer_ticks()+ticks;
 	while(get_timer_ticks() < eticks);
+}
+/* Sleep for a specific number of seconds.
+ */
+static void sleep(unsigned int seconds)
+{
+	unsigned int eseconds = get_timer_seconds()+seconds;
+	while(get_timer_seconds() < eseconds);
 }
 /* Get key from keyboard.
  */
@@ -42,6 +49,8 @@ static int getch(void)
 	kbd_discard_last_key();
 	return key;
 }
+/* Get command from user and put to buffer.
+ */
 static void get_command(char *buf, int size)
 {
 		KEYCODE key;
@@ -74,7 +83,7 @@ static void get_command(char *buf, int size)
 				kbd_istyping = true;
 				kputc(c);
 			}
-			sleep(10);
+			delay(3);
 		}
 		buf[i] = 0;
 }
@@ -90,7 +99,7 @@ static void kernel_main(void)
 	irq_install();
 	
 	// Display welcome message to user and prompt.
-	kprintf(WELCOME_MESSAGE "? ");
+	kprintf(WELCOME_MESSAGE);
 	for(;;) {
 #if 1		// This works!
 		KEYCODE key;
@@ -123,7 +132,7 @@ static void kernel_main(void)
 				kbd_istyping = true;
 				kputc(c);
 			}
-			sleep(10);
+			delay(3);
 		}
 		key_buffer[i] = 0;
 
@@ -131,11 +140,12 @@ static void kernel_main(void)
 		if(login_active) {
 			if(!strcmp("root071", key_buffer)) {
 				login_active = false;
-				kprintf("Login successful!\nPlease type 'help' for "
-					"a list of commands.\n\n> ");
+				kprintf("Login successful!\n");
+				sleep(2);
+				kprintf("Please type 'help' for a list of commands.\n> ");
 			} else {
 				login_active = true;
-				kprintf("Login failed.\nLOGIN ? ");
+				kprintf("Login failed.\nLOGIN? ");
 			}
 		} else {
 			process_command(key_buffer);
@@ -146,11 +156,12 @@ static void kernel_main(void)
 			get_command(key_buffer, MAXBUF);
 			if(!strcmp("root071", key_buffer)) {
 				login_active = false;
-				kprintf("Login successful!\nPlease type 'help' "
-					"for a list of commands.\n\n> ");
+				kprintf("Login successful!\n");
+				sleep(2);
+				kprintf("Please type 'help' for a list of commands.\n> ");
 			} else {
 				login_active = true;
-				kprintf("Login failed!\nLOGIN ? ");
+				kprintf("Login failed!\nLOGIN? ");
 			}
 		} else {
 			get_command(key_buffer, MAXBUF);

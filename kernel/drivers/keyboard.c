@@ -9,6 +9,7 @@
 
 #include "keyboard.h"
 #include "kernel.h"
+#include "system.h"
 #include "helper.h"
 #include "io.h"
 #include "ports.h"
@@ -96,9 +97,11 @@ static char kbd_ctrl_read_status(void)
  */
 void kbd_ctrl_send_cmd(unsigned char cmd)
 {
-	while(1)
+	while(1) {
 		if((kbd_ctrl_read_status() & 2) == 0)
 			break;
+		halt();
+	}
 	outb(0x64, cmd);
 }
 /* Read keyboard encoder buffer.
@@ -111,9 +114,11 @@ static char kbd_enc_read_buf(void)
  */
 static void kbd_enc_send_cmd(unsigned char cmd)
 {
-	while(1)
+	while(1) {
 		if((kbd_ctrl_read_status() & 2) == 0)
 			break;
+		halt();
+	}
 	outb(0x60, cmd);
 }
 /* Set LEDs on keyboard for Special keys.

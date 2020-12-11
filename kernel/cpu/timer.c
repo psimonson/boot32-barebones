@@ -26,6 +26,12 @@ u32_t get_timer_ticks(void)
 {
 	return _kernel_ticks;
 }
+/* Get timer seconds from kernel.
+ */
+int get_timer_seconds(void)
+{
+	return (_kernel_ticks % 18) == 0 ? (_kernel_ticks / 18) : 0;
+}
 /* Initialize the system timer.
  */
 void install_timer(u32_t freq)
