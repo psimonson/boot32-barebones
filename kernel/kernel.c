@@ -108,6 +108,7 @@ static void kernel_main(void)
 		delay(5);
 		sound(0);
 		sleep(1);
+		kputc('.');
 	}
 	sound(0);
 	clear_screen();
