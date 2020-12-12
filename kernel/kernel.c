@@ -114,6 +114,7 @@ static void kernel_main(void)
 			if(key == KEY_RETURN) {
 				kputc('\n');
 				kbd_istyping = false;
+				buf_char = false;
 				break;
 			}
 
@@ -121,9 +122,11 @@ static void kernel_main(void)
 				if(i > 0) {
 					key_buffer[i--] = '\0';
 					kbd_istyping = true;
+					kputc('\b');
 				} else {
 					kbd_istyping = false;
 				}
+				buf_char = false;
 			}
 
 			if(buf_char) {
