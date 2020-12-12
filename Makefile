@@ -26,7 +26,7 @@ all:
 	cd $(SRCDIR)/prsfs && $(MAKE)
 
 run: disk
-	qemu-system-i386 -fda $(SRCDIR)/floppy.img -boot a
+	qemu-system-i386 -fda $(SRCDIR)/floppy.img -boot a -soundhw pcspk
 
 debug: disk
 	qemu-system-i386 -fda $(SRCDIR)/floppy.img -boot a -s &

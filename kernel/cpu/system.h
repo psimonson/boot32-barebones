@@ -23,6 +23,7 @@ extern void halt(void);
 
 /* Other system functions. */
 extern void gen_interrupt(int intno);
+extern void sound(unsigned char freq);
 
 #ifdef __cplusplus
 }

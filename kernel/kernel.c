@@ -17,6 +17,7 @@
 #include "shell.h"
 #include "keyboard.h"
 #include "timer.h"
+#include "system.h"
 
 #define isascii(c) ((unsigned)(c) <= 0x7F)
 #define MAXBUF 100
@@ -91,12 +92,25 @@ static void get_command(char *buf, int size)
  */
 static void kernel_main(void)
 {
+	const unsigned char snd[] = {0x3f, 0x4F, 0x5F, 0x3F, 0x7F};
+	const int tsnd = sizeof(snd)/sizeof(snd[0]);
 	char key_buffer[MAXBUF];
 
 	// Initialize the terminal and install ISRs and IRQs.
 	term_init(BLUE, YELLOW);
 	isr_install();
 	irq_install();
+
+	// Display loading message and play music.
+	kprintf("Loading system! Please wait");
+	for(int i = 0; i < tsnd; i++) {
+		sound(snd[i]);
+		delay(5);
+		sound(0);
+		sleep(1);
+	}
+	sound(0);
+	clear_screen();
 	
 	// Display welcome message to user and prompt.
 	kprintf(WELCOME_MESSAGE);

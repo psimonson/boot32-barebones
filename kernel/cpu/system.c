@@ -8,7 +8,7 @@
  */
 
 #include "system.h"
-
+#include "ports.h"
 
 /* ------------------------- CPU Functions ----------------------- */
 
@@ -36,3 +36,12 @@ void halt(void)
 /* -------------------- Other System Functions ------------------- */
 
 
+/* Play a sound on the PC speaker.
+ */
+void sound(unsigned char freq)
+{
+	if(!freq)
+		outb(0x61, ~3 | (freq << 2));
+	else
+		outb(0x61, 3 | (freq << 2));
+}
