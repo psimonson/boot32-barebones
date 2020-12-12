@@ -27,7 +27,7 @@ bool login_active;
 
 /* Get key from keyboard.
  */
-static int getch(void)
+int getch(void)
 {
 	KEYCODE key = KEY_UNKNOWN;
 	
@@ -38,30 +38,32 @@ static int getch(void)
 }
 /* Get command from user and put to buffer.
  */
-static void get_command(char *buf, int size)
+void get_command(char *buf, int size)
 {
 		KEYCODE key;
 		bool buf_char;
 		int i = 0;
 
-		while(i < size) {
+		while(i < MAXBUF) {
 			buf_char = true;
 			key = getch();
 
 			if(key == KEY_RETURN) {
 				kputc('\n');
 				kbd_istyping = false;
+				buf_char = false;
 				break;
 			}
 
 			if(key == KEY_BACKSPACE) {
 				if(i > 0) {
-					buf[i-1] = 0;
+					buf[i--] = '\0';
 					kbd_istyping = true;
-					i--;
+					kputc('\b');
 				} else {
 					kbd_istyping = false;
 				}
+				buf_char = false;
 			}
 
 			if(buf_char) {
@@ -72,11 +74,11 @@ static void get_command(char *buf, int size)
 			}
 			delay(3);
 		}
-		buf[i] = 0;
+		buf[i] = '\0';
 }
 /* Entry point for kernel.
  */
-static void kernel_main(void)
+void kernel_main(void)
 {
 	const unsigned short snd[] = {500, 1000, 3000, 1500, 800};
 	const int tsnd = sizeof(snd)/sizeof(snd[0]);
@@ -102,42 +104,7 @@ static void kernel_main(void)
 	// Display welcome message to user and prompt.
 	kprintf(WELCOME_MESSAGE);
 	for(;;) {
-#if 1		// This works!
-		KEYCODE key;
-		bool buf_char;
-		int i = 0;
-
-		while(i < MAXBUF) {
-			buf_char = true;
-			key = getch();
-
-			if(key == KEY_RETURN) {
-				kputc('\n');
-				kbd_istyping = false;
-				buf_char = false;
-				break;
-			}
-
-			if(key == KEY_BACKSPACE) {
-				if(i > 0) {
-					key_buffer[i--] = '\0';
-					kbd_istyping = true;
-					kputc('\b');
-				} else {
-					kbd_istyping = false;
-				}
-				buf_char = false;
-			}
-
-			if(buf_char) {
-				char c = kbd_key_to_ascii(key);
-				key_buffer[i++] = c;
-				kbd_istyping = true;
-				kputc(c);
-			}
-			delay(3);
-		}
-		key_buffer[i] = '\0';
+		get_command(key_buffer, sizeof(key_buffer));
 
 		// Handle login
 		if(login_active) {
@@ -154,32 +121,5 @@ static void kernel_main(void)
 			process_command(key_buffer);
 			if(!login_active) kprintf("> ");
 		}
-#else		// This doesn't! Why?
-		if(login_active) {
-			get_command(key_buffer, MAXBUF);
-			if(!strcmp("root071", key_buffer)) {
-				login_active = false;
-				kprintf("Login successful!\n");
-				sleep(2);
-				kprintf("Please type 'help' for a list of commands.\n> ");
-			} else {
-				login_active = true;
-				kprintf("Login failed!\nLOGIN? ");
-			}
-		} else {
-			get_command(key_buffer, MAXBUF);
-			process_command(key_buffer);
-			if(!login_active) kprintf("> ");
-		}
-#endif
 	}
-}
-/* Start of operating system.
- */
-void _start(void)
-{
-	// Initialize variables and start main routine
-	kbd_istyping = false;
-	login_active = true;
-	kernel_main();
 }
