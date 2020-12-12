@@ -95,6 +95,20 @@ void itoa_s(int n, unsigned base, char *buf, int size)
 
 /* ----------------------- Helper Functions ---------------------- */
 
+/* Sleep for a specific number of ticks.
+ */
+void delay(unsigned int ticks)
+{
+	unsigned int eticks = get_timer_ticks()+ticks;
+	while(get_timer_ticks() < eticks);
+}
+/* Sleep for a specific number of seconds.
+ */
+void sleep(unsigned int seconds)
+{
+	unsigned int eseconds = get_timer_seconds()+seconds;
+	while(get_timer_seconds() < eseconds);
+}
 /* Append to kernel buffer.
  */
 void append(char *s, char c)

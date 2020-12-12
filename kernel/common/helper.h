@@ -27,15 +27,17 @@ extern "C" {
 #endif
 
 /* String functions */
-int strlen(const char *s);
-int strstrip(char *s);
-int strcmp(const char *s, const char *t);
-void reverse(char *s);
-void itoa_s(int n, unsigned base, char *s, int size);
+extern int strlen(const char *s);
+extern int strstrip(char *s);
+extern int strcmp(const char *s, const char *t);
+extern void reverse(char *s);
+extern void itoa_s(int n, unsigned base, char *s, int size);
 
 /* Functions for kernel. */
-void append(char *s, char c);
-void backspace(char *s);
+extern void delay(unsigned int ticks);
+extern void sleep(unsigned int secs);
+extern void append(char *s, char c);
+extern void backspace(char *s);
 
 #ifdef __cplusplus
 }

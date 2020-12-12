@@ -25,20 +25,6 @@
 bool kbd_istyping;
 bool login_active;
 
-/* Sleep for a specific number of ticks.
- */
-static void delay(unsigned int ticks)
-{
-	unsigned int eticks = get_timer_ticks()+ticks;
-	while(get_timer_ticks() < eticks);
-}
-/* Sleep for a specific number of seconds.
- */
-static void sleep(unsigned int seconds)
-{
-	unsigned int eseconds = get_timer_seconds()+seconds;
-	while(get_timer_seconds() < eseconds);
-}
 /* Get key from keyboard.
  */
 static int getch(void)
@@ -92,7 +78,7 @@ static void get_command(char *buf, int size)
  */
 static void kernel_main(void)
 {
-	const unsigned char snd[] = {0x3f, 0x4F, 0x5F, 0x3F, 0x7F};
+	const unsigned short snd[] = {500, 1000, 3000, 1500, 800};
 	const int tsnd = sizeof(snd)/sizeof(snd[0]);
 	char key_buffer[MAXBUF];
 
@@ -128,14 +114,14 @@ static void kernel_main(void)
 			if(key == KEY_RETURN) {
 				kputc('\n');
 				kbd_istyping = false;
+				key_buffer[i] = '\0';
 				break;
 			}
 
 			if(key == KEY_BACKSPACE) {
 				if(i > 0) {
-					key_buffer[i-1] = 0;
+					key_buffer[--i] = '\0';
 					kbd_istyping = true;
-					i--;
 				} else {
 					kbd_istyping = false;
 				}
@@ -149,7 +135,6 @@ static void kernel_main(void)
 			}
 			delay(3);
 		}
-		key_buffer[i] = 0;
 
 		// Handle login
 		if(login_active) {

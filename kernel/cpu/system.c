@@ -38,10 +38,14 @@ void halt(void)
 
 /* Play a sound on the PC speaker.
  */
-void sound(unsigned char freq)
+void sound(unsigned short freq)
 {
-	if(!freq)
-		outb(0x61, ~3 | (freq << 2));
-	else
-		outb(0x61, 3 | (freq << 2));
+	if(!freq) {
+		outb(0x61, inb(0x61) & 0xFC);
+		return;
+	}
+	outb(0x43, 0xB6);
+	outb(0x42, (unsigned char)(freq & 0xff));
+	outb(0x42, (unsigned char)(freq >> 8) & 0xff);
+	outb(0x61, 3 | inb(0x61));
 }

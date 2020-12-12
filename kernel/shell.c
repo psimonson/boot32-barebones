@@ -44,6 +44,7 @@ typedef struct command {
 DEF_FNC(clear);
 DEF_FNC(regs);
 DEF_FNC(logout);
+DEF_FNC(version);
 DEF_FNC(help);
 DEF_FNC(exit);
 
@@ -53,6 +54,7 @@ BEG_CMD
 ADD_CMD(clear, "Clear the VGA screen buffer."),
 ADD_CMD(regs, "Display register values."),
 ADD_CMD(logout, "Log out of the operating system."),
+ADD_CMD(version, "Displays the version information."),
 ADD_CMD(help, "Display this help text."),
 ADD_CMD(exit, "Halt execution of CPU.")
 END_CMD
@@ -60,13 +62,6 @@ CNT_CMD
 
 /* ----------------------------- Functions ------------------------- */
 
-/* Sleep for a given number of seconds.
- */
-static void sleep(unsigned int sec)
-{
-	unsigned int esec = get_timer_seconds()+sec;
-	while(get_timer_seconds() < esec);
-}
 /* Clear command, erase VGA screen buffer.
  */
 DEF_FNC(clear)
@@ -94,8 +89,30 @@ DEF_FNC(logout)
 	kprintf("OK.\n");
 	login_active = true;
 	sleep(3);
+	sound(500);
+	delay(8);
+	sound(0);
 	clear_screen();
 	kprintf("LOGIN? ");
+}
+/* Version command, display version information.
+ */
+DEF_FNC(version)
+{
+	const char msg[] = "Version 1.1!";
+	kprintf("Barebones Operating System ");
+	for(int i = 0; i < strlen(msg); i++) {
+		kputc(msg[i]);
+		sound(1000);
+		delay(10);
+		sound(0);
+		delay(8);
+	}
+	kprintf("\nDate created: June 25, 2020.\n");
+	kprintf("Written by Philip R. Simonson.\n\n");
+	kprintf("Others helped me to fix the code I made, just \n");
+	kprintf("a few fixes here and there. But, for the most \n");
+	kprintf("part it is all my code.\n");
 }
 /* Help command, display help.
  */
