@@ -114,13 +114,12 @@ static void kernel_main(void)
 			if(key == KEY_RETURN) {
 				kputc('\n');
 				kbd_istyping = false;
-				key_buffer[i] = '\0';
 				break;
 			}
 
 			if(key == KEY_BACKSPACE) {
 				if(i > 0) {
-					key_buffer[--i] = '\0';
+					key_buffer[i--] = '\0';
 					kbd_istyping = true;
 				} else {
 					kbd_istyping = false;
@@ -135,6 +134,7 @@ static void kernel_main(void)
 			}
 			delay(3);
 		}
+		key_buffer[i] = '\0';
 
 		// Handle login
 		if(login_active) {
