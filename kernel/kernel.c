@@ -84,6 +84,10 @@ void kernel_main(void)
 	const int tsnd = sizeof(snd)/sizeof(snd[0]);
 	char key_buffer[MAXBUF];
 
+	// Initialize the variables.
+	kbd_istyping = false;
+	login_active = true;
+
 	// Initialize the terminal and install ISRs and IRQs.
 	term_init(BLUE, YELLOW);
 	isr_install();
