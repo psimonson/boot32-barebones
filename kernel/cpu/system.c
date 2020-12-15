@@ -29,7 +29,7 @@ void disable(void)
  */
 void halt(void)
 {
-	__asm__ __volatile__("cli; hlt");
+	__asm__ __volatile__("hlt");
 }
 
 

@@ -127,6 +127,7 @@ DEF_FNC(help)
 DEF_FNC(exit)
 {
 	kprintf("Halting CPU...\n");
+	disable();
 	halt();
 }
 /* Process user input.
