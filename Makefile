@@ -37,7 +37,7 @@ disk: all
 	$(IMAGEFS) w $(SRCDIR)/floppy.img $(SRCDIR)/boot/stage1.bin
 	$(PRSFS) $(SRCDIR)/floppy.img $(SRCDIR)/boot/stage2.bin $(SRCDIR)/kernel/kernel.bin
 
-cdrom: disk
+cdrom: disk clean
 	cd .. && mkisofs -pad -b floppy.img -R -o ./$(PROJECT_NAME)/boot32-barebones.iso ./$(PROJECT_NAME)
 
 clean:
