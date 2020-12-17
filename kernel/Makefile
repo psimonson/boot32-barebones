@@ -7,25 +7,27 @@ CFLAGS=-std=c11 -Wall -O -pedantic -g -m32 \
 	-I. -I./drivers -I./common -I./cpu
 LDFLAGS=
 BACKUPS=$(shell find . -iname "*.bak")
-OBJECTS=entry.o kernel.o shell.o common/io.o common/helper.o \
-	common/util.o drivers/vga.o drivers/keyboard.o \
-	cpu/idt.o cpu/isr.o cpu/gen_interrupt.o cpu/int.o \
-	cpu/system.o cpu/ports.o cpu/timer.o
+OBJECTS=entry.asm.o cpu/int.asm.o cpu/gen_interrupt.asm.o
+OBJECTS+=\
+	kernel.c.o shell.c.o common/io.c.o common/helper.c.o \
+	common/util.c.o drivers/vga.c.o drivers/keyboard.c.o \
+	cpu/idt.c.o cpu/isr.c.o	cpu/system.c.o cpu/ports.c.o \
+	cpu/timer.c.o
 TARGET=kernel.bin
 
 .PHONY: all clean distclean
-all: $(TARGET) kernel.elf
+all: $(TARGET)
 
-%.o: %.asm
+%.asm.o: %.asm
 	$(AS) $(AFLAGS) -o $@ $<
 
-%.o: %.c
+%.c.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(TARGET): kernel.elf
-	objcopy -O binary kernel.elf $(TARGET)
+	objcopy -O binary kernel.elf $@
 
-kernel.elf: $(OBJECTS) link.ld
+kernel.elf: $(OBJECTS)
 	$(LD) $(LDFLAGS) -Tlink.ld -o $@ $(OBJECTS)
 
 clean:
