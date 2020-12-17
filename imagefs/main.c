@@ -1,3 +1,12 @@
+/*
+ * main.c - Main source file for boot sector writer and image creator.
+ *
+ * Author: Philip R. Simonson
+ * Date: 02/28/2020
+ *
+ *************************************************************************
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

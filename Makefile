@@ -24,6 +24,7 @@ all:
 	cd $(SRCDIR)/kernel && $(MAKE)
 	cd $(SRCDIR)/imagefs && $(MAKE)
 	cd $(SRCDIR)/prsfs && $(MAKE)
+	cd $(SRCDIR)/imgwrite && $(MAKE)
 
 run: disk
 	qemu-system-i386 -fda $(SRCDIR)/floppy.img -boot a -soundhw pcspk
@@ -46,6 +47,7 @@ clean:
 	cd $(SRCDIR)/kernel && $(MAKE) clean
 	cd $(SRCDIR)/imagefs && $(MAKE) clean
 	cd $(SRCDIR)/prsfs && $(MAKE) clean
+	cd $(SRCDIR)/imgwrite && $(MAKE) clean
 
 distclean: clean
 	rm -f floppy.img $(CDROM_IMG) *.bak *.log
@@ -53,6 +55,7 @@ distclean: clean
 	cd $(SRCDIR)/kernel && $(MAKE) distclean
 	cd $(SRCDIR)/imagefs && $(MAKE) distclean
 	cd $(SRCDIR)/prsfs && $(MAKE) distclean
+	cd $(SRCDIR)/imgwrite && $(MAKE) distclean
 
 dist: distclean
 	cd .. && tar -cv --exclude=.git $(SRCDIR)/$(PROJECT_NAME) \
