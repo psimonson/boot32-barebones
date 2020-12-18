@@ -10,6 +10,7 @@ written in pure C.
 ![Screen shot as of July 2, 2020!](screenshots/screenshot01.png)
 ![Screen shot as of July 7, 2020!](screenshots/screenshot02.png)
 ![Screen shot as of July 7, 2020!](screenshots/screenshot03.png)
+![Screen shot as of December 18, 2020!](screenshots/screenshot04.png)
 
 ### Build and Run Instructions
 
@@ -36,7 +37,7 @@ written in pure C.
 
 ### PATCHES
 
- - login.patch - Adds a simple login to the operating system.
+ - None
  
 #### Apply the patches like this!
 
@@ -60,11 +61,13 @@ written in pure C.
  - [x] - Add keyboard input handler.
  - [x] - Basic shell.
  - [x] - Fix buggy backspace issue.
- - [x] - Make backspace not exceed bounds. (Almost complete)
+ - [x] - Make backspace not exceed bounds. (Complete)
+ - [ ] - Fix bug with shift key in keyboard driver.
 
 ### Known Issues
 
  - (Fixed) Backspacing is normal now, works like a charm.
+ - (Not fixed) Keyboard driver has a bug when you press shift it stays on, caps lock doesn't effect it either. Will fix soon.
 
 ### Developer
 

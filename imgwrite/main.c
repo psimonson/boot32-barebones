@@ -24,6 +24,7 @@ int main(int argc, char **argv)
 	char buf[MAXBUF], buf2[MAXBUF];
 	FILE *fin, *fout;
 	bool error;
+	int retry;
 
 	if(argc != 3) {
 		fprintf(stderr, "Usage: %s <input-file> <output-file>\n", argv[0]);
@@ -46,15 +47,18 @@ int main(int argc, char **argv)
 	}
 
 	/* Copy file contents to output device/file. */
-	while((bytes_read = fread(buf, 1, MAXBUF-1, fin)) > 0) {
+	retry = 3;
+	while(retry && (bytes_read = fread(buf, 1, MAXBUF-1, fin)) > 0) {
 		bytes_written = fwrite(buf, 1, bytes_read, fout);
 		if(bytes_written != bytes_read) {
 			fseek(fin, -bytes_read, SEEK_CUR);
 			fseek(fout, -bytes_written, SEEK_CUR);
-			fprintf(stderr, "Warning: Failed trying again.\n");
+			fprintf(stderr, "Warning: Failed to write trying again.\n");
+			retry--;
 			continue;
 		}
 		total_bytes += bytes_written;
+		retry = 3;
 	}
 	fflush(fout);
 	fclose(fout);
@@ -71,17 +75,20 @@ int main(int argc, char **argv)
 	error = false;
 
 	/* Verify contents of input file against output file. */
-	while((bytes_read = fread(buf, sizeof(char), MAXBUF, fin)) > 0) {
+	retry = 3;
+	while(retry && (bytes_read = fread(buf, sizeof(char), MAXBUF, fin)) > 0) {
 		bytes_written = fread(buf2, sizeof(char), MAXBUF, fout);
 		if(bytes_read != bytes_written) {
 			fseek(fin, -bytes_read, SEEK_CUR);
 			fseek(fout, -bytes_written, SEEK_CUR);
 			fprintf(stderr, "Warning: Failed to read trying again.\n");
+			retry--;
 			continue;
 		}
-		if(memcmp(buf, buf2, bytes_written) == 0)
+		if(memcmp(buf, buf2, bytes_written) == 0) {
 			total_checked += bytes_written;
-		else {
+			retry = 3;
+		} else {
 			error = true;
 			break;
 		}
@@ -89,11 +96,11 @@ int main(int argc, char **argv)
 	fclose(fin);
 	fclose(fout);
 
-	if(error != 0) {
-		fprintf(stderr, "Failed to copy and/or verify.\n");
+	if(error != 0 || retry == 0) {
+		fprintf(stdout, "Failed to copy and/or verify.\n");
 		return EXIT_FAILURE;
 	}
 
-	fprintf(stderr, "Successfully copied and verified.\n");
+	fprintf(stdout, "Successfully copied and verified.\n");
 	return EXIT_SUCCESS;
 }
