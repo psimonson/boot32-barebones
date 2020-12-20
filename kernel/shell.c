@@ -15,9 +15,11 @@
 #include "shell.h"
 #include "timer.h"
 #include "system.h"
+#include "regs.h"
 
 /* Login active external variable */
 extern bool login_active;
+extern bool regs_update;
 
 /* Command structure */
 typedef struct command {
@@ -72,13 +74,16 @@ DEF_FNC(clear)
  */
 DEF_FNC(regs)
 {
-	unsigned int eax, ebx, ecx, edx, esi, edi;
-	__asm__ __volatile__("" : "=a"(eax), "=b"(ebx), "=c"(ecx), "=d"(edx));
-	__asm__ __volatile__("" : "=S"(esi), "=D"(edi));
+	regs_t *regs;
+
+	// Update register values and get regsters.
+	regs = get_current_regs(true);
+
+	// Display results.
 	kprintf("List of registers below...\n");
 	kprintf("==========================\n");
-	kprintf("EAX: %x\nEBX: %x\nECX: %x\nEDX: %x\nESI: %x\nEDI: %x\n",
-		eax, ebx, ecx, edx, esi, edi);
+	kprintf("EAX: 0x%x\nEBX: 0x%x\nECX: 0x%x\nEDX: 0x%x\nESI: 0x%x\nEDI: 0x%x\n",
+		regs->eax, regs->ebx, regs->ecx, regs->edx, regs->esi, regs->edi);
 }
 /* Logout command, quit the shell and return to login screen.
  */

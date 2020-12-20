@@ -7,17 +7,31 @@
  ******************************************************************
  */
 
+#include "regs.h"
 #include "timer.h"
 #include "ports.h"
 #include "isr.h"
 
-u32_t _kernel_ticks = 0;
+static u32_t _kernel_ticks = 0;
+static regs_t _regs;
+
+extern bool regs_update;
 
 /* Count ticks for timer.
  */
 static void timer_callback(registers_t *regs)
 {
 	_kernel_ticks++;
+
+	if(regs_update) { // Update registers
+		__asm__ __volatile__(
+			""
+			: "=a"(_regs.eax), "=b"(_regs.ebx), "=c"(_regs.ecx), "=d"(_regs.edx),
+			"=S"(_regs.esi), "=D"(_regs.edi)
+		);
+		regs_update = false;
+	}
+
 	(void)regs;
 }
 /* Get timer ticks from kernel.
@@ -31,6 +45,13 @@ u32_t get_timer_ticks(void)
 int get_timer_seconds(void)
 {
 	return (_kernel_ticks % 18) == 0 ? (_kernel_ticks / 18) : 0;
+}
+/* Get system registers current values.
+ */
+regs_t *get_current_regs(bool update)
+{
+	regs_update = update;
+	return &_regs;
 }
 /* Initialize the system timer.
  */
@@ -48,4 +69,7 @@ void install_timer(u32_t freq)
 	outb(0x43, 0x36); // Command port
 	outb(0x40, low);
 	outb(0x40, high);
+
+	// Set register update state.
+	regs_update = true;
 }

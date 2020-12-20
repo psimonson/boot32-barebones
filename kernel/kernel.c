@@ -24,6 +24,7 @@
 
 bool kbd_istyping;
 bool login_active;
+bool regs_update;
 
 /* Get key from keyboard.
  */
