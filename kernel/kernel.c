@@ -44,34 +44,36 @@ void get_command(char *buf, int size)
 		bool buf_char;
 		int i = 0;
 
-		while(i < MAXBUF) {
+		while(i < size) {
 			buf_char = true;
 			key = getch();
 
 			if(key == KEY_RETURN) {
 				kputc('\n');
 				kbd_istyping = false;
-				buf_char = false;
 				break;
 			}
 
 			if(key == KEY_BACKSPACE) {
 				if(i > 0) {
-					buf[i--] = '\0';
-					kbd_istyping = true;
+					buf[i] = '\0';
 					kputc('\b');
-				} else {
-					kbd_istyping = false;
+					--i;
 				}
-				buf_char = false;
+				continue;
 			}
 
+			// Update if keyboard is typing or not.
+			kbd_istyping = buf_char;
+
 			if(buf_char) {
-				char c = kbd_key_to_ascii(key);
-				buf[i++] = c;
-				kbd_istyping = true;
-				kputc(c);
+				if(isascii(key)) {
+					char c = kbd_key_to_ascii(key);
+					buf[i++] = c;
+					kputc(c);
+				}
 			}
+
 			delay(3);
 		}
 		buf[i] = '\0';

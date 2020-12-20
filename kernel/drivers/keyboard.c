@@ -128,8 +128,8 @@ static void kbd_set_leds(bool num, bool caps, bool scroll)
 	unsigned char data = 0;
 	
 	data = (scroll) ? (data | 1) : (data & 1);
-	data = (num) ? (data | 2) : (data & 2);
-	data = (caps) ? (data | 4) : (data & 4);
+	data = (num) ? (num | 2) : (num & 2);
+	data = (caps) ? (num | 4) : (num & 4);
 	
 	kbd_enc_send_cmd(0xED);
 	kbd_enc_send_cmd(data);
@@ -151,7 +151,7 @@ static void keyboard_callback(registers_t *regs)
 			
 			if(code & 0x80) {
 				/* Convert the break to into it make code equivelant. */
-				code -= 80;
+				code -= 0x80;
 				
 				int key = _kbd_std_table[code];
 				switch(key) {
@@ -168,6 +168,7 @@ static void keyboard_callback(registers_t *regs)
 						_alt = false;
 					break;
 					default:
+						// Do nothing here
 					break;
 				}
 			} else {
@@ -200,23 +201,9 @@ static void keyboard_callback(registers_t *regs)
 						_scrolllock = (_scrolllock) ? false : true;
 						kbd_set_leds(_numlock, _capslock, _scrolllock);
 					break;
-					case KEY_BACKSPACE:
-/*						backspace(key_buffer);
-						kputc('\b');
-						kbd_istyping = true;
-*/					break;
-					case KEY_RETURN:
-/*						kputc('\n');
-						kbd_istyping = false;
-						key_buffer[0] = 0;
-*/					break;
-					default: {
-/*						char str[2] = {key, '\0'};
-						kbd_istyping = true;
-						append(key_buffer, key);
-						kputs(str);
-*/						break;
-					}
+					default:
+						// Do nothing here
+					break;
 				}
 			}
 		
@@ -232,6 +219,7 @@ static void keyboard_callback(registers_t *regs)
 					_kbd_resend_res = true;
 				break;
 				default:
+					// Do nothing here
 				break;
 			}
 		}
@@ -270,8 +258,9 @@ char kbd_key_to_ascii(KEYCODE code)
 	
 	if(isascii(key)) {
 		if(_shift || _capslock) {
-			if(key >= 'a' && key <= 'z')
+			if(key >= 'a' && key <= 'z') {
 				key -= 32;
+			}
 		}
 		
 		if(_shift && !_capslock) {
