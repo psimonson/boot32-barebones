@@ -8,6 +8,7 @@
  */
 
 #include "helper.h"
+#include "timer.h"
 
 /* ------------------------ Used internally ---------------------- */
 

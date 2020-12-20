@@ -2,6 +2,8 @@
 *.bin
 *.elf
 *.bak
+*.img
+imgwrite/imgwrite
 imagefs/imagefs
 prsfs/prsfs
 tags
