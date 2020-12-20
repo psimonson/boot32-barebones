@@ -15,7 +15,7 @@
 #include "io.h"
 #include "ports.h"
 #include "keyboard.h"
-#include "timer.h"
+#include "pit.h"
 #include "system.h"
 
 isr_t interrupt_handlers[256];

@@ -16,7 +16,7 @@
 #include "io.h"
 #include "shell.h"
 #include "keyboard.h"
-#include "timer.h"
+#include "pit.h"
 #include "system.h"
 
 #define isascii(c) ((unsigned)(c) <= 0x7F)

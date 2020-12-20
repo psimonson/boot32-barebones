@@ -13,7 +13,7 @@
 #include "helper.h"
 #include "io.h"
 #include "shell.h"
-#include "timer.h"
+#include "pit.h"
 #include "system.h"
 #include "regs.h"
 
