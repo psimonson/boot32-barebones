@@ -20,8 +20,8 @@ void hal_init(void)
 	i86_cpu_init();
 	i86_pic_init(0x20, 0x28);
 	i86_pit_init();
-	i86_pit_start_counter(100, I86_PIT_OCW_COUNTER0,
-		I86_PIC_OCW_MODE_SQUAREWAVEGEN);
+	i86_pit_start_counter(100, I86_PIT_OCW_COUNTER_0,
+		I86_PIT_OCW_MODE_SQUAREWAVEGEN);
 
 	enable(); // Restore interrupts
 }
@@ -40,10 +40,10 @@ inline void interrupt_done(unsigned int intno)
 
 	// Test if end-of-interrupt to second PIC.
 	if(intno >= 8)
-		i86_pic_send_command(I86_PIC_OCW2_MASK_EOI, 1);
+		i86_pic_send_command(0xA0, 1);
 
 	// Always send end-of-interrupt to primary PIC.
-	i86_pic_send_command(I86_PIC_OCW2_MASK_EOI, 0);
+	i86_pic_send_command(0x20, 0);
 }
 /* Set new interrupt vector.
  */
