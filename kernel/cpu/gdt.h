@@ -48,7 +48,7 @@ struct gdt_descriptor {
 extern void gdt_set_descriptor(u32_t i, u64_t base, u64_t limit, u8_t access,
 	u8_t grand);
 /* Return a descriptor. */
-extern gdt_descriptor *i86_gdt_get_descriptor(int i);
+extern struct gdt_descriptor *i86_gdt_get_descriptor(int i);
 /* Initialize the GDT. */
 extern void i86_gdt_init(void);
 

@@ -36,6 +36,6 @@ idt_reg_t idt_reg;
 
 /* Functions implemented in idt.c. */
 extern void set_idt_gate(int n, u32_t handler);
-extern void set_idt(void);
+extern void i86_idt_init(void);
 
 #endif

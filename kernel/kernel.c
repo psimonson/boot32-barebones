@@ -10,9 +10,8 @@
 #include <stdbool.h>
 
 #include "kernel.h"
-#include "isr.h"
-#include "vga.h"
 #include "helper.h"
+#include "vga.h"
 #include "io.h"
 #include "shell.h"
 #include "keyboard.h"
@@ -90,11 +89,6 @@ void kernel_main(void)
 	// Initialize the variables.
 	kbd_istyping = false;
 	login_active = true;
-
-	// Initialize the terminal and install ISRs and IRQs.
-	term_init(BLUE, YELLOW);
-	isr_install();
-	irq_install();
 
 	// Display loading message and play music.
 	kprintf("Loading system! Please wait");

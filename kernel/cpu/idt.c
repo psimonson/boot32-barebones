@@ -23,7 +23,7 @@ void set_idt_gate(int n, u32_t handler)
 }
 /* Loads the IDT into system.
  */
-void set_idt(void)
+void i86_idt_init(void)
 {
 	idt_reg.base = (u32_t)&idt;
 	idt_reg.limit = IDT_ENTRIES * sizeof(idt_gate_t) - 1;

@@ -11,17 +11,22 @@
 #include "cpu.h"
 #include "idt.h"
 #include "pit.h"
+#include "pic.h"
+#include "vga.h"
 #include "system.h"
+#include "keyboard.h"
 
 /* Initialize HAL interface.
  */
 void hal_init(void)
 {
 	i86_cpu_init();
+	term_init(BLUE, YELLOW);
 	i86_pic_init(0x20, 0x28);
 	i86_pit_init();
 	i86_pit_start_counter(100, I86_PIT_OCW_COUNTER_0,
 		I86_PIT_OCW_MODE_SQUAREWAVEGEN);
+	install_kbd();
 
 	enable(); // Restore interrupts
 }
@@ -40,30 +45,29 @@ inline void interrupt_done(unsigned int intno)
 
 	// Test if end-of-interrupt to second PIC.
 	if(intno >= 8)
-		i86_pic_send_command(0xA0, 1);
+		i86_pic_send_command(I86_PIC_OCW2_MASK_EOI, 1);
 
 	// Always send end-of-interrupt to primary PIC.
-	i86_pic_send_command(0x20, 0);
+	i86_pic_send_command(I86_PIC_OCW2_MASK_EOI, 0);
 }
 /* Set new interrupt vector.
  */
 void set_vect(int intno, void (*vect)())
 {
-	i86_install_ir(intno, I86_IDT_DESC_PRESENT | I86_IDT_DESC_BIT32,
-		0x8, vect);
+	register_interrupt_handler(intno, vect);
 }
 /* Get current interrupt vector.
  */
-void (*get_vect(int intno))()
+isr_handler_t get_vect(int intno)
 {
 	// Get the descriptor from the idt.
-	idt_descriptor *desc = i86_get_ir(intno);
+	struct idt_gate *desc = 0; //i86_get_ir(intno);
 	if(!desc) return 0;
 
 	// Get address of interrupt handler.
-	addr = desc->base_low | (desc->base_high << 16);
+	u32_t addr = desc->low_offset | (desc->high_offset << 16);
 
 	// Return interrupt handler.
-	I86_IRQ_HANDLER irq = (I86_IRQ_HANDLER)addr;
-	return addr;
+	isr_handler_t irq = (isr_handler_t)addr;
+	return irq;
 }

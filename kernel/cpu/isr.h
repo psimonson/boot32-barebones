@@ -105,7 +105,7 @@ extern void isr_install(void);
 extern void isr_handler(registers_t *r);
 extern void irq_install(void);
 
-typedef void (*isr_t)(registers_t *);
-extern void register_interrupt_handler(u8_t n, isr_t handler);
+typedef void (*isr_handler_t)(registers_t *r);
+extern void register_interrupt_handler(u8_t n, isr_handler_t handler);
 
 #endif

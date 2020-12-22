@@ -44,7 +44,7 @@ void gdt_set_descriptor(u32_t i, u64_t base, u64_t limit, u8_t access,
 	// Set limit and base addresses
 	_gdt[i].base_low = (u16_t)(base & 0xffff);
 	_gdt[i].base_mid = (u8_t)((base >> 16) & 0xff);
-	_gdt[i].base_high = (u8_t((base >> 24) & 0xff);
+	_gdt[i].base_high = (u8_t)((base >> 24) & 0xff);
 	_gdt[i].limit = (u16_t)(limit & 0xffff);
 
 	// Set flags and grandularity bytes.

@@ -10,6 +10,9 @@
 #ifndef _HAL_H_
 #define _HAL_H_
 
+#include "isr.h"
+#include "hal.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -26,7 +29,7 @@ extern inline void interrupt_done(unsigned int intno);
 /* Set new interrupt vector. */
 extern void set_vect(int intno, void (*vect)());
 /* Get current interrupt vector. */
-extern void (*get_vect(int intno))();
+extern isr_handler_t get_vect(int intno);
 
 #ifdef __cplusplus
 }
