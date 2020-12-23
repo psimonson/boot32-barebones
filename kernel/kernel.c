@@ -75,7 +75,7 @@ void get_command(char *buf, int size)
 				}
 			}
 
-			delay(3);
+			delay(2);
 		}
 		buf[i] = '\0';
 }
@@ -98,11 +98,11 @@ void kernel_main(void)
 	// Display loading message and play music.
 	kprintf("Loading system! Please wait");
 	for(int i = 0; i < tsnd; i++) {
+		kputc('.');
 		sound(snd[i]);
 		delay(5);
 		sound(0);
-		sleep(1);
-		kputc('.');
+		delay(5);
 	}
 	sound(0);
 	clear_screen();
