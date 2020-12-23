@@ -9,8 +9,10 @@
 
 #include <stdbool.h>
 
+#include "hal.h"
 #include "kernel.h"
 #include "helper.h"
+#include "isr.h"
 #include "vga.h"
 #include "io.h"
 #include "shell.h"
@@ -87,6 +89,7 @@ void kernel_main(void)
 
 	// Initialize terminal
 	term_init(BLUE, YELLOW);
+	hal_init();
 
 	// Initialize the variables.
 	kbd_istyping = false;

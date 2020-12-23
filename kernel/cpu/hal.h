@@ -25,7 +25,7 @@ extern void hal_shutdown(void);
 /* Generate an interrupt. */
 extern void gen_interrupt(int intno);
 /* Send EOI to PIC. */
-extern inline void interrupt_done(unsigned int intno);
+extern void interrupt_done(unsigned int intno);
 /* Set new interrupt vector. */
 extern void set_vect(int intno, void (*vect)());
 /* Get current interrupt vector. */
