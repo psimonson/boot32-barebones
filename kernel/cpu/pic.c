@@ -21,7 +21,7 @@
 #define I86_PIC2_REG_COMMAND 0xA0
 #define I86_PIC2_REG_STATUS 0xA0
 #define I86_PIC2_REG_DATA 0xA1
-#define I86_PIC2_REG_IMR 0xA2
+#define I86_PIC2_REG_IMR 0xA1
 
 // Initialization control word 1 bit masks.
 #define I86_PIC_ICW1_MASK_IC4 0x1
@@ -67,7 +67,7 @@ u8_t i86_pic_read_data(u8_t picno)
 {
 	if(picno > 1) return 0;
 
-	u8_t reg = (picno == 1) ? I86_PIC2_REG_COMMAND : I86_PIC1_REG_COMMAND;
+	u8_t reg = (picno == 1) ? I86_PIC2_REG_DATA : I86_PIC1_REG_DATA;
 	return inb(reg);
 }
 /* Send data byte to PIC.
@@ -76,7 +76,7 @@ void i86_pic_send_data(u8_t data, u8_t picno)
 {
 	if(picno > 1) return;
 
-	u8_t reg = (picno == 1) ? I86_PIC2_REG_COMMAND : I86_PIC1_REG_COMMAND;
+	u8_t reg = (picno == 1) ? I86_PIC2_REG_DATA : I86_PIC1_REG_DATA;
 	outb(reg, data);
 }
 /* Send operational command to PIC.
@@ -93,9 +93,6 @@ void i86_pic_send_command(u8_t cmd, u8_t picno)
 void i86_pic_init(u8_t base0, u8_t base1)
 {
 	u8_t icw = 0;
-
-	// Disable hardware interrupts.
-	disable();
 
 	// Begin Initialization of PIC.
 	icw = (icw & ~I86_PIC_ICW1_MASK_INIT) | I86_PIC_ICW1_INIT_YES;

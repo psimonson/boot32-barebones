@@ -20,9 +20,9 @@
  */
 void hal_init(void)
 {
+	disable();
 	i86_cpu_init();
 	i86_pic_init(0x20, 0x28);
-	isr_install();
 	i86_pit_init();
 	i86_pit_start_counter(100, I86_PIT_OCW_COUNTER_0,
 		I86_PIT_OCW_MODE_SQUAREWAVEGEN);

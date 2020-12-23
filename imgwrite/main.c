@@ -23,8 +23,6 @@ int main(int argc, char **argv)
 	unsigned long total_bytes = 0, total_checked = 0;
 	char buf[MAXBUF], buf2[MAXBUF];
 	FILE *fin, *fout;
-	bool error;
-	int retry;
 
 	if(argc != 3) {
 		fprintf(stderr, "Usage: %s <input-file> <output-file>\n", argv[0]);
@@ -47,18 +45,15 @@ int main(int argc, char **argv)
 	}
 
 	/* Copy file contents to output device/file. */
-	retry = 3;
-	while(retry && (bytes_read = fread(buf, 1, MAXBUF-1, fin)) > 0) {
+	while((bytes_read = fread(buf, 1, MAXBUF-1, fin)) > 0) {
 		bytes_written = fwrite(buf, 1, bytes_read, fout);
 		if(bytes_written != bytes_read) {
 			fseek(fin, -bytes_read, SEEK_CUR);
 			fseek(fout, -bytes_written, SEEK_CUR);
 			fprintf(stderr, "Warning: Failed to write trying again.\n");
-			retry--;
 			continue;
 		}
 		total_bytes += bytes_written;
-		retry = 3;
 	}
 	fflush(fout);
 	fclose(fout);
@@ -72,31 +67,26 @@ int main(int argc, char **argv)
 		fclose(fin);
 		return 1;
 	}
-	error = false;
 
 	/* Verify contents of input file against output file. */
-	retry = 3;
-	while(retry && (bytes_read = fread(buf, sizeof(char), MAXBUF, fin)) > 0) {
+	while((bytes_read = fread(buf, sizeof(char), MAXBUF, fin)) > 0) {
 		bytes_written = fread(buf2, sizeof(char), MAXBUF, fout);
 		if(bytes_read != bytes_written) {
 			fseek(fin, -bytes_read, SEEK_CUR);
 			fseek(fout, -bytes_written, SEEK_CUR);
 			fprintf(stderr, "Warning: Failed to read trying again.\n");
-			retry--;
 			continue;
 		}
 		if(memcmp(buf, buf2, bytes_written) == 0) {
 			total_checked += bytes_written;
-			retry = 3;
 		} else {
-			error = true;
 			break;
 		}
 	}
 	fclose(fin);
 	fclose(fout);
 
-	if(error != 0 || retry == 0) {
+	if(total_bytes != total_checked) {
 		fprintf(stdout, "Failed to copy and/or verify.\n");
 		return EXIT_FAILURE;
 	}
