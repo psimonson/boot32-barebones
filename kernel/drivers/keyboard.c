@@ -15,6 +15,7 @@
 #include "ports.h"
 #include "isr.h"
 #include "util.h"
+#include "hal.h"
 
 #define APPEND_KEYS(K, ...) K, ##__VA_ARGS__
 #define BUILD_KBD_ERR(S, X) S = X
