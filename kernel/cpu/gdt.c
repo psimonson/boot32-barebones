@@ -9,6 +9,7 @@
 
 #include "gdt.h"
 #include "helper.h"
+#include "util.h"
 
 // Processor GDTR register points to base of GDT.
 struct gdtr {

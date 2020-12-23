@@ -15,7 +15,6 @@
 #include "io.h"
 #include "shell.h"
 #include "keyboard.h"
-#include "pit.h"
 #include "system.h"
 
 #define isascii(c) ((unsigned)(c) <= 0x7F)
@@ -85,6 +84,9 @@ void kernel_main(void)
 	const unsigned short snd[] = {500, 1000, 3000, 1500, 800};
 	const int tsnd = sizeof(snd)/sizeof(snd[0]);
 	char key_buffer[MAXBUF];
+
+	// Initialize terminal
+	term_init(BLUE, YELLOW);
 
 	// Initialize the variables.
 	kbd_istyping = false;

@@ -11,6 +11,7 @@
 #include "pit.h"
 #include "ports.h"
 #include "isr.h"
+#include "hal.h"
 
 #define I86_PIT_REG_COUNTER0 0x40
 #define I86_PIT_REG_COUNTER1 0x41
@@ -37,6 +38,7 @@ static void timer_callback(registers_t *regs)
 		regs_update = false;
 	}
 
+	interrupt_done(IRQ0);
 	(void)regs;
 }
 /* Get timer ticks from kernel.
@@ -74,10 +76,10 @@ void i86_pit_send_command(u8_t cmd)
 }
 /* Send data to a counter.
  */
-void i86_pit_send_data(u16_t counter, u8_t data)
+void i86_pit_send_data(u16_t data, u8_t cmd)
 {
-	u8_t port = (counter == I86_PIT_OCW_COUNTER_0) ? I86_PIT_REG_COUNTER0 :
-		((counter == I86_PIT_OCW_COUNTER_1) ? I86_PIT_REG_COUNTER1 :
+	u8_t port = (cmd == I86_PIT_OCW_COUNTER_0) ? I86_PIT_REG_COUNTER0 :
+		((cmd == I86_PIT_OCW_COUNTER_1) ? I86_PIT_REG_COUNTER1 :
 		I86_PIT_REG_COUNTER2);
 
 	outb(port, data);
@@ -123,4 +125,6 @@ void i86_pit_init(void)
 {
 	// Install the timer callback.
 	register_interrupt_handler(IRQ0, timer_callback);
+
+	_kernel_ticks = 0;
 }

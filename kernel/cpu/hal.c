@@ -21,7 +21,6 @@
 void hal_init(void)
 {
 	i86_cpu_init();
-	term_init(BLUE, YELLOW);
 	i86_pic_init(0x20, 0x28);
 	i86_pit_init();
 	i86_pit_start_counter(100, I86_PIT_OCW_COUNTER_0,
@@ -41,10 +40,10 @@ void hal_shutdown(void)
 inline void interrupt_done(unsigned int intno)
 {
 	// Insure its a valid hardware IRQ.
-	if(intno > 16) return;
+	if(intno >= 256) return;
 
 	// Test if end-of-interrupt to second PIC.
-	if(intno >= 8)
+	if(intno >= 40)
 		i86_pic_send_command(I86_PIC_OCW2_MASK_EOI, 1);
 
 	// Always send end-of-interrupt to primary PIC.

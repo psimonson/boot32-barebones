@@ -16,7 +16,7 @@
 void i86_cpu_init(void)
 {
 	i86_gdt_init();
-//	i86_idt_init(0x8);
+	i86_idt_init();
 }
 /* Deinitialize CPU resources.
  */

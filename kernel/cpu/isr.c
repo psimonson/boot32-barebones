@@ -123,9 +123,6 @@ void isr_install(void)
 	SET_IRQ(13);
 	SET_IRQ(14);
 	SET_IRQ(15);
-	/* Load IDT with assembly */
-	i86_idt_init();
-	enable();
 }
 /* Generic exception handler.
  */

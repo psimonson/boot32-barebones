@@ -224,6 +224,8 @@ static void keyboard_callback(registers_t *regs)
 			}
 		}
 	}
+
+	interrupt_done(IRQ1);
 	(void)regs;
 }
 /* Do a self test on the keyboard.
