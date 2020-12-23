@@ -111,7 +111,7 @@ DEF_FNC(version)
 		sound(1000);
 		delay(5);
 		sound(0);
-		delay(5);
+		delay(10);
 	}
 	kprintf("\nDate created: June 25, 2020.\n");
 	kprintf("Written by Philip R. Simonson.\n\n");

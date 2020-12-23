@@ -113,8 +113,8 @@ void i86_pit_start_counter(u32_t freq, u8_t counter, u8_t mode)
 	// Set frequency rate.
 	u8_t low = (u8_t)(divisor & 0xFF);
 	u8_t high = (u8_t)((divisor >> 8) & 0xFF);
-	i86_pit_send_data(counter, low);
-	i86_pit_send_data(counter, high);
+	i86_pit_send_data(low, counter);
+	i86_pit_send_data(high, counter);
 
 	// Set register update state.
 	regs_update = true;

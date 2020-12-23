@@ -75,7 +75,7 @@ void get_command(char *buf, int size)
 				}
 			}
 
-			delay(2);
+			delay(5);
 		}
 		buf[i] = '\0';
 }
@@ -102,7 +102,7 @@ void kernel_main(void)
 		sound(snd[i]);
 		delay(5);
 		sound(0);
-		delay(5);
+		delay(10);
 	}
 	sound(0);
 	clear_screen();
