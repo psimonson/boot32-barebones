@@ -7,7 +7,6 @@
  ***************************************************************
  */
 
-#include "hal.h"
 #include "isr.h"
 #include "idt.h"
 #include "vga.h"
@@ -16,10 +15,10 @@
 #include "io.h"
 #include "ports.h"
 #include "keyboard.h"
-#include "pit.h"
+#include "timer.h"
 #include "system.h"
 
-isr_handler_t interrupt_handlers[256];
+isr_t interrupt_handlers[256];
 
 /* Exception messages to print. */
 static char *exception_messages[32] = {
@@ -123,6 +122,9 @@ void isr_install(void)
 	SET_IRQ(13);
 	SET_IRQ(14);
 	SET_IRQ(15);
+	/* Load IDT with assembly */
+	set_idt();
+	enable();
 }
 /* Generic exception handler.
  */
@@ -135,7 +137,7 @@ void isr_handler(registers_t *r)
 }
 /* Register interrupt handler.
  */
-void register_interrupt_handler(u8_t n, isr_handler_t handler)
+void register_interrupt_handler(u8_t n, isr_t handler)
 {
 	interrupt_handlers[n] = handler;
 }
@@ -145,9 +147,19 @@ void irq_handler(registers_t *r)
 {
 	/* Handle the interrupt in a modular way */
 	if(interrupt_handlers[r->int_no] != 0) {
-		isr_handler_t handler = interrupt_handlers[r->int_no];
+		isr_t handler = interrupt_handlers[r->int_no];
 		handler(r);
 	}
 
-	interrupt_done(r->int_no); // Tell HAL interrupt done.
+	if(r->int_no >= 40) outb(0xA0, 0x20); // slave
+	outb(0x20, 0x20); // master
+}
+/* Install the IRQs.
+ */
+void irq_install(void)
+{
+	/* IRQ0: timer */
+	install_timer(50);
+	/* IRQ1: keyboard */
+	install_kbd();
 }

@@ -12,14 +12,11 @@ OBJECTS+=\
 	kernel.c.o shell.c.o common/io.c.o common/helper.c.o \
 	common/util.c.o drivers/vga.c.o drivers/keyboard.c.o \
 	cpu/idt.c.o cpu/isr.c.o	cpu/system.c.o cpu/ports.c.o \
-	cpu/pit.c.o cpu/hal.c.o cpu/cpu.c.o cpu/gdt.c.o \
-	cpu/pic.c.o
+	cpu/timer.c.o
 TARGET=kernel.bin
 
 .PHONY: all clean distclean
 all: $(TARGET)
-
-%.asm:
 
 %.asm.o: %.asm
 	$(AS) $(AFLAGS) -o $@ $<

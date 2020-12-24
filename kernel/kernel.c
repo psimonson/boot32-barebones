@@ -9,14 +9,14 @@
 
 #include <stdbool.h>
 
-#include "hal.h"
 #include "kernel.h"
-#include "helper.h"
 #include "isr.h"
 #include "vga.h"
+#include "helper.h"
 #include "io.h"
 #include "shell.h"
 #include "keyboard.h"
+#include "timer.h"
 #include "system.h"
 
 #define isascii(c) ((unsigned)(c) <= 0x7F)
@@ -75,7 +75,7 @@ void get_command(char *buf, int size)
 				}
 			}
 
-			delay(5);
+			delay(3);
 		}
 		buf[i] = '\0';
 }
@@ -87,22 +87,23 @@ void kernel_main(void)
 	const int tsnd = sizeof(snd)/sizeof(snd[0]);
 	char key_buffer[MAXBUF];
 
-	// Initialize terminal
-	term_init(BLUE, YELLOW);
-	hal_init();
-
 	// Initialize the variables.
 	kbd_istyping = false;
 	login_active = true;
 
+	// Initialize the terminal and install ISRs and IRQs.
+	term_init(BLUE, YELLOW);
+	isr_install();
+	irq_install();
+
 	// Display loading message and play music.
 	kprintf("Loading system! Please wait");
 	for(int i = 0; i < tsnd; i++) {
-		kputc('.');
 		sound(snd[i]);
 		delay(5);
 		sound(0);
-		delay(10);
+		sleep(1);
+		kputc('.');
 	}
 	sound(0);
 	clear_screen();

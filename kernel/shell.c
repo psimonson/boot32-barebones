@@ -13,7 +13,7 @@
 #include "helper.h"
 #include "io.h"
 #include "shell.h"
-#include "pit.h"
+#include "timer.h"
 #include "system.h"
 #include "regs.h"
 
@@ -93,10 +93,10 @@ DEF_FNC(logout)
 	sleep(1);
 	kprintf("OK.\n");
 	login_active = true;
+	sleep(3);
 	sound(500);
 	delay(8);
 	sound(0);
-	sleep(1);
 	clear_screen();
 	kprintf("LOGIN? ");
 }
@@ -109,9 +109,9 @@ DEF_FNC(version)
 	for(int i = 0; i < strlen(msg); i++) {
 		kputc(msg[i]);
 		sound(1000);
-		delay(5);
-		sound(0);
 		delay(10);
+		sound(0);
+		delay(8);
 	}
 	kprintf("\nDate created: June 25, 2020.\n");
 	kprintf("Written by Philip R. Simonson.\n\n");

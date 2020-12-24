@@ -15,7 +15,6 @@
 #include "ports.h"
 #include "isr.h"
 #include "util.h"
-#include "hal.h"
 
 #define APPEND_KEYS(K, ...) K, ##__VA_ARGS__
 #define BUILD_KBD_ERR(S, X) S = X
@@ -225,8 +224,6 @@ static void keyboard_callback(registers_t *regs)
 			}
 		}
 	}
-
-	interrupt_done(IRQ1);
 	(void)regs;
 }
 /* Do a self test on the keyboard.

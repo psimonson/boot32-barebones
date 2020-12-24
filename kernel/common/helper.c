@@ -8,7 +8,7 @@
  */
 
 #include "helper.h"
-#include "pit.h"
+#include "timer.h"
 
 /* ------------------------ Used internally ---------------------- */
 
