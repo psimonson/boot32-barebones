@@ -11,6 +11,7 @@
 
 #include "kernel.h"
 #include "isr.h"
+#include "gdt.h"
 #include "vga.h"
 #include "helper.h"
 #include "io.h"
@@ -93,6 +94,7 @@ void kernel_main(void)
 
 	// Initialize the terminal and install ISRs and IRQs.
 	term_init(BLUE, YELLOW);
+	gdt_install();
 	isr_install();
 	irq_install();
 
