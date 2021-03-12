@@ -11,6 +11,9 @@
 #include "util.h"
 #include "vga.h"
 
+static idt_gate_t idt[IDT_ENTRIES];
+static idt_reg_t idt_reg;
+
 /* Set the IDT handlers one at a time.
  */
 void set_idt_gate(int n, u32_t handler)

@@ -15,6 +15,7 @@
 #include "helper.h"
 
 static unsigned char _text_attr = 0, _term_init = 0;
+unsigned char *vga_buffer = NULL;
 
 /* ------------------------- Private Functions -------------------------- */
 
